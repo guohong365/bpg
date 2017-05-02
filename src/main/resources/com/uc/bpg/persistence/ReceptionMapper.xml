@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uc.bpg.persistence.ReceptionMapper">
+  <resultMap id="checkInRecordDetail" type="com.uc.bpg.domain.CheckIn">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="CHAR" property="uuid" />
+    <result column="HOTEL" jdbcType="INTEGER" property="hotel" />
+    <result column="ROOM" jdbcType="INTEGER" property="room" />
+    <result column="CHECK_IN_TIME" jdbcType="TIMESTAMP" property="checkInTime" />
+    <result column="CHECK_IN_RECEPTIONIST" jdbcType="INTEGER" property="checkInReceptionist" />
+    <result column="CHECK_OUT_TIME" jdbcType="TIMESTAMP" property="checkOutTime" />
+    <result column="CHECK_OUT_RECEPTIONIST" jdbcType="INTEGER" property="checkOutReceptionist" />
+  </resultMap>
+  <resultMap id="chargingRecordDetail" type="com.uc.bpg.domain.Charging">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="CHAR" property="uuid" />
+    <result column="CHECK_IN_RECORD" jdbcType="INTEGER" property="checkIn" />
+    <result column="CHAGRE" jdbcType="DECIMAL" property="chagre" />
+    <result column="RECEPTIONIST" jdbcType="INTEGER" property="receptionist" />
+    <result column="CHARGING_TIME" jdbcType="TIMESTAMP" property="chargingTime" />
+  </resultMap>
+  <resultMap type="com.uc.bpg.domain.RoomDetail" id="roomDetailMap">
+    <id column="ID" jdbcType="INTEGER" property="id"/>
+    <result column="STOREY" jdbcType="INTEGER" property="storey"/>
+    <result column="ROOM_NO" jdbcType="VARCHAR" property="roomNo"/>
+    <result column="CHECK_IN_TIME" jdbcType="TIMESTAMP" property="checkInTime"/>
+    <result column="CHECK_OUT_TIME" jdbcType="TIMESTAMP" property="checkOutTime"/>
+    <result column="CHARGE" jdbcType="DECIMAL" property="charge"/>
+    <result column="USE_TIMES" jdbcType="INTEGER" property="useTimes"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectStoreys" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select distinct a.STOREY from t_room a 
+    left join t_device b on b.ROOM = a.ID 
+     where a.HOTEL=#{hotelId,jdbcType=INTEGER} and a.VALID and b.ID is not null 
+     order by a.STOREY desc
+  </select>
+  <select id="selectRoomDetails" parameterType="java.lang.Long" resultMap="roomDetailMap">
+    select 
+    a.ID, a.STOREY, a.ROOM_NO, 
+    b.CHECK_IN_TIME as CHECK_IN_TIME, b.CHECK_OUT_TIME as CHECK_OUT_TIME,
+    if(b.CHECK_IN_TIME is null or b.CHECK_OUT_TIME is not null, 0, 
+       (select sum(charge) from t_device_usage where USE_TIME &gt; b.CHECK_IN_TIME and USE_TIME &lt; now())) as CHARGE,
+    if(b.CHECK_IN_TIME is null or b.CHECK_OUT_TIME is not null, 0, 
+       (select count(*) from t_device_usage where  USE_TIME &gt; b.CHECK_IN_TIME and USE_TIME &lt; now())) as USE_TIMES
+    from t_room a
+    left join t_check_in b on b.ROOM = a.ID and b.CHECK_IN_TIME = (select max(CHECK_IN_TIME) from t_check_in)
+    left join t_device c on c.ROOM = a.ID
+    where a.VALID and a.HOTEL=#{hotelId,jdbcType=INTEGER} and c.ID is not null
+  </select>
+  <select id="selectCharge" parameterType="java.lang.Long" resultMap="chargingRecordDetail">
+    select sum(a.charge), b.ID as CHECK_IN  from t_device_usage a
+    left join t_check_in b on b.ROOM = a.ROOM and b.ID = (select max(ID) from t_check_in where CHECK_OUT_TIME is null and ROOM = #{room, jdbcType=INTEGER})
+    where not a.PAYED and b.ID is not null and a.USE_TIME &gt; b.CHECK_IN_TIME and a.USE_TIME &lt; now()    
+  </select>
+  <select id="selectRoomCanCheckIn" parameterType="java.lang.Long" resultType="java.lang.Boolean">  
+    select (CHECK_OUT_TIME is not null) from t_check_in where ROOM = #{room, jdbcType=INTEGER} and ID = (select max(ID) from t_check_in)  
+  </select>
+    
+  <select id="selectChargingDetails" parameterType="java.lang.Long" resultMap="chargingRecordDetail">
+  </select>
+
+  <insert id="insertCheckIn" parameterType="com.uc.bpg.domain.CheckIn">
+    insert into t_check_in (UUID, HOTEL, 
+      ROOM, CHECK_IN_TIME, 
+      CHECK_IN_RECEPTIONIST, CHECK_OUT_TIME, CHECK_OUT_RECEPTIONIST
+      )
+    values (#{uuid,jdbcType=CHAR}, #{hotel,jdbcType=INTEGER}, 
+      #{room,jdbcType=INTEGER}, #{checkInTime,jdbcType=TIMESTAMP}, 
+      #{checkInReceptionist,jdbcType=INTEGER}, #{checkOutTime,jdbcType=TIMESTAMP}, #{checkOutReceptionist,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertCheckOut" parameterType="com.uc.bpg.domain.CheckIn">
+  </insert>
+</mapper>
