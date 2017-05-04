@@ -25,10 +25,12 @@
         always-use-default-target="true"        
         />
       <sec:logout logout-success-url="/login" logout-url="/logout" />
-      <sec:session-management invalid-session-url="/login" />
+      <sec:session-management invalid-session-url="/login">
+      </sec:session-management>
       <sec:custom-filter ref="securityFilter" before="FILTER_SECURITY_INTERCEPTOR" />
       <sec:access-denied-handler error-page="/403"/>
     </sec:http>
+    
     
     
     <sec:authentication-manager alias="authenticationManager">      
