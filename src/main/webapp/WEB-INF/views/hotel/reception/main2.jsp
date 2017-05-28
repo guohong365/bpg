@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="<c:url value="/resources/css/datepicker.css" />" />
 <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-datetimepicker.css" />" />
 <link rel="stylesheet" href="<c:url value="/resources/css/daterangepicker.css" />" />
-<link rel="stylesheet" href='<c:url value="/resources/css/jquery.gritter.css" />' />
+
 <!-- text fonts -->
 <link rel="stylesheet" href="<c:url value="/resources/css/ace-fonts.css" />" />
 
@@ -54,37 +54,74 @@ margin-top: 10px;
 }
 .room-btn{
  box-sizing:border-box;
- top:240px;
- margin:auto;
+ float:left;
+ margin: 10px;
  height: 280px;
- width:560px;
+ width : 280px;
+ padding:2px;
+ background-color: #0094FF;
  position: relative;
 }
-div.check-in{
-  box-sizing: border-box;
-  margin:10px;
-  width: 260px;
-  height: 260px;
-  float:left;
-}
-.check-in-btn{  
-  height: 260px;
-  width:260px;  
-  background-image: url('<c:url value="/resources/images/check-in.png" />');
+.room-plate{
+  box-sizing:border-box;
+  width:200px;
+  height:50px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right:auto;
+  margin-bottom:5px;  
+  padding: 0;
+  background-image: url("<c:url value='/resources/images/room_plate.png' />");
   background-repeat: no-repeat; 
+  font-size: 35px;
+  text-align: center;
+  line-height: 50px; 
 }
-
-div.check-in img {
-  display:inline;
-  padding:10px;
-  width: 260px;
-  background-color: #EEEEEE;
-  border: 1px solid #CCCCCC;  
+.room-label{
+  box-sizing: border-box;
+  color: #FFF;
+  font-size: 20px;
+  vertical-align: middle;
+  height: 24px;   
+  width:276px;
+  line-height: 24px;
+  margin-top: 4px;
+  border: 1px 1px 1px 1px #FFF;
 }
-
-div.check_in img:hover{
-  border: 1px solid #EBEBEB;
+.room-label .label{
+  float: left;
+  padding-left: 10px;
 }
+.room-label .info{
+  float: left;
+  padding-right: 10px;
+}
+.charge-panel{
+  box-sizing:border-box;
+  width: 276px;
+  height: 50px;
+  background-color: #EEE;  
+  position: absolute;
+  bottom: 2px;
+}
+.charge-panel div{
+  text-align: right;
+  vertical-align: middle;
+  height:46px;
+  line-height:46px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.charge-panel .info{
+  float: left;
+  padding-left: 10px;
+  font-size: 20px;
+}
+.charge-panel .charge{
+  padding-right: 10px;
+  float: right;
+  font-size: 25px;
+} 
 
 </style>
 <!--[if lte IE 9]>
@@ -170,138 +207,91 @@ div.check_in img:hover{
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
 
-    <div class="main-content">
+    <!-- #section:basics/sidebar -->
+    <div id="sidebar" class="sidebar                  responsive">
+      <script type="text/javascript">
+				try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+			</script>
+      <div id="storeyButtons" data-toggle="buttons">
+      <c:forEach items="${_storeys}" var="storey">
+        <label class="btn btn-lg  btn-block storey" >
+        <input type="radio" data-storey="${storey}" value="${storey}"/>${storey}层</label>
+      </c:forEach>      
+      </div>
+      <script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+				</script>
+    </div>
 
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+          <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+          </script>
+
+        <!-- /.breadcrumb -->
+
+        <!-- #section:basics/content.searchbox -->
+        <div class="nav-search">
+          <span class="input-icon">
+            <input id="roomSearch" class="nav-search-input" type="text" autocomplete="off" />
+            <i class="ace-icon fa fa-search"></i>            
+          </span>
+        </div>  
+         <!-- /.nav-search -->
+
+        <!-- /section:basics/content.searchbox -->
+      </div>
       <div class="page-content">
         <div id="rooms" class="page-content-area"><!-- ajax content goes here -->
-          <div class="row">
-            <div class="col-sm-4 col-sm-offset-4">
-              <div class="room-btn">
-                <div class="check-in">
-                  <a data-check-action="checkin" href="#">
-                  <img src='<c:url value="/resources/images/check-in.png" />' alt="入住" >
-                  </a>                  
-                </div>
-                <div class="check-in">    
-                  <a data-check-action="checkout" href="#">
-                    <img src='<c:url value="/resources/images/check-out.png" />' alt="退房" >
-                  </a>
-                </div>  
-                <div class="check-in">
-                  <a data-check-action="test" href="#">test</a>
-                </div>              
-              </div>
+        <c:forEach items="${_roomDetails}" var="room">
+          <div class="room-btn" data-storey="${room.storey}" data-room="${room.roomNo }">
+            <div class="room-plate">${room.roomNo}</div> 
+            <div class="room-label">
+              <div class="label">入住时间：</div>
+              <div class="info">${room.checkInTime }</div>
+            </div>     
+            <div class="room-label">
+              <div class="label">使用次数：</div>
+              <div class="info">${room.useTimes }</div>
+            </div>
+            <div class="charge-panel">
+              <div class="info">应付款：</div>          
+              <div class="charge red"><strong>${charge}</strong></div>            
             </div>
           </div>
+        </c:forEach>
         </div><!-- /.page-content-area -->
-        <div id="room_input_dlg" class="modal" tabindex="-1" data-backdrop="static">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <form id="room_input_form" action="#" class="form-horizontal">
-                <input type="hidden" id="isCheckIn" value="">
-                <div class="modal-header">
-                  <button class="close" data-dismiss="modal" type="button">&times;</button>
-                  <h4 class="blue">房间号</h4>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-xs-12">
-                      <label class="control-label col-xs-12 col-sm-3">房间号：</label>
-                      <div class="col-xs-12 col-sm-9">
-                        <input id="roomNo" class="form-control input-large" type="text" />
-                      </div>  
-                    </div>
-                  </div>
-                  <div class="row"">  
-                    <div  class="col-xs-12">  
-                      <div id="room_input_error" class="col-xs-12 col-sm-9 col-sm-offset-3">
-                      </div>                    
-                    </div>                  
-                  </div>
-                </div> 
-                <div class="modal-footer">
-                  <button class="btn btn-primary" type="submit">确定</button>
-                  <button class="btn" data-dismiss="modal" type="button">取消</button>
-                </div>               
-              </form>
-            </div>
-          </div>
-        </div>
-        
-        <div id="room_checkin_dlg" class="modal" tabindex="-1" data-backdrop="static">
-          <div class="modal-dialog">
-            <form id="room_checkin_form" class="form-horizontal" action="#">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button class="close" data-dismiss="modal">&times;</button>
-                <h4>入住登记</h4>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <h2 id="checkin_prompt"></h2>
-                  </div>
-                </div>                
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">确定</button>
-                <button class="btn" data-dismiss="modal" type="button">取消</button>
-              </div>
-            </div>
-            </form>
-          </div>
-        </div>
-        
-        <div id="room_checkout_dlg" class="modal" tabindex="-1" data-backdrop="static">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button class="close" data-dismiss="modal" type="button">&times;</button>
-                <h4 class="blue">退房</h4>
-              </div>
-              <div class="modal-body">
-              
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary" type="button">确定</button>
-                <button class="btn" data-dismiss="modal" type="button">取消</button>
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- change password modal dialog -->
         <div id="change_pwd_dlg" class="modal" tabindex="-1" data-backdrop="false">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form id="FORM_CHANGE_PWD" class="form-horizontal" role="from">
+              <form id="FORM_CHANGE_PWD" class="form-horizonal" role="from">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="blue bigger">修改密码</h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-xs-12">
-                      <div class="form-group">                        
-                        <label for="tOldPwd" class="control-label col-xs-12 col-sm-3"><span class="red">*</span>旧密码：</label>
-                        <div class="col-xs-12 col-sm-9">
-                          <input id="tOldPwd" class="form-control" type="password" name="tOldPwd" placeholder="旧密码">
-                        </div>
+                    <div class="col-xs-12 col-sm-5">
+                      <div class="form-group middle">
+                        <span>
+                          <label for="tOldPwd"><span class="red">*</span>旧密码：</label>
+                          <input id="tOldPwd" class="input-large" type="password" name="tOldPwd" placeholder="旧密码">
+                        </span>
                       </div>
-                    </div>
-                    <div class="col-xs-12">  
                       <div class="form-group">
-                          <label for="tNewPwd" class="control-label col-xs-12 col-sm-3"><span class="red">*</span>新密码：</label>
-                          <div class="col-xs-12 col-sm-9">
-                            <input class="form-control" type="password" id="tNewPwd" name="tnNewPwd" placeholder="新密码">
-                          </div>  
+                        <span>
+                          <label for="tNewPwd"><span class="red">*</span>新密码：</label>
+                          <input class="input-large" type="password" id="tNewPwd" name="tnNewPwd" placeholder="新密码">
+                        </span>
                       </div>
-                    </div>
-                    <div class="col-xs-12">  
                       <div class="form-group">
-                        <label for="tNewPwdAgain" class="control-label col-xs-3"><span class="red">*</span>重复新密码：</label>
-                        <div class="col-xs-12 col-sm-9">
-                          <input class="form-control" type="password" id="tNewPwdAgain" name="tNewPwdAgain" placeholder="重复新密码">
-                        </div>  
+                        <span>
+                          <label for="tNewPwdAgain"><span class="red">*</span>重复新密码</label>
+                          <input class="input-large" type="password" id="tNewPwdAgain" name="tNewPwdAgain" placeholder="重复新密码">
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -391,7 +381,7 @@ div.check_in img:hover{
   <script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<c:url value="/resources/js/jquery.mobile.custom.min.js" />'>"+"<"+"/script>");
 		</script>
-  <script type="text/javascript" src="<c:url value="/resources/js/uncompressed/bootstrap.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 
   <!-- ace scripts -->
   <script type="text/javascript" src='<c:url value="/resources/js/ace-elements.min.js" />' ></script>
@@ -410,7 +400,6 @@ div.check_in img:hover{
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.form-helper.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.validate.methods.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/jquery.md5.js" />' ></script>
-  <script type="text/javascript" src='<c:url value="/resources/js/jquery.gritter.min.js" />' ></script>
   
   <script type="text/javascript">
 	//Load content via ajax
@@ -424,7 +413,6 @@ div.check_in img:hover{
 		});
 						
 		$('#FORM_CHANGE_PWD').submit(function(event){
-			
 			if($('#tOldPwd').val()==='' ||
 				$('#tNewPwd').val()===''){
 				$("#changePwdNotice").text("密码不能为空！");
@@ -461,97 +449,72 @@ div.check_in img:hover{
 			return false;
 		});
 		
-		$('.check-in a').on('click',function(event){
-			event.preventDefault();
-			switch($(this).attr('data-check-action')){
-			case 'checkin':
-				console.log('checkin clicked....');
-				$('#isCheckIn').val('true')
-		    $('#room_input_dlg').modal('show');
-				break;
-		  case 'checkout':
-			  console.log('checkout clicked....');
-			  $('#isCheckIn').val('false')
-				$('#room_input_dlg').modal('show');
-        break;
-			case 'test':
-				console.log('test clicked.....')
-			  $.gritter.add({
-				  text:'aaaaa',
-				  class_name: 'gritter-success'
-			  });
-				break;
+		$('#rooms').on('click','.room-btn', function(){
+			console.log('btn clicked['+ $(this).attr('data-room') +']...');			
+		});
+		
+		$('#storeyButtons').on('change', 'input[data-storey]', function(){
+			if($(this).prop('checked')){
+				console.log('storey['+$(this).attr('data-storey') +'] selected ');				
+			  var hiddenItem=".room-btn[data-storey!='"+ $(this).attr('data-storey') +"']:visible";
+			  console.log('hiddenItem:' + hiddenItem);
+			  var visibleItem=".room-btn[data-storey='"+ $(this).attr('data-storey') +"']";
+			  console.log('visibleItem:' + visibleItem);
+			  $(hiddenItem).addClass('hidden');
+			  $(visibleItem).removeClass('hidden');
+			  return true;
 			}
 		});
 		
-		$('#room_input_dlg').on('show.bs.modal', function(){
-			$('#room_input_error').html('');
-			$('#roomNo').val('');
+		$('#roomSearch').keydown(function(){
+			$('.room-btn').addClass('hidden');
+			var filter=".room-btn[data-room*='"+ $(this).val() +"']";
+			$(filter).removeClass('hidden');
 		});
 		
-		$('#room_input_form').on('submit', function(event){
-			event.preventDefault();
-			if($('#roomNo').val()==''){
-				$('#room_input_error').html('<p class="control-static red">请输入房间号！</p>')
-				return;
-			}
-			var url='<c:url value="/hotel/reception/checkin" />';
-			if($('#isCheckIn').val()==='false'){
-				url='<c:url value="/hotel/reception/checkout" />';
-			}
+	  var buildStoreys=function(storeys){
+		  var $buttons=$('#storeyButtons');
+	    $buttons.html('');
+	    for(var i=0; i< storeys.length; i++){
+	      var $button=$('<label class="btn btn-lg  btn-block storey" ><input type="radio" data-storey="'+ 
+	           storeys[i] + '" value="'+ storeys[i] +
+	           '"/>'+ storeys[i] + '层</label>');
+	      $buttons.append($button);
+	    }
+	  };
+	  var buildRooms=function(rooms){
+	    var $rooms=$('#rooms');
+	    $rooms.html('');
+	    for(var i=0; i<rooms.length; i++){
+	      var $room=$('<div class="room-btn" data-storey="'+ rooms[i].storey + '" data-room="'+ rooms[i].roomNo + '">'+
+	          '<div class="room-plate">'+ rooms[i].roomNo + '</div>' +
+	          '<div class="">入住时间：'+ (rooms[i].chekinTime?rooms[i].chekinTime:'') +'</div>' +
+	          '<div class=""><div class="info">使用次数：</div>'+ 
+	          '<div class="">' +rooms[i].useTimes + '</div>' +
+	          '<div class="charge-panel"><div class="info">应付款：</div>' +          
+	          '<div class="charge red"><strong>'+ rooms[i].charge + '</strong></div></div></div>');
+	          $rooms.append($room);    
+	    }
+	  };		
+		
+		var refreshRooms=function(){
 			$.ajax({
-				async:false,
-				type:'get',
-				data:'roomNo=' + $('#roomNo').val(),
-				url: url,
+				url : '<c:url value="/hotel/reception/rooms" />',
+				type : 'post',
+				data : '',
 				dataType : 'json'
 			}).done(function(data){
-				if(data.ok){
-					if($('#isCheckIn').val()=='true'){
-					  $('#room_input_dlg').modal('hide');
-					  $('#checkin_prompt').html('是否入住房间<strong class="red">'+data.roomNo+'</strong>?');
-					  $('#room_checkin_dlg').modal('show');
-					} else {
-						
-					}
-				} else {
-					$('#room_input_error').html('<p class="control-static red">'+ data.reason +'</p>');
+				console.log('return data=' + data.storeys);
+				if(data && data.storeys){
+					buildStoreys(data.storeys);
 				}
-			});			
-		});
-		
-		$('#room_checkin_form').on('submit', function(event){
-			event.preventDefault();
-			$.ajax({
-				type: 'post',
-				data: 'roomNo=' + $('#roomNo').val(),
-				url: '<c:url value="/hotel/reception/checkin" />',
-				dataType:'json'
-			}).fail(function(){
-				$.gritter.add({
-          title:'入住登记',
-					text:'执行入住登记错误，请联系系统管理员！',
-					class_name:'gritter-error'
-					});
-			}).done(function(data){
-				if(data.ok){
-				  $.gritter.add({
-					  title:'入住登记',
-					  text:'入住登记成功！',
-					  class_name:'gritter-success'					
-					});
-				} else {
-					$.gritter.add({
-						title:'入住登记',
-						text:'入住登记失败！' + data.reason,
-					  class_name:'gritter-error'
-					});
+				if(data && data.rooms){
+					buildRooms(data.rooms);
 				}
 			});
-			$('#room_checkin_dlg').modal('hide');
-		});
-		
-		
+		};
+
+		setInterval(refreshRooms, 10000);		
 	});
 </script>
 </body>

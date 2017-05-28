@@ -7,6 +7,7 @@ import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.domain.HotelRoomInfo;
 import com.uc.bpg.domain.RoomDetail;
+import com.uc.bpg.uitls.OptResult;
 
 public interface ReceptionService {
 
@@ -18,7 +19,6 @@ public interface ReceptionService {
 	ChargingDetails selectChargingDetails(Long room);
 	boolean selectRoomCanCheckIn(Long room);
 	HotelRoomInfo selectHotelRoomInfo(Long hotel);
-	
-	
-
+	OptResult<Charging> selectRoomCheckOut(Long id, String room);
+	OptResult<CheckIn> selectRoomCheckIn(Long hotel, String roomNo);
 }

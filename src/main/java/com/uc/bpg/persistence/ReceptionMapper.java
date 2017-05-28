@@ -2,6 +2,8 @@ package com.uc.bpg.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.uc.bpg.domain.Charging;
 import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
@@ -22,5 +24,11 @@ public interface ReceptionMapper {
 	boolean selectRoomCanCheckIn(Long room);
 
 	ChargingDetails selectChargingDetails(Long room);
+
+	CheckIn selectRoomCheckIn(
+			@Param("hotel")
+			Long hotel,
+			@Param("roomNo")
+			String roomNo);
 
 }

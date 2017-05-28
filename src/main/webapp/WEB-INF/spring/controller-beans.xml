@@ -171,4 +171,19 @@
 		class="com.uc.bpg.controller.impl.DeviceUsageRecordListControllerImpl">
 		<property name="appListService" ref="deviceUsageListService" />
 	</bean>
+	
+	<bean id="checkInExportorFacotry" class="com.uc.bpg.export.CheckInExportorFactory" />
+	<bean id="foreCheckInListController" class="com.uc.bpg.controller.hotel.impl.CheckInListControllerImpl">
+	 <property name="appListService" ref="checkInListService" />
+	 <property name="pageBasePath" value="/hotel/checkin" />
+	 <property name="modelTitle" value="入住记录" />
+	 <property name="exportorFactory" ref="checkInExportorFacotry" />
+	 <property name="exportorOptions" ref="excelExportorOptions" />
+	</bean>
+	<bean id="foreCheckInDetailController" class="com.uc.bpg.controller.hotel.impl.CheckInDetailControllerImpl">
+	 <property name="appDetailService" ref="checkInDetailService" />
+	 <property name="pageBasePath" value="/hotel/checkin" />
+	 <property name="modelTitle" value="入住记录" />
+	 <property name="entityName" value="入住记录" />
+	</bean>
 </beans>

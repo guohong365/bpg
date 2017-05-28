@@ -57,6 +57,13 @@
       </foreach>
     </where>
   </sql>
+  <select id="selectRoomCheckIn" parameterType="map" resultMap="checkInRecordDetail">
+    select a.ID as ROOM, a.HOTEL as HOTEL, c.ID as ID, c.CHECK_IN_TIME as CHECK_IN_TIME, c.CHECK_OUT_TIME as CHECK_OUT_TIME 
+    from t_room a 
+      left join (select ROOM, max(ID) as MAX_ID from t_check_in group by ROOM) b on b.ROOM=a.ID
+      left join t_check_in c on c.ID=MAX_ID
+    where a.HOTEL = #{hotel,jdbcType=INTEGER} and a.ROOM_NO = #{roomNo,jdbcType=VARCHAR} 
+  </select>
   <select id="selectStoreys" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select distinct a.STOREY from t_room a 
     left join t_device b on b.ROOM = a.ID 

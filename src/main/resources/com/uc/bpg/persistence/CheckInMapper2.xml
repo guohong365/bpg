@@ -48,41 +48,6 @@
       </foreach>
     </where>
   </sql>
-  <sql id="selectSql">
-   select 
-     a.ID, a.HOTEL, a.ROOM, a.CHECK_IN_TIME, a.CHECK_IN_RECEPTIONIST, a.CHECK_OUT_TIME, a.CHECK_OUT_RECEPTIONIST,
-     b.STOREY, b.ROOM_NO, b.VALID, b.ID as ROOM_ID,
-     c.NAME as CHECK_IN_RECEPTIONIST_NAME,
-     d.NAME as CHECK_OUT_RECEPTIONIST_NAME,
-     (
-        select count(*) 
-        from t_device_usage s 
-        where s.ROOM=a.ROOM and s.USE_TIME &gt;= a.CHECK_IN_TIME and s.USE_TIME &lt;= ifnull(a.CHECK_OUT_TIME, 
-        <choose>
-        <when test="queryForm!=null and queryForm.queryNow!=null">
-          #{queryForm.queryNow,jdbcType=TIMESTAMP}
-        </when>
-        <otherwise>now()</otherwise>
-        </choose>
-        )  
-        group by s.ROOM) as USE_TIMES,
-     (
-        select sum(s.charge) as CHARGE 
-        from t_device_usage s  
-        where s.ROOM=a.ROOM and s.USE_TIME &gt;= a.CHECK_IN_TIME and s.USE_TIME &lt;=ifnull(a.CHECK_OUT_TIME,
-        <choose>
-        <when test="queryForm!=null and queryForm.queryNow!=null">
-          #{queryForm.queryNow,jdbcType=TIMESTAMP}
-        </when>
-        <otherwise>now()</otherwise>
-        </choose>         
-        ) 
-        group by s.ROOM) as CHARGE
- from t_check_in a
- left join t_room b on b.ID=a.ROOM 
- left join t_user c on c.ID=a.CHECK_IN_RECEPTIONIST
- left join t_user d on d.ID=a.CHECK_OUT_RECEPTIONIST
-  </sql>
   <sql id="columns">
     ID, UUID, HOTEL, ROOM, CHECK_IN_TIME, CHECK_IN_RECEPTIONIST, CHECK_OUT_TIME, 
     CHECK_OUT_RECEPTIONIST
@@ -162,21 +127,70 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectOptimized" parameterType="com.uc.bpg.forms.CheckInQueryForm" resultMap="checkInRecordDetail">
-    <include refid="selectSql" />
+   select 
+    t1.ROOM_NO, 
+    t1.HOTEL,
+    t1.ID as ROOM, 
+    t2.ID as ID,
+    t2.CHECK_IN_TIME,
+    t2.CHECK_OUT_TIME,
+    t2.CHECK_IN_RECEPTIONIST,
+    t3.NAME as CHECK_IN_RECEPTIONIST_NAME,
+    t2.CHECK_OUT_RECEPTIONIST,
+    t4.NAME as CHECK_OUT_RECEPTIONIST_NAME,
+    ifnull(t2.USE_TIMES,0) as USE_TIMES, 
+    ifnull(t2.CHARGING,0) as CHARGING,
+    ifnull(t2.CHARGE,0) as CHARGE,
+    ifnull(t2.CHARGE_STANDARD,0) as CHARGE_STANDARD
+  from t_room t1
+  left join (
+    select 
+      a.*, 
+      count(c.ID) as USE_TIMES, 
+      sum(c.CHARGING) as CHARGING,
+      sum(c.CHARGE) as CHARGE,
+      sum(c.CHARGE_STANDARD) as CHARGE_STANDARD
+    from t_check_in a 
+    left join (select max(s.ID) as MAX_ID from t_check_in s
+    <if test="queryForm!=null">
+     <where>
+       <trim prefixOverrides="and">
+         <if test="queryForm.queryCheckInTimeFrom!=null">
+           and s.CHECK_IN_TIME &gt;= #{queryForm.queryCheckInTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckInTimeTo!=null">
+           and s.CHECK_IN_TIME &lt;= #{queryForm.queryCheckInTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckOutTime!=null">
+           and s.CHECK_OUT_TIME &gt;= #{queryForm.queryCheckOutTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckOutTime!=null">
+           and s.CHECK_OUT_TIME &lt;= #{queryForm.queryCheckOutTimeFrom}
+         </if>
+       </trim>  
+     </where>
+    </if> 
+     group by s.ROOM) b on b.MAX_ID=a.ID
+    left join t_device_usage c on c.ROOM=a.ROOM and c.USE_TIME &gt;= a.CHECK_IN_TIME and c.USE_TIME &lt;= ifnull(a.CHECK_OUT_TIME, now())
+    where b.MAX_ID is not null
+    group by a.ROOM
+    ) t2 on t2.ROOM= t1.ID
+  left join t_user t3 on t3.ID=t2.CHECK_IN_RECEPTIONIST    
+  left join t_user t4 on t4.ID=t2.CHECK_OUT_RECEPTIONIST
   <if test="queryForm!=null">
     <where>
     <trim prefixOverrides="and">
       <if test="queryForm.queryHotel !=null">
-        and a.HOTEL=#{queryForm.queryHotel,jdbcType=INTEGER}
+        and t1.HOTEL=#{queryForm.queryHotel,jdbcType=INTEGER}
       </if>
       <if test="queryForm.queryRoomNo !=null">
-        and b.ROOM_NO like '${queryForm.queryRoomNo}%'
+        and t1.ROOM_NO like '${queryForm.queryRoomNo}%'
       </if>
       <if test="queryForm.queryCheckInReceptionistName!=null">
-        and c.NAME like '${queryForm.queryCheckInReceptionistName}%'
+        and t3.NAME like '${queryForm.queryCheckInReceptionistName}%'
       </if>
       <if test="queryForm.queryCheckOutReceptionistName!=null">
-        and d.NAME like '${queryForm.queryCheckOutReceptionistName}%'
+        and t4.NAME like '${queryForm.queryCheckOutReceptionistName}%'
       </if>      
     </trim>    
     </where>
@@ -188,24 +202,51 @@
   </select>
   <select id="selectCountOptimized"  parameterType="com.uc.bpg.forms.CheckInQueryForm" resultType="java.lang.Long" >
   select count(*) 
-  from t_check_in a
- left join t_room b on b.ID=a.ROOM 
- left join t_user c on c.ID=a.CHECK_IN_RECEPTIONIST
- left join t_user d on d.ID=a.CHECK_OUT_RECEPTIONIST
+  from t_room t1
+  left join (
+    select 
+    a.* 
+    from t_check_in a 
+    left join (select max(s.ID) as MAX_ID from t_check_in s
+    <if test="queryForm!=null">
+     <where>
+       <trim prefixOverrides="and">
+         <if test="queryForm.queryCheckInTimeFrom!=null">
+           and s.CHECK_IN_TIME &gt;= #{queryForm.queryCheckInTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckInTimeTo!=null">
+           and s.CHECK_IN_TIME &lt;= #{queryForm.queryCheckInTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckOutTime!=null">
+           and s.CHECK_OUT_TIME &gt;= #{queryForm.queryCheckOutTimeFrom}
+         </if>
+         <if test="queryForm.queryCheckOutTime!=null">
+           and s.CHECK_OUT_TIME &lt;= #{queryForm.queryCheckOutTimeFrom}
+         </if>
+       </trim>  
+     </where>
+    </if>     
+     group by s.ROOM) b on b.MAX_ID=a.ID
+    left join t_device_usage c on c.ROOM=a.ROOM and c.USE_TIME &gt;= a.CHECK_IN_TIME and c.USE_TIME &lt;= ifnull(a.CHECK_OUT_TIME, now())
+    where b.MAX_ID is not null
+    group by a.ROOM
+    ) t2 on t2.ROOM= t1.ID
+  left join t_user t3 on t3.ID=t2.CHECK_IN_RECEPTIONIST    
+  left join t_user t4 on t4.ID=t2.CHECK_OUT_RECEPTIONIST
   <if test="queryForm!=null">
     <where>
     <trim prefixOverrides="and">
       <if test="queryForm.queryHotel !=null">
-        and a.HOTEL=#{queryForm.queryHotel,jdbcType=INTEGER}
+        and t1.HOTEL=#{queryForm.queryHotel,jdbcType=INTEGER}
       </if>
       <if test="queryForm.queryRoomNo !=null">
-        and b.ROOM_NO like '${queryForm.queryRoomNo}%'
+        and t1.ROOM_NO like '${queryForm.queryRoomNo}%'
       </if>
       <if test="queryForm.queryCheckInReceptionistName!=null">
-        and c.NAME like '${queryForm.queryCheckInReceptionistName}%'
+        and t3.NAME like '${queryForm.queryCheckInReceptionistName}%'
       </if>
       <if test="queryForm.queryCheckOutReceptionistName!=null">
-        and d.NAME like '${queryForm.queryCheckOutReceptionistName}%'
+        and t4.NAME like '${queryForm.queryCheckOutReceptionistName}%'
       </if>      
     </trim>    
     </where>

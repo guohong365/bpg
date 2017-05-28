@@ -897,7 +897,11 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       that.$element
         .addClass('in')
         .attr('aria-hidden', false)
-
+      
+      var $modal_dialog = $(that.$element[0]).find('.modal-dialog');  
+      var m_top = ( $(document).height() - $modal_dialog.height() )/2;  
+      $modal_dialog.css({'margin-top': m_top + 'px'});  
+  
       that.enforceFocus()
 
       var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })

@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.domain.RoomDetail;
 import com.uc.bpg.persistence.ReceptionMapper;
 import com.uc.bpg.test.TestBase;
@@ -31,5 +32,8 @@ public class ReceptionMapperTest extends TestBase{
 			System.err.println(builder.toString());
 		}
 		
+		CheckIn checkIn=mapper.selectRoomCheckIn(2L, "8301");
+		
+		System.err.println(checkIn.toString());
 	}
 }

@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.uc.bpg.domain.Charging;
 import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
-import com.uc.bpg.domain.HotelRoomInfo;
 import com.uc.bpg.domain.RoomDetail;
+import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.service.ReceptionService;
+import com.uc.bpg.uitls.OptResult;
 import com.uc.web.controller.ControllerProxySupportImpl;
 
 @Controller
@@ -43,13 +43,6 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 	
 	private static SerializeConfig mapping=new SerializeConfig();
 	private static String dateFormat="yyyy-MM-dd HH:mm:ss";
-	private static SerializerFeature[] features={
-			SerializerFeature.WriteMapNullValue,
-			SerializerFeature.WriteNullBooleanAsFalse,
-			SerializerFeature.WriteNullListAsEmpty,
-			SerializerFeature.WriteNullNumberAsZero,
-			SerializerFeature.WriteNullStringAsEmpty
-	};
 	static {
 		mapping.put(Date.class, new SimpleDateFormatSerializer(dateFormat));
 	}
@@ -72,39 +65,57 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 		return RECEPTION_PAGE;
 	}
 	
-	@RequestMapping(value="/checkin", method=RequestMethod.GET)
+	@RequestMapping(value="/checkin", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String getCheckIn(
-		@RequestParam("room")
-		Long room,
-		Model model){		
-		return getService().selectRoomCanCheckIn(room)? "OK": "FAILED";
-	}
-	@RequestMapping(value="checkin", method=RequestMethod.POST)
-	@ResponseBody
-	public String postCheckIn(
-			Long room,
+	public String preCheckIn(
+			@RequestParam(value="roomNo", required=true)
+			String roomNo,
 			Model model
 			){
-		CheckIn checkIn=new CheckIn();
-		checkIn.setCheckInReceptionist(getUserProfile().getUser().getId());
-		checkIn.setCheckInTime(Calendar.getInstance().getTime());
-		checkIn.setHotel(getUserProfile().getOrgnization().getId());
-		checkIn.setRoom(room);
-		checkIn.setUuid(UUID.randomUUID().toString());
-		return getService().insertCheckIn(checkIn)==1 ?"OK":"ERROR";
-	}
-	@RequestMapping(value="/checkout", method=RequestMethod.GET)
-	public String getCharge(
-			Long room,
-			Model model
-			){
-		Charging charging= getService().selectCharge(room);		
-		model.addAttribute(PARAM_NAME_CHARGE, charging);
-		return getPageBasePath() + "/checkout";
+		OptResult<CheckIn> result=getService().selectRoomCheckIn(getUserProfile().getOrgnization().getId(), roomNo);
+		
+		return JSONObject.toJSONString(result);
 	}
 	
-	@RequestMapping(value="/checkout", method=RequestMethod.POST)
+	@RequestMapping(value="/checkin", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String postCheckIn(
+			@RequestParam(value="roomNo", required=true)
+			String roomNo,
+			Model model
+			){
+		UserProfile user=(UserProfile)getUserProfile();
+		OptResult<CheckIn> result=getService().selectRoomCheckIn(user.getOrgnization().getId(), roomNo);
+		if(result.isOk()){
+			CheckIn checkIn=new CheckIn();
+			checkIn.setCheckInReceptionist(getUserProfile().getUser().getId());
+			checkIn.setCheckInTime(Calendar.getInstance().getTime());
+			checkIn.setHotel(getUserProfile().getOrgnization().getId());
+			checkIn.setRoom(result.getRoom());
+			checkIn.setUuid(UUID.randomUUID().toString());
+			int ret=getService().insertCheckIn(checkIn);
+			result.setData(checkIn);
+			if(ret!=1){
+				result.setOk(false);
+				result.setReason("系统错误，请联系管理员！");
+			}
+		} 
+		return JSONObject.toJSONString(result);
+	}
+	
+	@RequestMapping(value="/checkout", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String preCheckOut(
+			@RequestParam(value="roomNo", required=true)
+			String room,
+			Model model
+			){
+		UserProfile user=(UserProfile)getUserProfile();
+		OptResult<Charging> result=getService().selectRoomCheckOut(user.getOrgnization().getId(), room);		
+		return JSONObject.toJSONString(result);
+	}
+	
+	@RequestMapping(value="/charging", method=RequestMethod.POST)
 	public String postCharge(
 			@ModelAttribute(PARAM_NAME_CHARGE)
 			Charging charging, 
@@ -120,15 +131,5 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 		model.addAttribute(PARAM_NAME_CHARGING_DETAILS, chargingDetails);
 		return getPageBasePath() + "/details";
 	}
-	
-	@RequestMapping(value="/rooms", method=RequestMethod.POST, produces="application/json;charset=UTF-8;")
-	@ResponseBody
-	public String postLoadRooms(){
-		HotelRoomInfo info= getService().selectHotelRoomInfo(getUserProfile().getOrgnization().getId());
-		return JSON.toJSONString(info, mapping, features);
-	}
-	
-	
-	
 	
 }

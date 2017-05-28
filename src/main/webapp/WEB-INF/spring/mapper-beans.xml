@@ -70,4 +70,10 @@
     <property name="mapperInterface" value="com.uc.bpg.persistence.ReceptionMapper" />
     <property name="sqlSessionFactory" ref="sqlSessionFactory" />
   </bean>
+  
+  <bean id="checkInMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.uc.bpg.persistence.CheckInMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  
 </beans>

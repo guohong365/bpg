@@ -87,9 +87,18 @@
 	 <property name="receptionMapper" ref="receptionMapper" />
 	</bean>
 	  <bean id="roomListService" class="com.uc.bpg.service.impl.RoomListServiceImpl">
-    <property name="appListMapper" ref="roomMapper"></property>
+    <property name="appListMapper" ref="roomMapper" />
   </bean>
   <bean id="roomDetailService" class="com.uc.bpg.service.impl.RoomDetailServiceImpl">
-    <property name="appDetailMapper" ref="roomMapper"></property>
+    <property name="appDetailMapper" ref="roomMapper" />
   </bean>
+  
+  <bean id="checkInListService" class="com.uc.bpg.service.impl.CheckInListServiceImpl">
+    <property name="appListMapper" ref="checkInMapper" />
+    <property name="defaultOrderByClause" value="ROOM_NO" />
+  </bean>
+  <bean id="checkInDetailService" class="com.uc.bpg.service.impl.CheckInDetailServiceImpl">
+    <property name="appDetailMapper" ref="checkInMapper" />
+  </bean>
+  
 </beans>
