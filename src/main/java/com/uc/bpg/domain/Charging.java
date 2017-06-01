@@ -2,15 +2,17 @@ package com.uc.bpg.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import com.uc.web.domain.EntityBase;
 
 
 public class Charging  extends EntityBase {
 	private Long id;
 	private String uuid;
+	private Long hotel;
 	private Long checkIn;
-	private BigDecimal chagre;
+	private BigDecimal charge;
+	private BigDecimal chargeStandard;
+	private BigDecimal rent;
 	private Long receptionist;
 	private Date chargingTime;
 	public Long getId() {
@@ -26,12 +28,6 @@ public class Charging  extends EntityBase {
 		this.uuid = uuid;
 	}
 	
-	public BigDecimal getChagre() {
-		return chagre;
-	}
-	public void setChagre(BigDecimal chagre) {
-		this.chagre = chagre;
-	}
 	public Long getReceptionist() {
 		return receptionist;
 	}
@@ -50,5 +46,28 @@ public class Charging  extends EntityBase {
 	public void setCheckIn(Long checkIn) {
 		this.checkIn = checkIn;
 	}
-
+	public BigDecimal getCharge() {
+		return charge;
+	}
+	public void setCharge(BigDecimal charge) {
+		this.charge = charge;
+	}
+	public Long getHotel() {
+		return hotel;
+	}
+	public void setHotel(Long hotel) {
+		this.hotel = hotel;
+	}
+	public BigDecimal getChargeStandard() {
+		return chargeStandard;
+	}
+	public void setChargeStandard(BigDecimal chargeStandard) {
+		this.chargeStandard = chargeStandard;
+	}
+	public BigDecimal getRent() {
+		return rent;
+	}
+	public void setRent(BigDecimal rent) {
+		this.rent = rent;
+	}
 }

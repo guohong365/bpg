@@ -116,6 +116,9 @@
           </div>
         </div>
         <div class="modal-footer">
+          <button id="btnSave" class="btn btn-primary" type="submit">
+            <i class="ace-icon fa fa-check"></i>确认
+          </button>
           <button id="btnCancel" class="btn btn-sm" data-dismiss="modal">
             <i class="ace-icon fa fa-times"></i> 关闭
           </button>

@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="spring"  uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <div id="detail-dialog" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -28,83 +28,83 @@
                 <div class="widget-body">
                   <div class="widget-main">
                     <div class="row">
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">生成时间：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.generatedTime}</p>
+                            <p class="form-control-static blue"><fmt:formatDate value="${detailInput.generatedTime}" pattern="yyyy年MM月dd日 HH:mm:ss" /></p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">酒店：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.hotelName}</p>
+                            <p class="form-control-static blue">${detailInput.hotelName}</p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">酒店收入：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.income}</p>
+                            <p class="form-control-static blue"><fmt:formatNumber type="currency" pattern="￥0.00" value="${detailInput.income}" /> </p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
-                          <label class="control-label col-xs-12 col-sm-4">应付款：</label>
+                          <label class="control-label col-xs-12 col-sm-4">分成收入：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.payable}</p>
+                            <p class="form-control-static blue"><fmt:formatNumber type="currency" pattern="￥0.00" value="${detailInput.basicCharge}" /></p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
-                          <label class="control-label col-xs-12 col-sm-4">分成比例：</label>
+                          <label class="control-label col-xs-12 col-sm-4">应付分成：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.ratio}</p>
+                            <p class="form-control-static blue"><fmt:formatNumber type="currency" pattern="￥0.00"  value="${detailInput.rent}" /></p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">状态：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.state}</p>
+                            <p class="form-control-static blue">${detailInput.state}</p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">付款时间：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.payTime}</p>
+                            <p class="form-control-static blue"><fmt:formatDate value="${detailInput.payTime}" pattern="yyyy年MM月dd日 HH:mm:ss" /></p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">付款人：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.payerName}</p>
+                            <p class="form-control-static blue">${detailInput.payerName}</p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">确认时间：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.verifyTime}</p>
+                            <p class="form-control-static blue"><fmt:formatDate value="${detailInput.verifyTime}" pattern="yyyy年MM月dd日 HH:mm:ss" /></p>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-sm-6 col-lg-4">
+                      <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">确认人：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static">${detailInput.verifierName}</p>
+                            <p class="form-control-static blue">${detailInput.verifierName}</p>
                           </div>
                         </div>
                       </div>
@@ -116,22 +116,11 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="btnSave" class="btn btn-sm btn-primary" type="submit">
-            <i class="ace-icon fa fa-check"></i> 保存
-          </button>
           <button id="btnCancel" class="btn btn-sm" data-dismiss="modal">
-            <i class="ace-icon fa fa-times"></i> 取消
+            <i class="ace-icon fa fa-times"></i> 关闭
           </button>
         </div>
       </form:form>
     </div>
   </div>
 </div>
-<script type="text/javascript">
-	$(document).ready(function() {
-		<c:if test="${action eq 'view'}" >
-		$('#btnCancel').text('关闭');
-		$('#btnSave').addClass('hide');
-		</c:if>
-	});
-</script>

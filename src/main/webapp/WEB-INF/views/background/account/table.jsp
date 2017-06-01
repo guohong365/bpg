@@ -67,19 +67,19 @@
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='应付款' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="应付款">应付款</th>
+                      <c:when test="${queryInput.queryOrderBy =='分成收入' }">
+                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成收入">分成收入</th>
                       </c:when>
                       <c:otherwise>
-                        <th class="center sorting" data-column="应付款">应付款</th>
+                        <th class="center sorting" data-column="分成收入">分成收入</th>
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='分成比例' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成比例">分成比例</th>
+                      <c:when test="${queryInput.queryOrderBy =='分成' }">
+                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成比例">分成</th>
                       </c:when>
                       <c:otherwise>
-                        <th class="center sorting" data-column="分成比例">分成比例</th>
+                        <th class="center sorting" data-column="分成">分成</th>
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
@@ -131,22 +131,20 @@
                       <td><fmt:formatDate value="${item.generatedTime}" pattern="yyyy年MM月dd日" /></td>
                       <td>${item.hotelName}</td>
                       <td><fmt:formatNumber value="${item.income}" type="currency" currencySymbol="￥" maxFractionDigits="2" /></td>
-                      <td><fmt:formatNumber value="${item.payable}" type="currency" currencySymbol="￥" maxFractionDigits="2" /></td>
-                      <td><fmt:formatNumber value="${item.ratio}" type="percent" maxFractionDigits="2" /></td>
+                      <td><fmt:formatNumber value="${item.basicCharge}" type="currency" currencySymbol="￥" maxFractionDigits="2" /></td>
+                      <td><fmt:formatNumber value="${item.rent}" type="currency" currencySymbol="￥" maxFractionDigits="2" /></td>
                       <td>${item.state}</td>
                       <td><fmt:formatDate value="${item.payTime}" pattern="yyyy年MM月dd日" /></td>
                       <td>${item.payerName}</td>
                       <td><fmt:formatDate value="${item.verifyTime}" pattern="yyyy年MM月dd日" /></td>
                       <td>${item.verifierName}</td>
                       <td>
-                        <div class="btn-group">
-                          <c:set var="disabled" value="disabled" />
-                          <c:if test="${item.payTime!=0}">
-                            <c:set var="disabled" value="" />
-                          </c:if>
-                          <button data-original-title="确认收款" data-rel="tooltip" title="" class="btn btn-xs btn-danger ${disabled}" data-action="comfirm" data-item="${item.id }" type="button">
+                        <div class="btn-group">                          
+                          <c:if test="${item.payTime!=null and item.verifyTime==null}">
+                          <button data-original-title="确认收款" data-rel="tooltip" title="" class="btn btn-xs btn-danger" data-action="verify" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-edit bigger-120"></i>确认收款
                           </button>
+                          </c:if>
                           <button data-original-title="查看" data-rel="tooltip" title="" class="btn btn-xs btn-primary" data-action="view" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-search bigger-120"></i>查看
                           </button>

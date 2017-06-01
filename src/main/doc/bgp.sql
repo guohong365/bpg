@@ -1,29 +1,12 @@
-CREATE DATABASE  IF NOT EXISTS `bpg` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE  IF NOT EXISTS `bpg` DEFAULT CHARACTER SET utf8 ;
 USE `bpg`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- Host: localhost    Database: bpg
--- ------------------------------------------------------
--- Server version	5.7.16-log
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `t_allot_history`
 --
 
 DROP TABLE IF EXISTS `t_allot_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `t_allot_history` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -40,22 +23,19 @@ CREATE TABLE `t_allot_history` (
   KEY `I_ROOM` (`ROOM`),
   KEY `I_OPERATOR` (`OPERATOR`)
 ) ENGINE=InnoDB AUTO_INCREMENT=758 DEFAULT CHARSET=utf8 COMMENT='设备分配历史';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_bill`
 --
 
 DROP TABLE IF EXISTS `t_bill`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_bill` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
   `HOTEL` int(10) unsigned NOT NULL COMMENT '酒店',
-  `PAYABLE` decimal(10,3) NOT NULL COMMENT '应付账款',
-  `INCOME` decimal(10,3) NOT NULL COMMENT '应分成总收入',
-  `RATIO` decimal(10,3) NOT NULL COMMENT '分成比例',
+  `INCOME` decimal(10,3) NOT NULL COMMENT '酒店收入，源自酒店定价',
+  `BASIC_CHARGE` decimal(10,3) NOT NULL COMMENT '分成基准，源自公司定价',
+  `RENT`  decimal(10,3) NOT NULL COMMENT '分成金额=累计（每次使用应分成收入x当时分成比例）',
   `STATE` enum('未付款','已付款','确认收款') NOT NULL COMMENT '未付 已付 （酒店操作，通知公司已付款）确认收款（公司操作）',
   `GENERATED_TIME` datetime NOT NULL COMMENT '账单生成时间',
   `PAY_TIME` datetime DEFAULT NULL COMMENT '付款时间',
@@ -68,15 +48,12 @@ CREATE TABLE `t_bill` (
   KEY `I_VERIFIER` (`VERIFIER`),
   KEY `I_HOTEL` (`HOTEL`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='账单';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_bp_data`
 --
 
 DROP TABLE IF EXISTS `t_bp_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_bp_data` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `DEVICE` int(10) unsigned NOT NULL COMMENT '设备ID',
@@ -88,39 +65,34 @@ CREATE TABLE `t_bp_data` (
   PRIMARY KEY (`ID`),
   KEY `I_DEVICE` (`DEVICE`)
 ) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8 COMMENT='设备使用数据，即血压测量数据';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_charging`
 --
 
 DROP TABLE IF EXISTS `t_charging`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_charging` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
   `HOTEL` int(10) unsigned NOT NULL COMMENT '酒店',
-  `CHECK_IN_RECORD` int(10) unsigned NOT NULL COMMENT '入住记录',
-  `CHAGRE` decimal(10,3) NOT NULL COMMENT '应付款（酒店方收款标准，冗余收费策略）',
-  `CHARGING_STANDARD` decimal(10,3) NOT NULL COMMENT '付款标准（公司方收款标准，冗余收费策略）',
-  `RATIO` decimal(10,3) NOT NULL COMMENT '分成比例（冗余收费策略）',
+  `CHECK_IN` int(10) unsigned NOT NULL COMMENT '入住记录',
+  `CHARGE` decimal(10,3) NOT NULL COMMENT '应付款（酒店方收款标准，冗余收费策略）',
+  `CHARGE_STANDARD` decimal(10,3) NOT NULL COMMENT '付款标准（公司方收款标准，冗余收费策略）',
+  `RENT` decimal(10,3) NOT NULL COMMENT '分成金额，本次入住分成',
   `RECEPTIONIST` int(10) unsigned NOT NULL COMMENT '付款操作人（与入住记录里相同，冗余）',
   `CHARGING_TIME` datetime NOT NULL COMMENT '付款时间',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`),
   KEY `I_HOTEL` (`HOTEL`),
+  KEY `I_CHECK_IN` (`CHECK_IN`),
   KEY `I_RECEPTIONIST` (`RECEPTIONIST`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收费记录';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_check_in`
 --
 
 DROP TABLE IF EXISTS `t_check_in`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_check_in` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -137,15 +109,12 @@ CREATE TABLE `t_check_in` (
   KEY `I_CHECK_IN_RECEPTIONIST` (`CHECK_IN_RECEPTIONIST`),
   KEY `I_CHECK_OUT_RECEPTIONIST` (`CHECK_OUT_RECEPTIONIST`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='房间入住记录';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_device`
 --
 
 DROP TABLE IF EXISTS `t_device`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_device` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -166,16 +135,13 @@ CREATE TABLE `t_device` (
   KEY `I_HOTEL` (`HOTEL`),
   KEY `I_ROOM` (`ROOM`),
   KEY `I_INPUTER` (`INPUTER`)
-) ENGINE=InnoDB AUTO_INCREMENT=304 DEFAULT CHARSET=utf8 COMMENT='设备表';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备表';
 
 --
 -- Table structure for table `t_device_status`
 --
 
 DROP TABLE IF EXISTS `t_device_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_device_status` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `DEVICE` int(10) unsigned NOT NULL COMMENT '设备ID',
@@ -186,16 +152,13 @@ CREATE TABLE `t_device_status` (
   PRIMARY KEY (`ID`),
   KEY `I_DEVICE` (`DEVICE`),
   KEY `I_SERILA_NO` (`SERIAL_NO`)
-) ENGINE=InnoDB AUTO_INCREMENT=9311 DEFAULT CHARSET=utf8 COMMENT='设备状态';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备状态';
 
 --
 -- Table structure for table `t_device_usage`
 --
 
 DROP TABLE IF EXISTS `t_device_usage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_device_usage` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -208,8 +171,10 @@ CREATE TABLE `t_device_usage` (
   `CHARGE_STANDARD` decimal(10,3) NOT NULL COMMENT '公司收费标准，固化收费数据，简化计算和数据查询',
   `CHARGE` decimal(10,3) NOT NULL COMMENT '酒店收费标准，固化收费数据，简化计算和数据查询',
   `RATIO` decimal(10,3) NOT NULL COMMENT '分成比例，固化收费数据，简化计算和数据查询',
+  `RENT`  decimal(10,3) NOT NULL COMMENT '分成金额=公司收费标准x分成比例',
   `BILL` int(10) unsigned DEFAULT NULL COMMENT '替代账单明细后，需引入的外键，账单生成时填写',
   `IN_BILL` tinyint(1) DEFAULT '0' COMMENT '记录是否已被用于生成账单，冗余，BILL为空也能判断',
+  `PUBLIC_USAGE` tinyint(1) DEFAULT '0' COMMENT '设备为公用时，置为true',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`),
   KEY `I_DEVICE` (`DEVICE`),
@@ -217,16 +182,13 @@ CREATE TABLE `t_device_usage` (
   KEY `I_HOTEL` (`HOTEL`),
   KEY `I_ROOM` (`ROOM`),
   KEY `I_BIIL` (`BILL`)
-) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `t_function`
 --
 
 DROP TABLE IF EXISTS `t_function`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_function` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -237,16 +199,13 @@ CREATE TABLE `t_function` (
   `URI_PATTERN` varchar(2000) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `t_menu`
 --
 
 DROP TABLE IF EXISTS `t_menu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_menu` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -262,15 +221,12 @@ CREATE TABLE `t_menu` (
   KEY `I_FUNC` (`FUNC`),
   KEY `I_PARENT` (`PARENT`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_orgnization`
 --
 
 DROP TABLE IF EXISTS `t_orgnization`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_orgnization` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -299,16 +255,13 @@ CREATE TABLE `t_orgnization` (
   KEY `I_NAME` (`NAME`),
   KEY `I_PARENT` (`PARENT`),
   KEY `I_CREATER` (`CREATER`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `t_role`
 --
 
 DROP TABLE IF EXISTS `t_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_role` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -318,30 +271,24 @@ CREATE TABLE `t_role` (
   `INTERNAL` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `t_role_func`
 --
 
 DROP TABLE IF EXISTS `t_role_func`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_role_func` (
   `ROLE` int(10) unsigned NOT NULL,
   `FUNC` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ROLE`,`FUNC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_room`
 --
 
 DROP TABLE IF EXISTS `t_room`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_room` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -352,16 +299,13 @@ CREATE TABLE `t_room` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`),
   KEY `I_HOTEL` (`HOTEL`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COMMENT='房间';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='房间';
 
 --
 -- Table structure for table `t_stratege`
 --
 
 DROP TABLE IF EXISTS `t_stratege`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_stratege` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -376,16 +320,13 @@ CREATE TABLE `t_stratege` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `I_UUID` (`UUID`),
   KEY `I_CREATER` (`CREATER`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='收费策略';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收费策略';
 
 --
 -- Table structure for table `t_stratege_history`
 --
 
 DROP TABLE IF EXISTS `t_stratege_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_stratege_history` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -408,15 +349,12 @@ CREATE TABLE `t_stratege_history` (
   KEY `I_CREATER` (`CREATER`),
   KEY `I_MODIFIER` (`MODIFIER`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='保存公司收费政策修改历史';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `t_type`
 --
 
 DROP TABLE IF EXISTS `t_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_type` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` char(36) NOT NULL,
@@ -428,16 +366,14 @@ CREATE TABLE `t_type` (
   UNIQUE KEY `I_UUID` (`UUID`),
   KEY `I_PRODUCT` (`PRODUCT`),
   KEY `I_NAME` (`NAME`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='设备型号';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备型号';
+
 
 --
 -- Table structure for table `t_user`
 --
 
 DROP TABLE IF EXISTS `t_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_user` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `LOGIN_ID` varchar(100) NOT NULL,
@@ -458,30 +394,15 @@ CREATE TABLE `t_user` (
   KEY `I_NAME` (`NAME`),
   KEY `I_ORG` (`ORG`),
   KEY `I_CREATER` (`CREATER`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `t_user_role`
 --
 
 DROP TABLE IF EXISTS `t_user_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_user_role` (
   `ROLE` int(10) unsigned NOT NULL,
   `USER` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ROLE`,`USER`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-05-02  3:02:22

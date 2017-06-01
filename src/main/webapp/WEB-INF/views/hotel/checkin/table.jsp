@@ -84,7 +84,6 @@
                         <th class="center sorting" data-column="退房登记">退房登记</th>
                       </c:otherwise>
                     </c:choose>                    
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -97,16 +96,6 @@
                       <td>${item.charge}</td>
                       <td>${item.checkInReceptionistName}</td>
                       <td>${item.checkOutReceptionistName}</td>
-                      <td>
-                        <div class="btn-group">
-                          <button data-original-title="确认收款" data-rel="tooltip" title="" class="btn btn-xs btn-danger" data-action="comfirm" data-item="${item.id }" type="button">
-                            <i class="ace-icon fa fa-edit bigger-120"></i>确认收款
-                          </button>
-                          <button data-original-title="查看" data-rel="tooltip" title="" class="btn btn-xs btn-primary" data-action="view" data-item="${item.id }" type="button">
-                            <i class="ace-icon fa fa-search bigger-120"></i>查看
-                          </button>
-                        </div>
-                      </td>
                     </tr>  
                   </c:forEach>
                 </tbody>

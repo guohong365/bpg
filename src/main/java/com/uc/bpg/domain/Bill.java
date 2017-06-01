@@ -24,12 +24,12 @@ public class Bill extends EntityBase  {
 	@ListColumn(value="酒店收入", order=2)
 	@FormField(value="酒店收入", order=2)
 	private BigDecimal income;
-	@ListColumn(value="应付款",order=3)
-	@FormField(value="应付款",order=3)
-	private BigDecimal payable;
-	@ListColumn(value="分成比例",order=4)
-	@FormField(value="分成比例",order=4)
-	private BigDecimal ratio;
+	@ListColumn(value="分成基准",order=3)
+	@FormField(value="分成基准",order=3)
+	private BigDecimal basicCharge;
+	@ListColumn(value="分成",order=4)
+	@FormField(value="分成",order=4)
+	private BigDecimal rent;
 	@ListColumn(value="状态",order=5)
 	@FormField(value="状态",order=5)
 	private String state;
@@ -79,18 +79,6 @@ public class Bill extends EntityBase  {
 	public void setIncome(BigDecimal income) {
 		this.income = income;
 	}
-	public BigDecimal getPayable() {
-		return payable;
-	}
-	public void setPayable(BigDecimal payable) {
-		this.payable = payable;
-	}
-	public BigDecimal getRatio() {
-		return ratio;
-	}
-	public void setRatio(BigDecimal ratio) {
-		this.ratio = ratio;
-	}
 	public String getState() {
 		return state;
 	}
@@ -138,6 +126,18 @@ public class Bill extends EntityBase  {
 	}
 	public void setHotel(Long hotel) {
 		this.hotel = hotel;
+	}
+	public BigDecimal getRent() {
+		return rent;
+	}
+	public void setRent(BigDecimal rent) {
+		this.rent = rent;
+	}
+	public BigDecimal getBasicCharge() {
+		return basicCharge;
+	}
+	public void setBasicCharge(BigDecimal basicCharge) {
+		this.basicCharge = basicCharge;
 	}
 
 

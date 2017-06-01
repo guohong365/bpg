@@ -44,6 +44,7 @@ public class DataReceiverServiceImpl implements DataReceiverService {
 				usage.setRoom(device.getRoom());
 				usage.setUuid(UUID.randomUUID().toString());
 				usage.setUseTime(data.getExamineTime());
+				usage.setPublicUsage(device.getPublicUsage());				
 				data.setDevice(device.getId());
 				getReceiverMapper().insetBpData(data);
 				getReceiverMapper().insertUsage(usage);

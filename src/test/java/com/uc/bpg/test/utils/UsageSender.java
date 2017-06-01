@@ -33,7 +33,10 @@ public class UsageSender {
 		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(xmlConfigs);
 		DeviceMapper mapper = context.getBean(DeviceMapper.class);
 		Example example = new ExampleImpl();
-		example.or().andFieldEqualTo("VALID", true);
+		example.or()
+		.andFieldEqualTo("VALID", true)
+		.andFieldIsNotNull("ROOM");
+		
 		long count = mapper.selectCountByExample(example);
 		List<Device> devices = mapper.selectByExample(example, 0, count);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");

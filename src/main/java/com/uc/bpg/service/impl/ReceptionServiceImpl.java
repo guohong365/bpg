@@ -1,5 +1,6 @@
 package com.uc.bpg.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import com.uc.bpg.domain.Charging;
 import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
-import com.uc.bpg.domain.HotelRoomInfo;
-import com.uc.bpg.domain.RoomDetail;
 import com.uc.bpg.persistence.ChargingMapper;
 import com.uc.bpg.persistence.CheckInMapper;
 import com.uc.bpg.persistence.ReceptionMapper;
@@ -52,36 +51,25 @@ public class ReceptionServiceImpl implements ReceptionService {
 	}
 
 	@Override
-	public List<Integer> selectStoreys(Long hotelId) {
-		return getReceptionMapper().selectStoreys(hotelId);
-	}
-
-	@Override
-	public List<RoomDetail> selectRoomDetails(Long hotelId) {
-		return getReceptionMapper().selectRoomDetails(hotelId);
-	}
-	
-	@Override
-	public HotelRoomInfo selectHotelRoomInfo(Long hotel){
-		HotelRoomInfo info=new HotelRoomInfo();
-		info.setStoreys(selectStoreys(hotel));
-		info.setRooms(selectRoomDetails(hotel));
-		return info;
-	}
-
-	@Override
-	public Charging selectCharge(Long room) {
-		return getReceptionMapper().selectCharge(room);
-	}
-
-	@Override
 	public int insertCheckIn(CheckIn checkIn) {
-		return getReceptionMapper().insertCheckIn(checkIn);
+		return getCheckInMapper().insertDetail(checkIn);
 	}
 
 	@Override
-	public int insertCheckOut(Charging charging) {
-		return getReceptionMapper().insertCheckOut(charging);
+	public int insertCheckOut(Charging charging, List<Long> ids) {
+		return getReceptionMapper().insertCheckOutCharging(charging, ids);
+		/*
+		getChargingMapper().insertDetail(charging);
+		CheckIn checkIn=new CheckIn();
+		checkIn.setId(charging.getCheckIn());
+		checkIn.setCheckOutReceptionist(charging.getReceptionist());
+		checkIn.setCheckOutTime(charging.getChargingTime());
+		getCheckInMapper().updateDetailSelective(checkIn);		
+		if(ids!=null && !ids.isEmpty()){
+			getReceptionMapper().updateUsages(charging.getUuid(), ids);
+		}
+		return 1;
+		*/
 	}
 
 	@Override
@@ -95,9 +83,9 @@ public class ReceptionServiceImpl implements ReceptionService {
 	}
 
 	@Override
-	public OptResult<Charging> selectRoomCheckOut(Long hotel, String roomNo) {
-		CheckIn roomCheckIn=getReceptionMapper().selectRoomCheckIn(hotel, roomNo);
-		OptResult<Charging> result=new OptResult<>(hotel, roomNo);
+	public OptResult<ChargingDetails> selectRoomCheckOut(Long hotel, String roomNo) {
+		CheckIn roomCheckIn=getReceptionMapper().selectRoomLastCheckIn(hotel, roomNo);
+		OptResult<ChargingDetails> result=new OptResult<>(hotel, roomNo);
 		if(roomCheckIn==null){
 			result.setOk(false);
 			result.setReason("房间不存在！");
@@ -105,7 +93,8 @@ public class ReceptionServiceImpl implements ReceptionService {
 			result.setOk(false);
 			result.setReason("房间没有入住记录！");
 		} else {
-			Charging charging=getReceptionMapper().selectCharge(roomCheckIn.getRoom());
+			roomCheckIn.setRoomNo(roomNo);
+			ChargingDetails charging=getReceptionMapper().selectChargingDetails(roomCheckIn.getId());			
 			result.setData(charging);
 			result.setOk(true);
 		}
@@ -113,10 +102,9 @@ public class ReceptionServiceImpl implements ReceptionService {
 	}
 
 	@Override
-	public OptResult<CheckIn> selectRoomCheckIn(Long hotel, String roomNo) {
+	public OptResult<CheckIn> selectRoomLastCheckIn(Long hotel, String roomNo) {
 		OptResult<CheckIn> result=new OptResult<>(hotel, roomNo);
-		CheckIn checkIn=getReceptionMapper().selectRoomCheckIn(hotel, roomNo);
-		
+		CheckIn checkIn=getReceptionMapper().selectRoomLastCheckIn(hotel, roomNo);		
 		if(checkIn!=null){
 			getLogger().debug(checkIn.toString());
 			result.setData(checkIn);
@@ -134,6 +122,11 @@ public class ReceptionServiceImpl implements ReceptionService {
 			result.setReason("房间不存在！");
 		}
 		return result;
+	}
+
+	@Override
+	public BigDecimal selectChargingStandard(List<Long> ids) {
+		return getChargingMapper().selectChargingStandard(ids);
 	}
 	
 }

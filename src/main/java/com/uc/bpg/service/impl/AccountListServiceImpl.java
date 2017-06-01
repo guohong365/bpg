@@ -38,13 +38,25 @@ public class AccountListServiceImpl extends BusinessListServiceBase<BillQueryFor
 				condition.andFieldLessThanOrEqualTo("INCOME", queryForm.getQueryIncomeTo());
 			}
 			if(queryForm.getQueryPayableFrom()!=null){
-				condition.andFieldGreaterThanOrEqualTo("PAYABLE", queryForm.getQueryPayableFrom());
+				condition.andFieldGreaterThanOrEqualTo("BASIC_CHARGE", queryForm.getQueryPayableFrom());
 			}
 			if(queryForm.getQueryPayableTo()!=null){
-				condition.andFieldLessThanOrEqualTo("PAYABLE", queryForm.getQueryPayableTo());
+				condition.andFieldLessThanOrEqualTo("BASIC_CHARGE", queryForm.getQueryPayableTo());
 			}
+			boolean isAll=true;
+			String[] states=null;
 			if(!StringUtils.isEmpty(queryForm.getQueryState())){
-				String[] states=queryForm.getQueryState().split(",");				
+				isAll=false;
+				states=queryForm.getQueryState().split(",");
+			    for(String state:states){
+			    	if(state.isEmpty()){
+			    		queryForm.setQueryState(null);
+			    		isAll=true;
+			    		break;
+			    	}
+				}			    
+			}
+			if(!isAll){
 				condition.andFieldIn("STATE", Arrays.asList(states));
 			} else {
 				queryForm.setQueryState(null);

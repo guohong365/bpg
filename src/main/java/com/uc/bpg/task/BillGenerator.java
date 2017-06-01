@@ -1,7 +1,6 @@
 package com.uc.bpg.task;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -65,9 +64,11 @@ public class BillGenerator extends LoggerSupportorImpl {
 				}
 				BigDecimal income=new BigDecimal("0");
 				BigDecimal payable=new BigDecimal("0");
+				BigDecimal rent=new BigDecimal("0");
 				for(DeviceUsage usage:usages){
 					income=income.add(usage.getCharge());
 					payable=payable.add(usage.getChargeStandard());
+					rent=rent.add(usage.getRent());
 				}				
 				getLogger().trace("total income[{}], need pay distribute[{}]...", income.toString(), payable.toString());				
 				Bill bill=new Bill();
@@ -75,8 +76,8 @@ public class BillGenerator extends LoggerSupportorImpl {
 				bill.setUuid(UUID.randomUUID().toString());
 				bill.setHotel(hotel.getId());
 				bill.setIncome(income);
-				bill.setPayable(payable);
-				bill.setRatio(income.equals(new BigDecimal("0")) ? new BigDecimal("0") : payable.divide(income).setScale(4, RoundingMode.HALF_UP) );
+				bill.setBasicCharge(payable);;	
+				bill.setRent(rent);
 				bill.setState(Constant.BILL_STATE_UNPAYED);
 				getGeneratorSevice().insertGeneratedBill(bill, usages);
 				getLogger().trace("bill for[{}] generated....", hotel.getName());

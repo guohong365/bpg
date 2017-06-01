@@ -48,9 +48,9 @@
                       </div>                        
                       <div class="col-xs-12">
                         <div class="form-group">
-                          <form:label path="order" cssClass="control-label col-xs-12 col-sm-4">显示顺序：</form:label>
+                          <form:label path="showOrder" cssClass="control-label col-xs-12 col-sm-4">显示顺序：</form:label>
                           <div class="col-xs-12 col-sm-8">
-                            <form:input path="order" cssClass="form-control" placeholder="显示顺序" />
+                            <form:input path="showOrder" cssClass="form-control" placeholder="显示顺序" />
                           </div>
                         </div>
                       </div>

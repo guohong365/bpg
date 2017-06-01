@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="<c:url value="/resources/css/ace-rtl.min.css" />" />
 <link rel="stylesheet" href="<c:url value="/resources/css/chosen.css" />" />
 <link rel="stylesheet" href="<c:url value="/resources/css/uc.data.css" />" />
+<link rel="stylesheet" href="<c:url value="/resources/css/jquery.gritter.css" />" />
 
 <style type="text/css">
 .strike-out {
@@ -328,6 +329,7 @@
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.validate.methods.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.bpg.resultDlg.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/jquery.md5.js" />' ></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/jquery.gritter.min.js" />' ></script>
   
   <script type="text/javascript">
 	//Load content via ajax

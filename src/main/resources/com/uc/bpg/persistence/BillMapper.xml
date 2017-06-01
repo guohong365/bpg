@@ -5,9 +5,9 @@
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="UUID" jdbcType="CHAR" property="uuid" />
     <result column="HOTEL" jdbcType="INTEGER" property="hotel"/>
-    <result column="PAYABLE" jdbcType="DECIMAL" property="payable" />
+    <result column="BASIC_CHARGE" jdbcType="DECIMAL" property="basicCharge" />
     <result column="INCOME" jdbcType="DECIMAL" property="income" />
-    <result column="RATIO" jdbcType="DECIMAL" property="ratio" />
+    <result column="RENT" jdbcType="DECIMAL" property="rent" />
     <result column="STATE" jdbcType="CHAR" property="state" />
     <result column="GENERATED_TIME" jdbcType="TIMESTAMP" property="generatedTime" />
     <result column="PAY_TIME" jdbcType="TIMESTAMP" property="payTime" />
@@ -48,7 +48,7 @@
     </where>
   </sql>
   <sql id="selectSql">
-    select a.ID,a.UUID,a.HOTEL, a.PAYABLE,a.INCOME,a.RATIO,a.STATE,a.GENERATED_TIME,a.PAY_TIME,
+    select a.ID,a.UUID,a.HOTEL, a.BASIC_CHARGE,a.INCOME,a.RENT,a.STATE,a.GENERATED_TIME,a.PAY_TIME,
       a.PAYER, b.NAME as PAYER_NAME,a.VERIFY_TIME,a.VERIFIER, c.NAME as VERIFIER_NAME, d.NAME as HOTEL_NAME
     from t_bill a
     left join t_user b on b.ID=a.PAYER
@@ -56,7 +56,7 @@
     left join t_orgnization d on d.ID=a.HOTEL
   </sql>
   <sql id="columns">
-      ID,UUID,HOTEL, PAYABLE,INCOME,RATIO,STATE,GENERATED_TIME,PAY_TIME,
+      ID,UUID,HOTEL, BASIC_CHARGE,INCOME,RENT,STATE,GENERATED_TIME,PAY_TIME,
       PAYER,PAYER_NAME,VERIFY_TIME,VERIFIER,VERIFIER_NAME, HOTEL_NAME
   </sql>
   <select id="selectByExample" parameterType="map" resultMap="billDetail">
@@ -87,13 +87,13 @@
   </delete>
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.Bill">
     insert into t_bill (
-      UUID, HOTEL, PAYABLE, 
-      INCOME, RATIO, STATE, 
+      UUID, HOTEL, BASIC_CHARGE, 
+      INCOME, RENT, STATE, 
       GENERATED_TIME, PAY_TIME, PAYER, VERIFY_TIME, 
       VERIFIER)
     values (
-      #{uuid,jdbcType=CHAR},#{hotel,jdbcType=INTEGER} #{payable,jdbcType=DECIMAL}, 
-      #{income,jdbcType=DECIMAL}, #{ratio,jdbcType=DECIMAL}, #{state,jdbcType=CHAR}, 
+      #{uuid,jdbcType=CHAR},#{hotel,jdbcType=INTEGER} #{basicCharge,jdbcType=DECIMAL}, 
+      #{income,jdbcType=DECIMAL}, #{rent,jdbcType=DECIMAL}, #{state,jdbcType=CHAR}, 
       #{generatedTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{payer,jdbcType=INTEGER}, 
       #{verifyTime,jdbcType=TIMESTAMP}, #{verifier,jdbcType=INTEGER})
   </insert>
@@ -108,14 +108,14 @@
   <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Bill">
     update t_bill
     <set>
-      <if test="payable != null">
-        PAYABLE = #{payable,jdbcType=DECIMAL},
+      <if test="basicCharge != null">
+        BASIC_CHARGE = #{basicCharge,jdbcType=DECIMAL},
       </if>
       <if test="income != null">
         INCOME = #{income,jdbcType=DECIMAL},
       </if>
-      <if test="ratio != null">
-        RATIO = #{ratio,jdbcType=DECIMAL},
+      <if test="rent != null">
+        RENT = #{rent,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         STATE = #{state,jdbcType=CHAR},
@@ -141,9 +141,9 @@
   <update id="updateDetail" parameterType="com.uc.bpg.domain.Bill">
     update t_bill
     set
-      PAYABLE = #{payable,jdbcType=DECIMAL},
+      BASIC_CHARGE = #{basicCharge,jdbcType=DECIMAL},
       INCOME = #{income,jdbcType=DECIMAL},
-      RATIO = #{ratio,jdbcType=DECIMAL},
+      RENT = #{rent,jdbcType=DECIMAL},
       STATE = #{state,jdbcType=CHAR},
       GENERATED_TIME = #{generatedTime,jdbcType=TIMESTAMP},
       PAY_TIME = #{payTime,jdbcType=TIMESTAMP},
@@ -153,9 +153,9 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
   <insert id="insertGeneratedBill" parameterType="map">
-    insert into t_bill (UUID, HOTEL, PAYABLE, INCOME, RATIO, STATE, GENERATED_TIME)
-    values (#{bill.uuid,jdbcType=CHAR}, #{bill.hotel,jdbcType=INTEGER}, #{bill.payable,jdbcType=DECIMAL},
-    #{bill.income,jdbcType=DECIMAL}, #{bill.ratio,jdbcType=DECIMAL}, #{bill.state,jdbcType=CHAR}, 
+    insert into t_bill (UUID, HOTEL, BASIC_CHARGE, INCOME, RENT, STATE, GENERATED_TIME)
+    values (#{bill.uuid,jdbcType=CHAR}, #{bill.hotel,jdbcType=INTEGER}, #{bill.basicCharge,jdbcType=DECIMAL},
+    #{bill.income,jdbcType=DECIMAL}, #{bill.rent,jdbcType=DECIMAL}, #{bill.state,jdbcType=CHAR}, 
     #{bill.generatedTime,jdbcType=TIMESTAMP});
     <if test="usages!=null and !usages.empty">
       update t_device_usage a left join t_bill b on b.UUID = #{bill.uuid,jdbcType=CHAR}

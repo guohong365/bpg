@@ -116,7 +116,7 @@
                     <tr class="${delClass }">
                       <td>${item.product}</td>
                       <td>${item.name}</td>
-                      <td>${item.order}</td>
+                      <td>${item.showOrder}</td>
                       <td>
                         <div class="hidden-sm hidden-xs btn-group">
                           <button data-original-title="编辑" data-rel="tooltip" title="" class="btn btn-xs btn-warning tooltip-warning" data-action="modify" data-item="${item.id }" type="button">

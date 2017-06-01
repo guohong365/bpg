@@ -59,7 +59,7 @@
                       </div>
                       <div class="col-xs-12 col-sm-6 col-lg-4">
                         <div class="form-group">
-                          <form:label path="payable" cssClass="control-label col-xs-12 col-sm-4">应付款：</form:label>
+                          <form:label path="payable" cssClass="control-label col-xs-12 col-sm-4">分成收入：</form:label>
                           <div class="col-xs-12 col-sm-8">
                             <form:input path="payable" cssClass="form-control" />
                           </div>
@@ -67,9 +67,9 @@
                       </div>
                       <div class="col-xs-12 col-sm-6 col-lg-4">
                         <div class="form-group">
-                          <form:label path="ratio" cssClass="control-label col-xs-12 col-sm-4">分成比例：</form:label>
+                          <form:label path="rent" cssClass="control-label col-xs-12 col-sm-4">分成：</form:label>
                           <div class="col-xs-12 col-sm-8">
-                            <form:input path="ratio" cssClass="form-control" />
+                            <form:input path="rent" cssClass="form-control" />
                           </div>
                         </div>
                       </div>

@@ -12,15 +12,19 @@
 
 <insert id="insertUsage" parameterType="com.uc.bpg.domain.DeviceUsage">
   insert into t_device_usage 
-  (UUID, DEVICE, USE_TIME, ROOM, HOTEL, CHARGING, PAYED, CHARGE_STANDARD, CHARGE, RATIO, BILL, IN_BILL)
+  (UUID, DEVICE, USE_TIME, ROOM, HOTEL, CHARGING, PAYED, CHARGE_STANDARD, CHARGE, RATIO, RENT, BILL, IN_BILL, PUBLIC_USAGE)
   select #{uuid,jdbcType=CHAR}, #{device,jdbcType=INTEGER}, #{useTime,jdbcType=TIMESTAMP}, #{room, jdbcType=INTEGER},
-    #{hotel,jdbcType=INTEGER},null, false, CHARGE_STANDARD, CHARGE, RATIO, null, false 
+    #{hotel,jdbcType=INTEGER},null, false, a.CHARGE_STANDARD, a.CHARGE, a.RATIO,if(b.PUBLIC_USAGE, 0, a.CHARGE_STANDARD*a.RATIO), null, false, b.PUBLIC_USAGE 
   <choose>
     <when test="hotel !=null">
-      from t_orgnization where ID=#{hotel, jdbcType=INTEGER}
+      from t_orgnization a 
+      left join t_device b on b.ID=#{device,jdbcType=INTEGER}
+      where a.ID=#{hotel, jdbcType=INTEGER}
     </when>
     <otherwise>
-      from t_stratege limit 1
+      from t_stratege a
+      left join t_device b on b.ID=#{device,jdbcType=INTEGER}
+      limit 1
     </otherwise>
   </choose>
 </insert>

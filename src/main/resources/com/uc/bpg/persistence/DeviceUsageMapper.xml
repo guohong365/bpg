@@ -13,8 +13,10 @@
     <result column="CHARGE_STANDARD" jdbcType="DECIMAL" property="chargeStandard" />
     <result column="CHARGE" jdbcType="DECIMAL" property="charge" />
     <result column="RATIO" jdbcType="DECIMAL" property="ratio" />
+    <result column="RENT" jdbcType="DECIMAL" property="rent"/>
     <result column="BILL" jdbcType="INTEGER" property="bill" />
     <result column="IN_BILL" jdbcType="BIT" property="inBill" />
+    <result column="PUBLIC_USAGE" jdbcType="BIT" property="publicUsage"/>
     <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName"/>
     <result column="DEVICE_SERIAL" jdbcType="VARCHAR" property="deviceSerial"/>
     <result column="ROOM_NO" jdbcType="VARCHAR" property="roomNo"/>
@@ -51,11 +53,11 @@
   </sql>
   <sql id="column">
     ID, UUID, DEVICE, USE_TIME, ROOM, HOTEL, CHARGING, PAYED, CHARGE_STANDARD, 
-    CHARGE, RATIO, BILL, IN_BILL, DEVICE_NAME, DEVICE_SERIAL, ROOM_NO
+    CHARGE, RATIO,RENT, BILL, IN_BILL,PUBLIC_USAGE, DEVICE_NAME, DEVICE_SERIAL, ROOM_NO
   </sql>
   <sql id="selectSql">
    select a.ID, a.UUID, a.DEVICE, a.USE_TIME, a.ROOM, a.HOTEL, a.CHARGING, a.PAYED, a.CHARGE_STANDARD, 
-    a.CHARGE, a.RATIO, a.BILL,a.IN_BILL, concat_ws(' ', c.PRODUCT, c.NAME) as DEVICE_NAME, b.SERIAL_NO as DEVICE_SERIAL, d.ROOM_NO as ROOM_NO
+    a.CHARGE, a.RATIO, a.RENT, a.BILL,a.IN_BILL,a.PUBLIC_USAGE, concat_ws(' ', c.PRODUCT, c.NAME) as DEVICE_NAME, b.SERIAL_NO as DEVICE_SERIAL, d.ROOM_NO as ROOM_NO
    from t_device_usage a 
    left join t_device b on b.ID=a.DEVICE
    left join t_type c on c.ID=b.TYPE
@@ -86,14 +88,15 @@
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.DeviceUsage">
     insert into t_device_usage (UUID, DEVICE, 
       USE_TIME, ROOM, HOTEL, 
-      CHARGE_RECORD, PAYED,  
-      CHARGE_STANDARD, CHARGE, RATIO, 
-      BILL, IN_BILL)
+      CHARGING, PAYED,  
+      CHARGE_STANDARD, CHARGE, RATIO, RENT, 
+      BILL, IN_BILL, PUBLIC_USAGE)
     values (#{uuid,jdbcType=CHAR}, #{device,jdbcType=INTEGER}, 
       #{useTime,jdbcType=TIMESTAMP}, #{room,jdbcType=INTEGER}, #{hotel,jdbcType=INTEGER}, 
       #{charging,jdbcType=INTEGER}, #{payed,jdbcType=BIT}, 
       #{chargeStandard,jdbcType=DECIMAL}, #{charge,jdbcType=DECIMAL}, #{ratio,jdbcType=DECIMAL}, 
-      #{bill,jdbcType=INTEGER}, #{inBill,jdbcType=BIT})
+      #{rent,jdbcType=DECIMAL},  #{bill,jdbcType=INTEGER}, #{inBill,jdbcType=BIT}
+      #{publicUsage,jdbcType=BIT})
   </insert>
   <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
     select count(*) from 
@@ -134,11 +137,17 @@
       <if test="ratio != null">
         RATIO = #{ratio,jdbcType=DECIMAL},
       </if>
+      <if test="rent !=null">
+        RENT = #{rent, jdbcType=DECIMAL},
+      </if>
       <if test="bill != null">
         BILL = #{bill,jdbcType=INTEGER},
       </if>
       <if test="inBill != null">
         IN_BILL = #{inBill,jdbcType=BIT},
+      </if>
+      <if test="publicUsage!=null">
+        PUBLIC_USAGE = #{publicUsage,jdbcType=BIT}
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
@@ -155,8 +164,10 @@
       CHARGE_STANDARD = #{chargeStandard,jdbcType=DECIMAL},
       CHARGE = #{charge,jdbcType=DECIMAL},
       RATIO = #{ratio,jdbcType=DECIMAL},
+      RENT=#{rent,jdbcType=DECIMAL},
       BILL = #{bill,jdbcType=INTEGER},
-      IN_BILL = #{inBill,jdbcType=BIT}
+      IN_BILL = #{inBill,jdbcType=BIT},
+      PUBLIC_USAGE = #{publicUsage,jdbcType=BIT}
     where ID = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

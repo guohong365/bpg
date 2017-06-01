@@ -1,11 +1,14 @@
 package com.uc.bpg.controller.impl;
 
+import java.util.Date;
+
 import org.springframework.ui.Model;
 
 import com.uc.bpg.controller.BusinessDetailListControllerBase;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.forms.DeviceUsageQueryForm;
+import com.uc.bpg.service.AccountService;
 import com.uc.web.controller.WebAction;
 
 public class AccountDetailControllerImpl 
@@ -16,6 +19,10 @@ public class AccountDetailControllerImpl
 	private static final String ACTION_NAME_PAY = "付款";
 	private static final String ACTION_NAME_VERIFY = "收款确认";
 
+	AccountService getAccountService(){
+		return (AccountService) getAppDetailService();
+	}
+	
 	@Override
 	protected Bill onCreateNewDetail() {
 		return new Bill();
@@ -60,8 +67,17 @@ public class AccountDetailControllerImpl
 		return super.onPostDetailPage(action, detail);
 	}
 
-	private String onPostPay(String action, Bill detail) {
-		// TODO Auto-generated method stub
-		return null;
+	private String onPostPay(String action, Bill detail) {				
+		switch(action){
+		case ACTION_PAY:
+			detail.setPayer(getUserProfile().getUser().getId());
+			getAccountService().pay(detail);
+			break;
+		case ACTION_VERIFY:
+			detail.setVerifier(getUserProfile().getUser().getId());
+			getAccountService().verify(detail);
+			break;
+		}
+		return "OK";
 	}
 }

@@ -28,7 +28,7 @@ public class DataRecieverServiceTest extends TestBase {
 	
 	@Test
 	public void test(){
-		List<Device> devices=listMapper.selectByExample(null, 0, 10);
+		List<Device> devices=listMapper.selectByExample(null, 0, 20);
 		Date date=Calendar.getInstance().getTime();
 		BpData data=new BpData(110, 75, 65, 0, date);
 		

@@ -34,9 +34,9 @@ public class AccountExportor extends TableExportorBase<Bill>{
 		case 2:
 			return item.getIncome().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 		case 3:	
-			return item.getPayable().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+			return item.getBasicCharge().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 		case 4:
-			return item.getRatio().multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"%";
+			return item.getRent().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 		case 5:
 			return item.getState();
 		case 6:

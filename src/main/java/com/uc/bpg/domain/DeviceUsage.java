@@ -27,12 +27,12 @@ public class DeviceUsage  extends EntityBase {
 	private BigDecimal chargeStandard;
 	@ListColumn(value="酒店收款", order=1)
 	private BigDecimal charge;
-	@ListColumn(value="分成比例", order=3)
-	private BigDecimal ratio;	
-	@ListColumn(value="应付款", order=4)
-	private BigDecimal payable;
+	private BigDecimal ratio;
+	@ListColumn(value="分成", order=3)
+	private BigDecimal rent;	
 	private Long bill;
 	private Boolean inBill;
+	private Boolean publicUsage;
 	@ListColumn(value="设备名称", order=6)
 	private String deviceName;
 	@ListColumn(value="序列号", order=7)
@@ -90,18 +90,6 @@ public class DeviceUsage  extends EntityBase {
 	public void setCharge(BigDecimal charge) {
 		this.charge = charge;
 	}
-	public BigDecimal getRatio() {
-		return ratio;
-	}
-	public void setRatio(BigDecimal ratio) {
-		this.ratio = ratio;
-	}
-	public BigDecimal getPayable() {
-		return payable;
-	}
-	public void setPayable(BigDecimal payable) {
-		this.payable = payable;
-	}
 	public Long getBill() {
 		return bill;
 	}
@@ -143,6 +131,24 @@ public class DeviceUsage  extends EntityBase {
 	}
 	public void setChargeStandard(BigDecimal chargeStandard) {
 		this.chargeStandard = chargeStandard;
+	}
+	public BigDecimal getRatio() {
+		return ratio;
+	}
+	public void setRatio(BigDecimal ratio) {
+		this.ratio = ratio;
+	}
+	public BigDecimal getRent() {
+		return rent;
+	}
+	public void setRent(BigDecimal rent) {
+		this.rent = rent;
+	}
+	public Boolean getPublicUsage() {
+		return publicUsage;
+	}
+	public void setPublicUsage(Boolean publicUsage) {
+		this.publicUsage = publicUsage;
 	}
 
 	

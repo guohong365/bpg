@@ -218,7 +218,11 @@
 				console.log('search completed....');
 				$('#listResult').html(data);
 			}).fail(function() {
-				console.log('seach fialed.');
+				$.gritter.add({
+					title:'查询',
+					text:'系统错误，查询失败!',
+					class_name:'gritter-error'
+				});				
 			});
 			return false;
 		},
@@ -242,7 +246,11 @@
 				console.log('refresh table loaded...');				
 				$('#listResult').html(data);
 			}).fail(function() {
-				console.error('table loaded failed.');
+				$.gritter.add({
+					title:'查询',
+					text:'系统错误，查询失败!',
+					class_name:'gritter-error'
+				});
 			});
 		},
 
@@ -268,8 +276,11 @@
 				$('#dialogPanel').html(data);
 				$('#detail-dialog').modal('show');
 			}).fail(function(xhr, code, exp) {
-				console.error('detail dialog loaded failed.');
-				alert("error:" + code + " exp:" + exp);
+				$.gritter.add({
+					title:'加载',
+					text:'系统错误，加载页面失败，请联系系统管理员',
+					class_name:'gritter-error'
+				});
 			});
 			
 			if(this._o.afterClickAction && typeof this._o.afterClickAction=='function'){
@@ -368,11 +379,25 @@
 				data : saveData,
 				dataType : "text"
 			}).done(function(data) {
-				console.log('data saved...')
-				alert(data);
+				if(data==='OK'){
+				  $.gritter.add({
+					  title:'保存',
+					  text:'保存成功！',
+					  class_name:'gritter-success'
+				  });
+				} else{
+				  $.gritter.add({
+					  title:'保存',
+					  text:'保存失败！',
+					  class_name:'gritter-error'
+				  });	
+				}
 			}).fail(function(xhr, data, exp) {
-				console.error('data save filed.');
-				alert(exp);
+				$.gritter.add({
+					title:'保存',
+					text:'系统错误，请联系系统管理员！',
+					class_name:'gritter-error'
+				});
 			});
 			$("#detail-dialog").modal('hide');
 			
@@ -400,7 +425,6 @@
 					$('#column-dialog').modal();
 				})
 				.fail(function(xhr, code, exp){
-					alert("failed!");
 				});
 				return false;
 			}
@@ -430,7 +454,7 @@
 				.done(function(data){					
 				})
 				.fail(function(xhr, error, exp){
-					alert("系统错误，设置失败！")
+					//alert("系统错误，设置失败！")
 				});
 				$('#column-dialog').modal('hide');
 				this.onRefresh();

@@ -186,10 +186,7 @@ div.check_in img:hover{
                   <a data-check-action="checkout" href="#">
                     <img src='<c:url value="/resources/images/check-out.png" />' alt="退房" >
                   </a>
-                </div>  
-                <div class="check-in">
-                  <a data-check-action="test" href="#">test</a>
-                </div>              
+                </div>                              
               </div>
             </div>
           </div>
@@ -253,19 +250,21 @@ div.check_in img:hover{
         </div>
         
         <div id="room_checkout_dlg" class="modal" tabindex="-1" data-backdrop="static">
-          <div class="modal-dialog">
+          <div class="modal-dialog">          
             <div class="modal-content">
+              <form id="room_checkout_form" action="#">
               <div class="modal-header">
                 <button class="close" data-dismiss="modal" type="button">&times;</button>
                 <h4 class="blue">退房</h4>
               </div>
-              <div class="modal-body">
-              
+              <div id="checkout-content" class="modal-body">
+                
               </div>
               <div class="modal-footer">
-                <button class="btn btn-primary" type="button">确定</button>
+                <button class="btn btn-primary" type="submit">确定</button>
                 <button class="btn" data-dismiss="modal" type="button">取消</button>
               </div>
+              </form>
             </div>
           </div>
         </div>
@@ -354,7 +353,7 @@ div.check_in img:hover{
     </div>
     <!-- /.main-content -->
 
-    <div class="footer" >
+    <div class="footer" >0
       <div class="footer-inner" >
         <!-- #section:basics/footer -->
         <div class="footer-content" style="background-color: #EEE;">
@@ -415,8 +414,6 @@ div.check_in img:hover{
   <script type="text/javascript">
 	//Load content via ajax
 	jQuery(function($) {
-		ace.settings.sidebar_fixed(true);
-				
 		$('#change_pwd_dlg').on('shown.bs.modal', function(){
 			$('#tOldPwd').val('');
 			$('#tNewPwd').val('');
@@ -473,14 +470,7 @@ div.check_in img:hover{
 			  console.log('checkout clicked....');
 			  $('#isCheckIn').val('false')
 				$('#room_input_dlg').modal('show');
-        break;
-			case 'test':
-				console.log('test clicked.....')
-			  $.gritter.add({
-				  text:'aaaaa',
-				  class_name: 'gritter-success'
-			  });
-				break;
+        break;			
 			}
 		});
 		
@@ -488,6 +478,28 @@ div.check_in img:hover{
 			$('#room_input_error').html('');
 			$('#roomNo').val('');
 		});
+		
+		var buildCheckOutContent=function($con, data){
+			var html='<div class="row"><div class="col-xs-12"><div class="widget-box"><div class="widget-header red"><h4 class="widget-title">'+
+			        data.roomNo +
+			        '</h4></div><div class="widget-body"><div class="widget-main"><div class="row"><div class="col-xs-12 col-sm-6">'+
+			        '共使用' + (data.data && data.data.usages? data.data.usages.length:0)+'次'
+			        +'</div></div>';
+			if(data.data && data.data.usages && data.data.usages.length>0){
+				  html +='<input type="hidden" name="checkIn" value="'+ data.data.checkIn +'" />';
+				  html +='<input type="hidden" name="charge" value="' + data.data.charge +'" />';
+				  html +='<div id="detailTable" class="row hidden"><div class="col-xs-12"><table class="table table-striped"><thead><tr><td>设备号</td><td>使用时间</td><td>收费</td></tr></thead>'+
+				  '<tbody>';
+				  for(var i=0; i<data.data.usages.length; i++){
+					  html +='<tr>'+ '<input type="hidden" name="id" value="'+ data.data.usages[i].id +'" />'
+					     +'<td>'+data.data.usages[i].deviceSerial +'</td><td>'+ data.data.usages[i].useTime +'</td><td>'+data.data.usages[i].charge +'</td></tr>';
+				  }  
+          html+='</tbody></table></div></div>';
+			}    
+      html+='</div><div class="widget-toolbox padding-8 clearfix"><button id="btnViewDetails" class="btn btn-large btn-primary pull-left" type="button">查看明细</button><h3 class="red pull-right">￥'+ data.data.charge + '</h3>'+
+            '</div></div></div></div></div>';
+      $con.html(html);      
+		};
 		
 		$('#room_input_form').on('submit', function(event){
 			event.preventDefault();
@@ -511,13 +523,19 @@ div.check_in img:hover{
 					  $('#room_input_dlg').modal('hide');
 					  $('#checkin_prompt').html('是否入住房间<strong class="red">'+data.roomNo+'</strong>?');
 					  $('#room_checkin_dlg').modal('show');
-					} else {
-						
+					} else {						
+						$('#room_input_dlg').modal('hide');
+						buildCheckOutContent($('#checkout-content'), data);						
+						$('#room_checkout_dlg').modal('show');
 					}
 				} else {
 					$('#room_input_error').html('<p class="control-static red">'+ data.reason +'</p>');
 				}
 			});			
+		});
+		
+		$('#checkout-content').on('click', '#btnViewDetails', function(event){
+			$('#detailTable').removeClass('hidden');
 		});
 		
 		$('#room_checkin_form').on('submit', function(event){
@@ -549,6 +567,38 @@ div.check_in img:hover{
 				}
 			});
 			$('#room_checkin_dlg').modal('hide');
+		});
+		
+		$('#room_checkout_form').on('submit', function(event){
+			event.preventDefault();
+			$.ajax({
+				type : 'post',
+				url:  '<c:url value="/hotel/reception/checkout" />',
+				data : $('#room_checkout_form').serialize(),
+				dataType : 'text'
+			}).fail(function(){
+				$.gritter.add({
+			    title:'退房',
+			    text:'执行退房结算错误，请联系系统管理员！',
+			    class_name:'gritter-error'
+			  });
+			}).done(function(data){
+				if(data=="OK"){
+					$.gritter.add({
+				    title:'退房',
+				    text:'退房结算完成！',
+				    class_name:'gritter-success'
+				    });
+				} else {
+					$.gritter.add({
+				    title:'退房',
+				    text:'执行退房结算错误，请联系系统管理员！',
+				    class_name:'gritter-error'
+				    });
+				}
+				$('#room_checkout_dlg').modal('hide');
+			});
+			
 		});
 		
 		

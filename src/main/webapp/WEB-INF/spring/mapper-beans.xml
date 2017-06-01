@@ -76,4 +76,9 @@
     <property name="sqlSessionFactory" ref="sqlSessionFactory" />
   </bean>
   
+  <bean id="chargingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.uc.bpg.persistence.ChargingMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  
 </beans>

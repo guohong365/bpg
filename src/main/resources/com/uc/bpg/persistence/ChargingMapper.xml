@@ -5,7 +5,9 @@
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="UUID" jdbcType="CHAR" property="uuid" />
     <result column="CHECK_IN" jdbcType="INTEGER" property="checkIn" />
-    <result column="CHAGRE" jdbcType="DECIMAL" property="chagre" />
+    <result column="CHARGE" jdbcType="DECIMAL" property="charge" />
+    <result column="CHARGE_STANDARD" jdbcType="DECIMAL" property="chargeStandard"/>
+    <result column="RENT" jdbcType="DECIMAL" property="rent"/>
     <result column="RECEPTIONIST" jdbcType="INTEGER" property="receptionist" />
     <result column="CHARGING_TIME" jdbcType="TIMESTAMP" property="chargingTime" />
   </resultMap>
@@ -39,7 +41,7 @@
     </where>
   </sql>
   <sql id="columns">
-    ID, UUID, CHECK_IN, CHAGRE, RECEPTIONIST, 
+    ID, UUID,HOTEL, CHECK_IN, CHARGE,CHARGE_STANDARD,RENT, RECEPTIONIST, 
     CHARGING_TIME, RECEPTIONIST_NAME
   </sql>
   <select id="selectByExample" parameterType="map" resultMap="chargingRecordDetail">
@@ -59,17 +61,11 @@
     from t_charging
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.Charging">
-    delete from t_charging
-    where ID = #{id,jdbcType=INTEGER}
-  </delete>
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.Charging">
-    insert into t_charging (UUID,  
-      CHECK_IN, CHAGRE, RECEPTIONIST, CHARGING_TIME
-      )
-    values (#{uuid,jdbcType=CHAR},  
-      #{checkInRecord,jdbcType=INTEGER}, #{chagre,jdbcType=DECIMAL}, #{receptionist,jdbcType=INTEGER}, #{chargingTime,jdbcType=TIMESTAMP}
-      )
+    insert into t_charging (UUID, HOTEL, CHECK_IN, CHARGE, CHARGE_STANDARD, RENT, RECEPTIONIST, CHARGING_TIME)
+    values (#{uuid,jdbcType=CHAR}, #{hotel,jdbcType=INTEGER}, 
+      #{checkIn,jdbcType=INTEGER}, #{charge,jdbcType=DECIMAL},
+      #{chargeStandard,jdbcType=DECIMAL},#{rent,jdbcType=DECIMAL}, #{receptionist,jdbcType=INTEGER}, #{chargingTime,jdbcType=TIMESTAMP})
   </insert>
   <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
     select count(*) from t_charging
@@ -77,31 +73,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Charging">
-    update t_charging
-    <set>
-      <if test="checkIn != null">
-        CHECK_IN = #{checkInRecord,jdbcType=INTEGER},
-      </if>
-      <if test="chagre != null">
-        CHAGRE = #{chagre,jdbcType=DECIMAL},
-      </if>
-      <if test="receptionist != null">
-        RECEPTIONIST = #{receptionist,jdbcType=INTEGER},
-      </if>
-      <if test="chargingTime != null">
-        CHARGING_TIME = #{chargingTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateDetail" parameterType="com.uc.bpg.domain.Charging">
-    update t_charging
-    set
-      CHECK_IN_RECORD = #{checkInRecord,jdbcType=INTEGER},
-      CHAGRE = #{chagre,jdbcType=DECIMAL},
-      RECEPTIONIST = #{receptionist,jdbcType=INTEGER},
-      CHARGING_TIME = #{chargingTime,jdbcType=TIMESTAMP}
-    where ID = #{id,jdbcType=INTEGER}
-  </update>
+    
+  <select id="selectChargingStandard" parameterType="list" resultType="java.math.BigDecimal">
+    select sum(CHARGE_STANDARD) from t_device_usage where ID in 
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
 </mapper>

@@ -11,7 +11,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-6 col-lg-4">
               <div class="form-group">
-                <form:label path="queryPayableFrom" cssClass="control-label col-xs-12 col-sm-4">应付款：</form:label>
+                <form:label path="queryPayableFrom" cssClass="control-label col-xs-12 col-sm-4">分成收入：</form:label>
                 <div class="col-xs-12 col-sm-8">
                   <div class="input-group">
                     <span class="input-group-addon">自</span>
@@ -187,19 +187,19 @@
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='应付款' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="应付款">应付款</th>
+                      <c:when test="${queryInput.queryOrderBy =='分成收入' }">
+                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成收入">分成收入</th>
                       </c:when>
                       <c:otherwise>
-                        <th class="center sorting" data-column="应付款">应付款</th>
+                        <th class="center sorting" data-column="分成收入">分成收入</th>
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='分成比例' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成比例">分成比例</th>
+                      <c:when test="${queryInput.queryOrderBy =='分成' }">
+                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成">分成</th>
                       </c:when>
                       <c:otherwise>
-                        <th class="center sorting" data-column="分成比例">分成比例</th>
+                        <th class="center sorting" data-column="分成">分成</th>
                       </c:otherwise>
                     </c:choose>
                     <c:choose>
@@ -249,9 +249,9 @@
                   <tr>
                     <c:forEach var="item" items="${records}">
                       <td><fmt:formatDate value="${item.generatedTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-                      <td>${item.income}</td>
-                      <td>${item.payable}</td>
-                      <td>${item.ratio}</td>
+                      <td><fmt:formatNumber value="${item.income}" currencySymbol="￥" type="currency" minFractionDigits="2" /></td>
+                      <td><fmt:formatNumber value="${item.basicCharge}" currencySymbol="￥" type="currency" minFractionDigits="2" /></td>
+                      <td><fmt:formatNumber value="${item.rent}" currencySymbol="￥" type="currency" minFractionDigits="2" /></td>
                       <td>${item.state}</td>
                       <td><fmt:formatDate value="${item.payTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                       <td>${item.payerName}</td>
@@ -259,9 +259,11 @@
                       <td>${item.verifierName}</td>
                       <td>
                         <div class="btn-group">
-                          <button data-original-title="确认收款" data-rel="tooltip" title="" class="btn btn-xs btn-danger" data-action="comfirm" data-item="${item.id }" type="button">
-                            <i class="ace-icon fa fa-edit bigger-120"></i>确认收款
+                          <c:if test="${item.payTime==null}">
+                          <button data-original-title="付款" data-rel="tooltip" title="" class="btn btn-xs btn-danger" data-action="pay" data-item="${item.id }" type="button">
+                            <i class="ace-icon fa fa-edit bigger-120"></i>付款
                           </button>
+                          </c:if>
                           <button data-original-title="查看" data-rel="tooltip" title="" class="btn btn-xs btn-primary" data-action="view" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-search bigger-120"></i>查看
                           </button>
