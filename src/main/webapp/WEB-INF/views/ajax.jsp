@@ -190,7 +190,7 @@
         <div id="change_pwd_dlg" class="modal" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form id="FORM_CHANGE_PWD" class="form-horizonal" role="from">
+              <form id="FORM_CHANGE_PWD" class="form-horizontal" role="from" action="#" method="post">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="blue bigger">修改密码</h4>
@@ -199,7 +199,7 @@
                   <div class="row">
                     <div class="col-xs-12">
                       <div class="form-group">
-                        <label for="tOldPwd" class="control-label col-xs-12 col-sm-3 align-right"><span class="red">*</span>旧密码：</label>
+                        <label for="tOldPwd" class="control-label col-xs-12 col-sm-3"><span class="red">*</span>旧密码：</label>
                         <div class="col-xs-12 col-sm-8">
                           <input id="tOldPwd" class="form-control" type="password" name="tOldPwd" placeholder="旧密码" />
                         </div>
@@ -207,7 +207,7 @@
                     </div>
                     <div class="col-xs-12">  
                       <div class="form-group">                        
-                        <label for="tNewPwd" class="control-label col-xs-12 col-sm-3 align-right"><span class="red">*</span>新密码：</label>
+                        <label for="tNewPwd" class="control-label col-xs-12 col-sm-3"><span class="red">*</span>新密码：</label>
                         <div class="col-xs-12 col-sm-8">
                           <input class="form-control" type="password" id="tNewPwd" name="tnNewPwd" placeholder="新密码" />
                         </div>  
@@ -215,7 +215,7 @@
                     </div>  
                     <div class="col-xs-12">  
                       <div class="form-group">
-                        <label for="tNewPwdAgain" class="control-label col-xs-12 col-sm-3 align-right"><span class="red">*</span>重复新密码</label>
+                        <label for="tNewPwdAgain" class="control-label col-xs-12 col-sm-3"><span class="red">*</span>重复新密码：</label>
                         <div class="col-xs-12 col-sm-8">
                           <input class="form-control" type="password" id="tNewPwdAgain" name="tNewPwdAgain" placeholder="重复新密码" />
                         </div>  

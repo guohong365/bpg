@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.aspectj.runtime.internal.cflowstack.ThreadStackFactoryImpl11;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

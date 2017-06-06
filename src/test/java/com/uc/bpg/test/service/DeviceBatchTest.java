@@ -1,7 +1,5 @@
 package com.uc.bpg.test.service;
 
-import static org.junit.Assert.assertFalse;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
