@@ -75,7 +75,9 @@ public class DataReveiverControllerImpl extends LoggerSupportorImpl {
 	private String getReturnString(){
 		SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
 		Date current=Calendar.getInstance().getTime();
-		return "over"+format.format(current);
+		StringBuilder builder=new StringBuilder();
+		builder.append("{\"statusCode\":0,\"serverTime\":\"").append(format.format(current)).append("\"}");
+		return builder.toString();
 	}
 	
 	@RequestMapping(value="/hb", method=RequestMethod.GET, produces="text/plain")
