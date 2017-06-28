@@ -109,8 +109,8 @@
             #{inputer,jdbcType=INTEGER}, #{inputTime, jdbcType=TIMESTAMP});
     insert into t_allot_history
       (UUID, OPERATION, DEVICE, HOTEL, ROOM, OPERATE_TIME, OPERATOR)
-      select uuid(), '新增', ID, null, null, #{detail.inputTime,jdbcType=TIMESTAMP}, #{detail.inputer,jdbcType=INTEGER} 
-      from t_device where UUID=#{detail.uuid,jdbcType=CHAR};             
+      select uuid(), '新增', ID, null, null, #{inputTime,jdbcType=TIMESTAMP}, #{inputer,jdbcType=INTEGER} 
+      from t_device where UUID=#{uuid,jdbcType=CHAR};             
   </insert>
   <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
     select count(*) from (

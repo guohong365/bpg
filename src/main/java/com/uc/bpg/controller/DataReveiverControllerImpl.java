@@ -54,8 +54,12 @@ public class DataReveiverControllerImpl extends LoggerSupportorImpl {
 			@RequestParam(value="Time", required=false)
 			String examineTime,
 			@RequestParam(value="Mac", required=false)
-			String mac){
-		if(!TEST_REQUEST.equals(user)){
+			String mac){		
+		if(getLogger().isTraceEnabled()){
+			System.err.println(String.format("user=[%s] status=[%s] battery=[%s] hp=[%s] lp=[%s] hb=[%s] ha=[%s] examineTime=[%s] mac=[%s]",
+				                          user,     status,     battery,     highPressure, lowPressure, heartBeatRate, heartBeatAnnottation, examineTime, mac));
+		}
+		if(!TEST_REQUEST.equals(user)){			
 		    SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
 		    Date useTime=Calendar.getInstance().getTime();
 		    try {

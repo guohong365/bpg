@@ -13,6 +13,8 @@ import com.uc.bpg.domain.Room;
 import com.uc.bpg.service.RoomDetailService;
 import com.uc.bpg.uitls.BatchProcessResult;
 import com.uc.bpg.uitls.BatchProcessResultItem;
+import com.uc.web.controller.WebAction;
+import com.uc.web.domain.security.UserProfile;
 
 public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room> implements RoomDetailController{
 	private static final String ACTION_BATCH_ADD = "batchNew";
@@ -88,5 +90,13 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 		return result.toJson();
 	}
 	
+	@Override
+	protected void onBeforSaveDetail(UserProfile<Long> user, String action, Room detail) throws Exception {
+		if(WebAction.NEW.equals(action)){
+			detail.setUuid(UUID.randomUUID().toString());
+			detail.setHotel(user.getOrgnization().getId());
+		}
+		super.onBeforSaveDetail(user, action, detail);
+	}
 	
 }
