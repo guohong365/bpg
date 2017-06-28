@@ -215,9 +215,6 @@
                             <i class="ace-icon fa ${allotIcon} bigger-120"></i>${allotName}</button>
                           <button class="btn btn-xs btn-success ${allotPublicDisabled}" data-action="${allotPublic}" data-item="${item.id}">
                             <i class="ace-icon fa ${allotPublicIcon}"></i>${allotPublicName}</button>
-                          <button class="btn btn-xs btn-success" data-action="viewHis" data-item="${item.id}">
-                            <i class="ace-icon fa fa-file-text bigger-120"></i>历史
-                          </button>
                         </div>
                       </td>
                     </tr>
