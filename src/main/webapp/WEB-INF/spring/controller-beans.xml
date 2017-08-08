@@ -116,6 +116,15 @@
 		<property name="entityName" value="账单" />
 		<property name="pageBasePath" value="/background/account" />
 	</bean>
+	
+	<bean id="backStatisticBillController" class="com.uc.bpg.controller.impl.StatisticBillListControllerImpl">
+	  <property name="appListService" ref="statisticBillService" />
+	  <property name="modelTitle" value="账务统计" />
+	  <property name="pageBasePath" value="/backgound/stat/bill" />
+	  <property name="exportorFactory" ref="backStatisticBillExportorFactory" />
+	  <property name="exportorOptions" ref="excelExportorOptions" />
+	</bean>
+	<bean id="backStatisticBillExportorFactory" class="com.uc.bpg.export.BackStatisticBillExportorFactory" />	
 
   <bean id="hotelDeviceExportorFactory" class="com.uc.bpg.export.HotelDeviceExportorFactory" />
   

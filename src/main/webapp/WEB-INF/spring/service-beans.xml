@@ -103,6 +103,10 @@
     <property name="appDetailMapper" ref="checkInMapper" />
   </bean>
   
+  <bean id="statisticBillService" class="com.uc.bpg.service.impl.StatisticBillServiceImpl">
+    <property name="appListMapper" ref="statisticBillMapper" />
+  </bean>
+  
   <bean id="demoService" class="com.uc.bpg.service.impl.DemoServiceImpl">
     <property name="hotelMapper" ref="hotelMapper" />
     <property name="billMapper" ref="billMapper" />

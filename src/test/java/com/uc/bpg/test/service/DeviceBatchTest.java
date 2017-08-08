@@ -12,6 +12,7 @@ public class DeviceBatchTest extends TestBase {
 	@Resource(name="deviceMapper")
 	DeviceMapper mapper;
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void test(){
 		

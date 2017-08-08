@@ -16,6 +16,7 @@ public class CeckInMapperTest extends TestBase {
 	@Autowired
 	CheckInMapper mapper;
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void test(){
 		CheckInQueryForm queryForm=null;

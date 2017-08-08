@@ -17,6 +17,7 @@ public class CheckInExportor extends TableExportorBase<CheckIn> {
 	};
 	
 	private static class Header extends ExcelSheetHeader{
+		@SuppressWarnings("unused")
 		private CheckInQueryForm queryForm;
 		public Header(CheckInQueryForm queryForm, IExcelExportOptions options){
 			super(options);

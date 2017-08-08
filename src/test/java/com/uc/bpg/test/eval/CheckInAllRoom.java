@@ -37,6 +37,7 @@ public class CheckInAllRoom extends TestBase {
 	UserMapper userMapper;
 	
 		
+	@SuppressWarnings("unused")
 	private Hotel findHotel(List<Hotel> hotels, Long id){
 		for(Hotel hotel: hotels){
 			if(hotel.getId().equals(id)){
@@ -55,6 +56,7 @@ public class CheckInAllRoom extends TestBase {
 		return null;
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void test1(){
 		
