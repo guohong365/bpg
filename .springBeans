@@ -10,9 +10,6 @@
 		<config>src/main/webapp/WEB-INF/spring/mapper-beans.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/controller-beans.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/service-beans.xml</config>
-		<config>src/test/resources/class-generator.xml</config>
-		<config>src/test/resources/autogenerator.xml</config>
-		<config>src/test/resources/page-generator.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/root-security.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
@@ -33,6 +30,7 @@
 				<config>src/main/webapp/WEB-INF/spring/root-security.xml</config>
 				<config>src/main/webapp/WEB-INF/spring/controller-beans.xml</config>
 				<config>src/main/webapp/WEB-INF/spring/utility-beans.xml</config>
+				<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
 				<config>src/main/webapp/WEB-INF/spring/root-task.xml</config>
 			</configs>
 			<profiles>
