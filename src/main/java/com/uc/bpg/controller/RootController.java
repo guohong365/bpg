@@ -29,6 +29,7 @@ import com.uc.web.utils.SystemConfig;
 public class RootController extends IntegerKeyControllerSupportImpl {
 
 	private static final String ROLE_RECEPTIONIST = "HOTEL_RECEPTION";
+	private static final String ROLE_FACTORY_EXAMINE="FACTORY_EXAMINE";
 
 	@Resource(name="${service.codes}")
 	private CodesService codesService;
@@ -73,6 +74,9 @@ public class RootController extends IntegerKeyControllerSupportImpl {
 				Role role=(Role) user.getRoles().get(i);
 				if(role.getUuid().equals(ROLE_RECEPTIONIST)){
 					return "redirect:/hotel/reception/";
+				}
+				if(role.getUuid().equals(ROLE_FACTORY_EXAMINE)){
+					return "redirect:/examine";
 				}
 			}
 			

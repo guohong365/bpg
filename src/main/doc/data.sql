@@ -45,7 +45,8 @@ VALUES
 (12,'HOTEL_ACCOUNT_MGR','酒店账务查询','hotel/stat/account/list','查询账单相关信息',1,'/hotel/stat/account/**'),
 (13,'HOTEL_RECEPTION','酒店前台','hotel/reception/list','酒店前台入住、退房登记',1,'/hotel/reception/**'),
 (14,'HOTEL_CHECKIN','酒店入住记录','hotel/checkin/list','酒店入住记录查看',1,'/hotel/checkin/**'),
-(15, 'DEMO', '演示', 'demo/demo', '演示辅助功能',1,'/demo/demo/**');
+(15, 'DEMO', '演示', 'demo/demo', '演示辅助功能',1,'/demo/demo/**'),
+(16, 'FACTORY_EXAMINE', '生产检测', 'examine/list', '', 1, '/examine/**');
 ALTER TABLE `t_function` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -113,7 +114,8 @@ VALUES
 (7,'HOTEL_ACCOUNT','酒店财务','负责付款，确认就收发票等',1,1),
 (8,'HOTEL_ACCOUNT_MGR','酒店财务主管','查询账务',1,1),
 (9,'HOTEL_RECEPTION','酒店前台','负责前台入住、退房登记，收款等',1,1),
-(10,'DEMO','演示','生成演示数据', 1,1);
+(10,'DEMO','演示','生成演示数据', 1,1),
+(11, 'FACTORY_EXAMINE', '生产测试', '查看生产测试数据', 1, 1);
 ALTER TABLE `t_role` ENABLE KEYS ;
 UNLOCK TABLES;
 
@@ -124,7 +126,7 @@ UNLOCK TABLES;
 LOCK TABLES `t_role_func` WRITE;
 ALTER TABLE `t_role_func` DISABLE KEYS;
 INSERT INTO `t_role_func` (`ROLE`, `FUNC`)
-VALUES (1,1),(1,2),(1,3),(1,4),(2,5),(3,6),(4,7),(5, 8),(6,9),(6,10),(6,14),(7,11),(8,12),(9,13),(10,15);
+VALUES (1,1),(1,2),(1,3),(1,4),(2,5),(3,6),(4,7),(5, 8),(6,9),(6,10),(6,14),(7,11),(8,12),(9,13),(10,15),(11, 16);
 ALTER TABLE `t_role_func` ENABLE KEYS;
 UNLOCK TABLES;
 
@@ -167,7 +169,8 @@ VALUES
 (3,'xl2','96e79218965eb72c92a549dd5a330112','李四','','',0,2,'2017-04-03 01:29:42',1,1,NULL,NULL,''),
 (4,'xl3','96e79218965eb72c92a549dd5a330112','王二麻子','','',0,2,'2017-04-03 01:47:55',1,1,NULL,NULL,''),
 (5,'xl4','96e79218965eb72c92a549dd5a330112','赵六','','',0,2,'2017-04-03 01:56:51',1,0,'2017-04-04 21:58:45',1,''),
-(6,'xl5','96e79218965eb72c92a549dd5a330112','刘七','','',0,2,'2017-04-03 02:03:21',1,0,'2017-04-03 05:25:26',1,'');
+(6,'xl5','96e79218965eb72c92a549dd5a330112','刘七','','',0,2,'2017-04-03 02:03:21',1,0,'2017-04-03 05:25:26',1,''),
+(7,'tester', uuid(), '生产检测', '','', 1, 1, now(), 1,1, NULL, NULL, '');
 ALTER TABLE `t_user` ENABLE KEYS ;
 UNLOCK TABLES;
 
@@ -177,6 +180,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `t_user_role` WRITE;
 ALTER TABLE `t_user_role` DISABLE KEYS;
-INSERT INTO `t_user_role` (`USER`, `ROLE`) VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,10);
+INSERT INTO `t_user_role` (`USER`, `ROLE`) VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,10),(7, 11);
 ALTER TABLE `t_user_role` ENABLE KEYS; 
 UNLOCK TABLES;

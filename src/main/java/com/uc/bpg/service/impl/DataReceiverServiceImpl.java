@@ -6,15 +6,17 @@ import com.uc.bpg.domain.BpData;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.DeviceStatus;
 import com.uc.bpg.domain.DeviceUsage;
+import com.uc.bpg.domain.Examine;
 import com.uc.bpg.persistence.DeviceMapper;
+import com.uc.bpg.persistence.ExamineMapper;
 import com.uc.bpg.persistence.ReceiverMapper;
 import com.uc.bpg.service.DataReceiverService;
 
 public class DataReceiverServiceImpl implements DataReceiverService {
 
 	private DeviceMapper deviceMapper;
-
 	private ReceiverMapper receiverMapper;
+	private ExamineMapper examineMapper;
 
 	public void setReceiverMapper(ReceiverMapper receiverMapper) {
 		this.receiverMapper = receiverMapper;
@@ -22,6 +24,10 @@ public class DataReceiverServiceImpl implements DataReceiverService {
 
 	public void setDeviceMapper(DeviceMapper deviceMapper) {
 		this.deviceMapper = deviceMapper;
+	}
+	
+	public void setExamineMapper(ExamineMapper examineMapper) {
+		this.examineMapper = examineMapper;
 	}
 
 	public DeviceMapper getDeviceMapper() {
@@ -31,9 +37,26 @@ public class DataReceiverServiceImpl implements DataReceiverService {
 	public ReceiverMapper getReceiverMapper() {
 		return receiverMapper;
 	}
+	
+	public ExamineMapper getExamineMapper() {
+		return examineMapper;
+	}
+	
+	Examine buildExameData(String mac, BpData data, int status){
+		Examine examine=new Examine();
+		examine.setMac(mac);
+		examine.setStatus(status);
+		if(data!=null){
+			examine.setData(data.toString());
+		} else {
+			examine.setData("状态报告");
+		}
+		return examine;
+	}
 
 	@Override
-	public void insertUsage(String mac, BpData data, DeviceStatus status) {
+	public void insertUsage(String mac, BpData data, DeviceStatus status) {	
+		getExamineMapper().insertDetail(buildExameData(mac, data, status.getStatus()));
 		Device device = getDeviceMapper().selectBySerial(mac);
 		if (device != null) {
 			if (status.getStatus() == 0) {
@@ -60,6 +83,7 @@ public class DataReceiverServiceImpl implements DataReceiverService {
 
 	@Override
 	public void insertStatus(String mac, DeviceStatus status) {
+		getExamineMapper().insertDetail(buildExameData(mac, null, status.getStatus()));
 		Device device = getDeviceMapper().selectBySerial(mac);
 		if (device != null) {
 			status.setDevice(device.getId());
