@@ -7,9 +7,9 @@ import com.uc.bpg.forms.DeviceUsageQueryForm;
 import com.uc.bpg.service.DeviceUsageListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.basic.GenericIntegerKeyAppListService;
+import com.uc.web.service.AppWebListServiceBase;
 
-public class DeviceUsageListServiceImpl extends GenericIntegerKeyAppListService<DeviceUsageQueryForm, DeviceUsage>
+public class DeviceUsageListServiceImpl extends AppWebListServiceBase<DeviceUsageQueryForm, DeviceUsage>
 	implements DeviceUsageListService{
 	
 	@Override

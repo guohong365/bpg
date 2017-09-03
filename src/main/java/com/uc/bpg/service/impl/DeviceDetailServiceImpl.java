@@ -12,12 +12,12 @@ import com.uc.bpg.persistence.AllotHistoryMapper;
 import com.uc.bpg.persistence.DeviceMapper;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.persistence.RoomMapper;
-import com.uc.bpg.service.DeviceService;
+import com.uc.bpg.service.DeviceDetailService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.ExampleImpl;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<Device> implements DeviceService {
+public class DeviceDetailServiceImpl extends AppDetailServiceBase<Long, Device> implements DeviceDetailService {
 	private HotelMapper hotelMapper;
 	private RoomMapper roomMapper;
 	private AllotHistoryMapper allotHistoryMapper;
@@ -30,8 +30,8 @@ public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<D
 		return hotelMapper;
 	}
 	
-	protected DeviceMapper getDeviceMapper(){
-		return (DeviceMapper) getAppDetailMapper();
+	public DeviceMapper getMapper(){
+		return (DeviceMapper) super.getMapper();
 	}
 	
 	public AllotHistoryMapper getAllotHistoryMapper() {
@@ -51,17 +51,17 @@ public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<D
 
 	@Override
 	public void insertBatchAdd(List<Device> devices) {
-		getDeviceMapper().insertBatchAdd(devices);
+		getMapper().insertBatchAdd(devices);
 	}
 
 	@Override
 	public boolean selectExistsSerial(String serial) {
-		return getDeviceMapper().selectExistsSerial(serial);
+		return getMapper().selectExistsSerial(serial);
 	}
 
 	@Override
 	public boolean selectAlreadyAllot(String serial, Long hotel) {
-		return getDeviceMapper().selectAlreadyAllot(serial, hotel);
+		return getMapper().selectAlreadyAllot(serial, hotel);
 	}
 
 	@Override
@@ -71,43 +71,43 @@ public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<D
 
 	@Override
 	public void updateBatchAllot(List<Device> devices) {
-		getDeviceMapper().updateBatchAllot(devices);
+		getMapper().updateBatchAllot(devices);
 	}
 
 	@Override
 	public void updateBatchWithdraw(List<Device> devices) {
-		getDeviceMapper().updateBatchWithdraw(devices);
+		getMapper().updateBatchWithdraw(devices);
 	}
 
 	@Override
 	public void updateBatchScrap(List<Device> devices) {
-		getDeviceMapper().updateBatchScrap(devices);
+		getMapper().updateBatchScrap(devices);
 	}
 	
 
 	@Override
 	public void updateAllot(Device device, String operatoin) {		
-		getDeviceMapper().updateAllot(device, operatoin);
+		getMapper().updateAllot(device, operatoin);
 	}
 	
 	@Override
 	public List<Room> selectAllocableRooms(Long hotelId) {
-		return getDeviceMapper().selectAllocableRooms(hotelId);
+		return getMapper().selectAllocableRooms(hotelId);
 	}
 
 	@Override
 	public int updateWithdrawAll(Long modifier, Long hotel) {
 		Example example=new ExampleImpl();
 		example.or().andFieldEqualTo("HOTEL", hotel).andFieldIsNotNull("ROOM");
-		long count=getDeviceMapper().selectCountByExample(example);
-		List<Device> devices=getDeviceMapper().selectByExample(example, 0, count);
+		long count=getMapper().selectCountByExample(example);
+		List<Device> devices=getMapper().selectByExample(example, 0, count);
 		if(devices.isEmpty()) return 0;
 		Date date=Calendar.getInstance().getTime();
 		for(Device device:devices){
 			device.setModifier(modifier);
 			device.setModifyTime(date);
 		}
-		getDeviceMapper().updateWithdrawAll(devices);
+		getMapper().updateWithdrawAll(devices);
 		return devices.size();
 	}
 
@@ -116,8 +116,8 @@ public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<D
 		Example example=new ExampleImpl();
 		example.or().andFieldEqualTo("HOTEL", hotel)
 		.andFieldIsNull("ROOM").andFieldEqualTo("PUBLIC_USAGE", false);		
-		Long count=getDeviceMapper().selectCountByExample(example);
-		List<Device> devices=getDeviceMapper().selectByExample(example, 0, count);
+		Long count=getMapper().selectCountByExample(example);
+		List<Device> devices=getMapper().selectByExample(example, 0, count);
 		if(devices.isEmpty()) return 0;
 		
 		example.clear();
@@ -140,7 +140,7 @@ public class DeviceDetailServiceImpl extends GenericIntegerKeyAppDetailService<D
 				indexDevice++;
 			}
 		}		
-		getDeviceMapper().updateBatchAllot(allotDevice);
+		getMapper().updateBatchAllot(allotDevice);
 		return ok;
 	}
 }

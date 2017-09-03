@@ -10,7 +10,7 @@ public class DeviceUsageRecordListControllerImpl
 	implements DeviceUsageRecordListController{
 
 	@Override
-	protected DeviceUsageQueryForm onCreateNewQueryForm() {
+	protected DeviceUsageQueryForm onCreateQueryForm() {
 		return new DeviceUsageQueryForm();
 	}
 

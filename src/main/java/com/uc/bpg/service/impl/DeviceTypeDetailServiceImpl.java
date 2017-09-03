@@ -2,18 +2,18 @@ package com.uc.bpg.service.impl;
 
 import com.uc.bpg.domain.DeviceType;
 import com.uc.bpg.persistence.DeviceTypeMapper;
-import com.uc.bpg.service.DeviceTypeService;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.bpg.service.DeviceTypeDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class DeviceTypeDetailServiceImpl extends GenericIntegerKeyAppDetailService<DeviceType> implements DeviceTypeService {
+public class DeviceTypeDetailServiceImpl extends AppDetailServiceBase<Long, DeviceType> implements DeviceTypeDetailService {
 
-	DeviceTypeMapper getDeviceTypeMapper(){
-		return (DeviceTypeMapper) getAppDetailMapper();
+	public DeviceTypeMapper getMapper(){
+		return (DeviceTypeMapper) super.getMapper();
 	}
 	
 	@Override
 	public Long selectNextShowOrder() {		
-		return getDeviceTypeMapper().selectNextOrder();
+		return getMapper().selectNextOrder();
 	}
 
 }

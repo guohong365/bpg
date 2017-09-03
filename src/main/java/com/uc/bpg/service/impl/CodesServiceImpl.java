@@ -6,17 +6,13 @@ import com.uc.bpg.domain.MenuTreeItem;
 import com.uc.bpg.persistence.CodesMapper;
 import com.uc.bpg.service.CodesService;
 import com.uc.web.domain.basic.IntegerCode;
+import com.uc.web.service.ServiceBase;
 
-public class CodesServiceImpl implements CodesService {
+public class CodesServiceImpl extends ServiceBase implements CodesService {
 
-	CodesMapper mapper;
-	
-	public void setMapper(CodesMapper mapper) {
-		this.mapper = mapper;
-	}
-	
+	@Override
 	public CodesMapper getMapper() {
-		return mapper;
+		return (CodesMapper) super.getMapper();
 	}
 	
 	@Override

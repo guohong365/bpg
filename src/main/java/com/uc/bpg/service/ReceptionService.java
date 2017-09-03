@@ -7,8 +7,9 @@ import com.uc.bpg.domain.Charging;
 import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.uitls.OptResult;
+import com.uc.web.service.Service;
 
-public interface ReceptionService {
+public interface ReceptionService extends Service{
 
 	int insertCheckIn(CheckIn checkIn);
 	int insertCheckOut(Charging charging, List<Long> ids);

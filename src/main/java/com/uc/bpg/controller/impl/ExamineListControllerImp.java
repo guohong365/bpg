@@ -8,7 +8,7 @@ import com.uc.bpg.forms.ExamineQueryForm;
 public class ExamineListControllerImp extends BusinessListControllerBase<ExamineQueryForm, Examine> implements ExamineListController {
 
 	@Override
-	protected ExamineQueryForm onCreateNewQueryForm() {
+	protected ExamineQueryForm onCreateQueryForm() {
 		return new ExamineQueryForm();
 	}
 }

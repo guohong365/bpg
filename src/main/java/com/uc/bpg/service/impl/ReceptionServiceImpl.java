@@ -3,9 +3,6 @@ package com.uc.bpg.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.uc.bpg.domain.Charging;
 import com.uc.bpg.domain.ChargingDetails;
 import com.uc.bpg.domain.CheckIn;
@@ -14,20 +11,17 @@ import com.uc.bpg.persistence.CheckInMapper;
 import com.uc.bpg.persistence.ReceptionMapper;
 import com.uc.bpg.service.ReceptionService;
 import com.uc.bpg.uitls.OptResult;
+import com.uc.web.service.ServiceBase;
 
-public class ReceptionServiceImpl implements ReceptionService {
-	private Logger logger;
+public class ReceptionServiceImpl extends ServiceBase implements ReceptionService {
 	private ReceptionMapper receptionMapper;
 	private CheckInMapper checkInMapper;
 	private ChargingMapper chargingMapper;
 	
 	public ReceptionServiceImpl(){
-		logger=LoggerFactory.getLogger(getClass());
 	}
 	
-	protected Logger getLogger(){
-		return logger;
-	}
+	
 	
 	public ReceptionMapper getReceptionMapper() {
 		return receptionMapper;

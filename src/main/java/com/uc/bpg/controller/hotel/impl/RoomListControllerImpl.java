@@ -8,7 +8,7 @@ import com.uc.bpg.forms.RoomQueryForm;
 
 public class RoomListControllerImpl extends BusinessListControllerBase<RoomQueryForm,Room> implements RoomListController{
 	@Override
-	protected RoomQueryForm onCreateNewQueryForm() {
+	protected RoomQueryForm onCreateQueryForm() {
 		RoomQueryForm queryForm=new RoomQueryForm();
 		return queryForm;
 	}

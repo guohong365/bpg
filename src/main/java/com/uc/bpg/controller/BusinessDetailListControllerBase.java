@@ -1,10 +1,11 @@
 package com.uc.bpg.controller;
 
+import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.forms.IDetailListQueryForm;
-import com.uc.web.controller.basic.GenericIntegerKeyDetailListController;
+import com.uc.web.controller.AbstractDetailListController;
 
 public class BusinessDetailListControllerBase<DetailType, ChildQueryType extends IDetailListQueryForm, ChildDetailType> 
-	extends GenericIntegerKeyDetailListController<DetailType, ChildQueryType, ChildDetailType> {
+	extends AbstractDetailListController<Long, DetailType, ChildQueryType> {
 	private boolean foreground;
 	
 	@Override
@@ -28,5 +29,9 @@ public class BusinessDetailListControllerBase<DetailType, ChildQueryType extends
 	}
 	public void setForeground(boolean foreground) {
 		this.foreground = foreground;
+	}
+	
+	protected UserProfile getUserProfile(){
+		return (UserProfile) getUser();
 	}
 }

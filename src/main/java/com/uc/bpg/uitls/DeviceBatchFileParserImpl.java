@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.controller.DeviceController;
+import com.uc.bpg.controller.DeviceDetailListController;
 import com.uc.utils.LoggerSupportorImpl;
 
 public class DeviceBatchFileParserImpl extends LoggerSupportorImpl implements DeviceBatchFileParser {
@@ -27,13 +27,13 @@ public class DeviceBatchFileParserImpl extends LoggerSupportorImpl implements De
 				continue;
 			}
 			if(line.startsWith(DeviceBatchFile.BATCH_ADD)){
-				action=DeviceController.ACTION_BATCH_ADD;
+				action=DeviceDetailListController.ACTION_BATCH_ADD;
 			} else if(line.startsWith(DeviceBatchFile.BATCH_ALLOT)){
-				action=DeviceController.ACTION_BATCH_ALLOT;
+				action=DeviceDetailListController.ACTION_BATCH_ALLOT;
 			} else if(line.startsWith(DeviceBatchFile.BATCH_WITHDRAW)){
-				action=DeviceController.ACTION_BATCH_WITHDRAW;
+				action=DeviceDetailListController.ACTION_BATCH_WITHDRAW;
 			} else if(line.startsWith(DeviceBatchFile.BATCH_SCRAP)){
-				action=DeviceController.ACTION_BATCH_SCRAP;
+				action=DeviceDetailListController.ACTION_BATCH_SCRAP;
 			} else {				
 				throw new IllegalHeaderFormat("文件头部格式错误");
 			}

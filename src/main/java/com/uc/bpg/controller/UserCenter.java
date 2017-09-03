@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.domain.UserProfile;
-import com.uc.bpg.service.UserService;
-import com.uc.web.controller.basic.IntegerKeyControllerSupportImpl;
+import com.uc.bpg.service.UserDetailService;
+import com.uc.web.controller.ControllerBaseImpl;
 
 @Controller
-public class UserCenter extends IntegerKeyControllerSupportImpl {	
+public class UserCenter extends ControllerBaseImpl {	
 	
 	@Resource(name="${service.user}")
-	UserService userService;
+	UserDetailService userService;
 
 	@RequestMapping(value="/changePwd", method=RequestMethod.POST, produces="text/html;charset=UTF-8")	
 	public @ResponseBody String doChangePwd(
 			@RequestParam(value="password", required=true) String oldPwd,
 			@RequestParam(value="newPassword", required=true) String newPwd){
-		UserProfile userInfo=(UserProfile) this.getUserProfile();
+		UserProfile userInfo=(UserProfile) this.getUser();
 		assert userInfo!=null;		
 		getLogger().info("change password for user:" + userInfo.getUser().getName());
 		getLogger().debug("original pwd=[" + userInfo.getUser().getPassword() + "]");

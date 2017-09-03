@@ -4,11 +4,12 @@ import org.springframework.util.StringUtils;
 
 import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.forms.UserQueryForm;
+import com.uc.bpg.service.UserListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.basic.GenericIntegerKeyAppListService;
+import com.uc.web.service.AppWebListServiceBase;
 
-public class UserListServiceImpl extends GenericIntegerKeyAppListService<UserQueryForm, UserImpl>{
+public class UserListServiceImpl extends AppWebListServiceBase<UserQueryForm, UserImpl> implements UserListService{
 
 	@Override
 	public boolean prepareExample(UserQueryForm queryForm, Example example) {

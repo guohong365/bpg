@@ -12,8 +12,9 @@ import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.service.BillGeneratorSevice;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.ExampleImpl;
+import com.uc.web.service.ServiceBase;
 
-public class BillGeneratorServiceImpl implements BillGeneratorSevice{
+public class BillGeneratorServiceImpl extends ServiceBase implements BillGeneratorSevice{
 	private BillMapper billMapper;
 	private HotelMapper hotelMapper;
 	private DeviceUsageMapper usageMapper;

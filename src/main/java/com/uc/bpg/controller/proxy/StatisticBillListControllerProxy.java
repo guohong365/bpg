@@ -6,27 +6,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.uc.bpg.domain.StatisticBill;
 import com.uc.bpg.forms.StatisticBillQueryForm;
-import com.uc.web.controller.ListController;
-import com.uc.web.controller.basic.AbstractIntegerKeyListControllerProxy;
+import com.uc.web.controller.AbstractListControllerProxy;
+import com.uc.web.controller.ControllerBase;
 
 @Controller
 @RequestMapping(value="${controller.proxy.uri.background.statistic.bill}")
-public class StatisticBillListControllerProxy extends AbstractIntegerKeyListControllerProxy<StatisticBillQueryForm, StatisticBill> {
+public class StatisticBillListControllerProxy extends AbstractListControllerProxy<StatisticBillQueryForm> {
 	
 	@Value(value="${controller.proxy.uri.background.statistic.bill}")
-	String baseUri;
-
 	@Override
-	protected String onGetBaseUri() {
-		return baseUri;
+	public void setBaseUri(String baseUri) {
+		super.setBaseUri(baseUri);
 	}
 	
 	@Resource(name="${controller.impl.list.background.statistic.bill}")
 	@Override
-	public void setListController(ListController<Long, StatisticBillQueryForm, StatisticBill> listController) {
-		super.setListController(listController);
+	public void setController(ControllerBase controller) {
+		super.setController(controller);
 	}
 	
 

@@ -1,7 +1,8 @@
 package com.uc.bpg.service.impl;
 
 import com.uc.bpg.domain.Orgnization;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.bpg.service.OrgnizationDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class OrgnizationDetailServiceImpl extends GenericIntegerKeyAppDetailService<Orgnization>{
+public class OrgnizationDetailServiceImpl extends AppDetailServiceBase<Long, Orgnization> implements OrgnizationDetailService{
 }

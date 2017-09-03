@@ -25,12 +25,13 @@ import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.service.ReceptionService;
 import com.uc.bpg.uitls.OptResult;
-import com.uc.web.controller.ControllerProxySupportImpl;
+import com.uc.web.controller.ControllerProxyBaseImpl;
+import com.uc.web.service.Service;
 import com.uc.web.utils.json.BigDecimalValueFilter;
 
 @Controller
 @RequestMapping("/hotel/reception")
-public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
+public class ReceptionControllerImpl  extends ControllerProxyBaseImpl {
 	
 	private static final String RECEPTION_PAGE = "/hotel/reception/main";
 	private static SerializeConfig mapping=new SerializeConfig();
@@ -44,15 +45,17 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 	}
 
 	@Resource(name="${service.reception}")
-	private ReceptionService service;
+	public void setService(Service service){
+		super.setService(service);
+	}
 	
 	public ReceptionService getService() {
-		return service;
+		return (ReceptionService) super.getService();
 	}
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String getReceptionPage(Model model){
-		model.addAttribute("userName",getUserProfile().getOrgnization().getName() +" " + getUserProfile().getUser().getName());
+		model.addAttribute("userName",((UserProfile)getUser()).getOrgnization().getName() +" " + ((UserProfile)getUser()).getUser().getName());
 		return RECEPTION_PAGE;
 	}
 	
@@ -63,7 +66,7 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 			String roomNo,
 			Model model
 			){
-		OptResult<CheckIn> result=getService().selectRoomLastCheckIn(getUserProfile().getOrgnization().getId(), roomNo);		
+		OptResult<CheckIn> result=getService().selectRoomLastCheckIn(((UserProfile)getUser()).getOrgnization().getId(), roomNo);		
 		return JSONObject.toJSONString(result,mapping, filter);
 	}
 	
@@ -74,13 +77,13 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 			String roomNo,
 			Model model
 			){
-		UserProfile user=(UserProfile)getUserProfile();
+		UserProfile user=(UserProfile)getUser();
 		OptResult<CheckIn> result=getService().selectRoomLastCheckIn(user.getOrgnization().getId(), roomNo);
 		if(result.isOk()){
 			CheckIn checkIn=new CheckIn();
-			checkIn.setCheckInReceptionist(getUserProfile().getUser().getId());
+			checkIn.setCheckInReceptionist(((UserProfile)getUser()).getUser().getId());
 			checkIn.setCheckInTime(Calendar.getInstance().getTime());
-			checkIn.setHotel(getUserProfile().getOrgnization().getId());
+			checkIn.setHotel(((UserProfile)getUser()).getOrgnization().getId());
 			checkIn.setRoom(result.getRoom());
 			checkIn.setUuid(UUID.randomUUID().toString());
 			int ret=getService().insertCheckIn(checkIn);
@@ -100,7 +103,7 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 			String room,
 			Model model
 			){
-		UserProfile user=(UserProfile)getUserProfile();
+		UserProfile user=(UserProfile)getUser();
 		OptResult<ChargingDetails> result=getService().selectRoomCheckOut(user.getOrgnization().getId(), room);
 		
 		//model.addAttribute(PARAM_NAME_CHARGING_DETAILS, result);
@@ -134,12 +137,12 @@ public class ReceptionControllerImpl  extends ControllerProxySupportImpl<Long> {
 			chargingStandard=new BigDecimal(0);
 		}
 		charging.setUuid(UUID.randomUUID().toString());
-		charging.setHotel(getUserProfile().getOrgnization().getId());
+		charging.setHotel(((UserProfile)getUser()).getOrgnization().getId());
 		charging.setChargingTime(new Date());
 		charging.setCharge(charge);
 		charging.setChargeStandard(chargingStandard);
 		charging.setCheckIn(checkIn);
-		charging.setReceptionist(getUserProfile().getUser().getId());		
+		charging.setReceptionist(((UserProfile)getUser()).getUser().getId());		
 		getService().insertCheckOut(charging, ids); 
 		return "OK";
 	}

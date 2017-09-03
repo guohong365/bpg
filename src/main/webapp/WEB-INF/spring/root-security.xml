@@ -88,7 +88,7 @@
       <property name="captchaCharSet" value="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz" />
     </bean>
     
-    <bean id="charImageGenerator" class="com.uc.web.utils.captcha.RandomCharImageCaptchaGenerator2" />
+    <bean id="charImageGenerator" class="com.uc.web.utils.captcha.RandomCharImageCaptchaGeneratorImpl2" />
     
     <bean id="captchaService" class="com.uc.web.utils.captcha.RandomCharImageCaptcha">
       <property name="captchaCount" value="4" />

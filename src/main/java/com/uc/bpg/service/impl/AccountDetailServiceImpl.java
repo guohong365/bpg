@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.uc.bpg.Constant;
 import com.uc.bpg.domain.Bill;
-import com.uc.bpg.service.AccountService;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.bpg.service.AccountDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class AccountDetailServiceImpl extends GenericIntegerKeyAppDetailService<Bill> implements AccountService {
+public class AccountDetailServiceImpl extends AppDetailServiceBase<Long, Bill> implements AccountDetailService {
 	@Override
 	public	int pay(Bill detail){
 		Bill bill=new Bill();

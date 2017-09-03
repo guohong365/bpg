@@ -7,23 +7,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.uc.bpg.domain.Device;
-import com.uc.web.controller.DetailController;
-import com.uc.web.controller.basic.AbstractIntegerKeyDetailControllerProxy;
+import com.uc.web.controller.AbstractDetailControllerProxy;
+import com.uc.web.controller.ControllerBase;
 
 @Controller
 @RequestMapping("${controller.proxy.uri.hotel.device}")
-public class ForeDeviceDetailControllerProxy extends AbstractIntegerKeyDetailControllerProxy<Device> {
+public class ForeDeviceDetailControllerProxy extends AbstractDetailControllerProxy<Long, Device> {
 	@Value("${controller.proxy.uri.hotel.device}")
-	private String baseUri;
-	
 	@Override
-	protected String onGetBaseUri() {
-		return baseUri;
+	public void setBaseUri(String baseUri) {
+		super.setBaseUri(baseUri);
 	}
 	
-	@Override
 	@Resource(name="${controller.impl.detail.hotel.device}")
-	public void setDetailController(DetailController<Long, Device> detailController) {
-		super.setDetailController(detailController);
+	@Override
+	public void setController(ControllerBase controller) {
+		super.setController(controller);
 	}
 }

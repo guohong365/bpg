@@ -2,27 +2,28 @@ package com.uc.bpg.controller.impl;
 
 import org.springframework.ui.Model;
 
+import com.uc.bpg.controller.AccountDetailListController;
 import com.uc.bpg.controller.BusinessDetailListControllerBase;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.forms.DeviceUsageQueryForm;
-import com.uc.bpg.service.AccountService;
+import com.uc.bpg.service.AccountDetailService;
 import com.uc.web.controller.WebAction;
 
 public class AccountDetailControllerImpl 
-	extends BusinessDetailListControllerBase<Bill, DeviceUsageQueryForm, DeviceUsage>  {
+	extends BusinessDetailListControllerBase<Bill, DeviceUsageQueryForm, DeviceUsage> implements AccountDetailListController {
 	private static final String ACTION_PAY = "pay";
 	private static final String ACTION_VERIFY = "verify";
 	private static final String ACTION_VIEW_DETAIL = "viewDetail";
 	private static final String ACTION_NAME_PAY = "付款";
 	private static final String ACTION_NAME_VERIFY = "收款确认";
 
-	AccountService getAccountService(){
-		return (AccountService) getAppDetailService();
+	public AccountDetailService  getService() {
+		return (AccountDetailService) super.getService();
 	}
 	
 	@Override
-	protected Bill onCreateNewDetail() {
+	protected Bill onCreateEntity() {
 		return new Bill();
 	}
 	
@@ -69,11 +70,11 @@ public class AccountDetailControllerImpl
 		switch(action){
 		case ACTION_PAY:
 			detail.setPayer(getUserProfile().getUser().getId());
-			getAccountService().pay(detail);
+			getService().pay(detail);
 			break;
 		case ACTION_VERIFY:
 			detail.setVerifier(getUserProfile().getUser().getId());
-			getAccountService().verify(detail);
+			getService().verify(detail);
 			break;
 		}
 		return "OK";

@@ -10,13 +10,13 @@ import org.junit.Test;
 
 import com.uc.bpg.domain.FunctionAvailable;
 import com.uc.bpg.domain.Role;
+import com.uc.bpg.service.RoleDetailService;
 import com.uc.bpg.test.TestBase;
-import com.uc.web.service.basic.IntegerKeyAppDetailService;
 
 public class RoleServiceTest extends TestBase {
 	
 	@Resource(name="roleDetailService")
-	IntegerKeyAppDetailService<Role> service;
+	RoleDetailService service;
 	
 	@Test
 	public void test(){

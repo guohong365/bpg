@@ -19,29 +19,29 @@ import org.springframework.transaction.annotation.Transactional;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.forms.DeviceQueryForm;
 import com.uc.bpg.persistence.DeviceMapper;
-import com.uc.bpg.service.DeviceService;
+import com.uc.bpg.service.DeviceDetailService;
+import com.uc.bpg.service.DeviceListService;
 import com.uc.bpg.test.TestBase;
 import com.uc.bpg.uitls.DeviceBatchFile;
 import com.uc.bpg.uitls.DeviceBatchFileParser;
 import com.uc.bpg.uitls.DeviceBatchFileParserImpl;
-import com.uc.web.forms.WebListFormBase;
-import com.uc.web.service.basic.IntegerKeyAppListService;
+import com.uc.web.forms.WebListForm;
 
 @Transactional
 public class DeviceServiceTest extends TestBase {
 	
 	@Resource(name="deviceDetailService")
-	DeviceService service;
+	DeviceDetailService service;
 	
 	@Resource(name="deviceMapper")
 	DeviceMapper mapper;
 	
 	@Resource(name="deviceListService")
-	IntegerKeyAppListService<DeviceQueryForm, Device> listService;
+	DeviceListService listService;
 	
 	@Test
 	public void test01(){
-		WebListFormBase<Long, DeviceQueryForm, Device> webForm=new WebListFormBase<>();
+		WebListForm<DeviceQueryForm, Device> webForm=new WebListForm<>();
 		webForm.setQuery(new DeviceQueryForm());
 		listService.select(webForm);		
 	}

@@ -7,16 +7,17 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 import com.uc.bpg.controller.BusinessDetailControllerBase;
+import com.uc.bpg.controller.UserDetailController;
 import com.uc.bpg.domain.RoleAvailable;
 import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.service.CodesService;
-import com.uc.bpg.service.UserService;
+import com.uc.bpg.service.UserDetailService;
 import com.uc.web.controller.WebAction;
 import com.uc.web.domain.Code;
 import com.uc.web.domain.basic.IntegerCode;
 import com.uc.web.domain.security.UserProfile;
 
-public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserImpl> {
+public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserImpl> implements UserDetailController{
     private static final String ORG_CODE_NAME="_ORGS";
     CodesService codesService;
     
@@ -28,24 +29,24 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 		return codesService;
 	}
 	
-    protected UserService getUserAppService(){
-    	return (UserService) getAppDetailService();
+    public UserDetailService getService(){
+    	return (UserDetailService) super.getService();
     }
     
 	@Override
-	protected UserImpl onCreateNewDetail() {
+	protected UserImpl onCreateEntity() {
 		UserImpl detail= new UserImpl();
-		detail.setRoles(getUserAppService().selectAvailableRoles());
+		detail.setRoles(getService().selectAvailableRoles());
 		return detail;
 	}
 	
 	@Override
-	protected void onBeforSaveDetail(UserProfile<Long > user, String action, UserImpl detail)
+	protected void onBeforSaveDetail(UserProfile user, String action, UserImpl detail)
 			throws Exception {
 		switch (action) {
 		case WebAction.NEW:
 			detail.setValid(true);
-			detail.setCreater(user.getUser().getId());
+			detail.setCreater(getUserProfile().getUser().getId());
 			detail.setCreateTime(new Date());
 			getLogger().trace("has roles=" + (detail.getRoles()==null? 0 : detail.getRoles().size() ));
 			if(getLogger().isTraceEnabled() && detail.getRoles()!=null)
@@ -61,7 +62,7 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 			}
 			break;
 		case WebAction.CANCELATE:
-			detail.setCancelater(user.getUser().getId());
+			detail.setCancelater(getUserProfile().getUser().getId());
 			detail.setCancelTime(new Date());
 			break;
 		case WebAction.REACTIVE:
@@ -75,16 +76,16 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 	
 	@Override
 	protected void saveReactive(UserImpl detail) {
-		UserImpl temp=getAppDetailService().selectById(detail.getId());
+		UserImpl temp=getService().selectById(detail.getId());
 		temp.setCancelater(null);
 		temp.setCancelTime(null);
 		temp.setValid(true);
-		getAppDetailService().update(temp);
+		getService().update(temp);
 	}
 	
 	@Override
 	protected void saveModify(UserImpl detail) {
-		getAppDetailService().updateSelective(detail);
+		getService().updateSelective(detail);
 	}
 	@Override
 	protected void saveCancelate(UserImpl detail) {
@@ -93,19 +94,19 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
         temp.setValid(false);
         temp.setCancelater(detail.getCancelater());
         temp.setCancelTime(detail.getCancelTime());
-        getAppDetailService().updateSelective(temp);
+        getService().updateSelective(temp);
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetNewCodes(UserProfile<Long> user) {
-		Map<String, List<? extends Code<Long>>> map= super.onGetNewCodes(user);
+	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
+		Map<String, List<? extends Code<?>>> map= super.onGetNewCodes(user);
 		List<IntegerCode> codes=  getCodesService().selectOrgCodes(null, true);
 		map.put(ORG_CODE_NAME, codes);
 		return map;
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetModifyCodes(UserProfile<Long> user,	UserImpl detail) {
+	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user,	UserImpl detail) {
 		return onGetNewCodes(user);
 	}
 

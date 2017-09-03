@@ -12,7 +12,7 @@ import com.uc.bpg.domain.BpData;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.DeviceStatus;
 import com.uc.bpg.service.DataReceiverService;
-import com.uc.bpg.service.DeviceService;
+import com.uc.bpg.service.DeviceDetailService;
 import com.uc.bpg.test.TestBase;
 import com.uc.web.persistence.AppListMapper;
 
@@ -21,7 +21,7 @@ public class DataRecieverServiceTest extends TestBase {
 	DataReceiverService service;
 	
 	@Resource(name="deviceDetailService")
-	DeviceService deviceService;
+	DeviceDetailService deviceService;
 	
 	@Resource(name="deviceMapper")
 	AppListMapper<Device> listMapper;

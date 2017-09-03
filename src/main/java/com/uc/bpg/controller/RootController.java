@@ -16,7 +16,7 @@ import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.service.CodesService;
 import com.uc.bpg.uitls.SystemFormHelper;
 import com.uc.utils.ObjectCacheImpl;
-import com.uc.web.controller.basic.IntegerKeyControllerSupportImpl;
+import com.uc.web.controller.ControllerBaseImpl;
 import com.uc.web.domain.basic.NoParentFoundException;
 import com.uc.web.forms.ui.IUIFormator;
 import com.uc.web.forms.ui.TreeView;
@@ -26,7 +26,7 @@ import com.uc.web.utils.SystemConfig;
  * Handles requests for the application home page.
  */
 @Controller
-public class RootController extends IntegerKeyControllerSupportImpl {
+public class RootController extends ControllerBaseImpl {
 
 	private static final String ROLE_RECEPTIONIST = "HOTEL_RECEPTION";
 	private static final String ROLE_FACTORY_EXAMINE="FACTORY_EXAMINE";
@@ -68,7 +68,7 @@ public class RootController extends IntegerKeyControllerSupportImpl {
 		}
 		
 	
-		UserProfile user=(UserProfile) getUserProfile();		
+		UserProfile user=(UserProfile) getUser();		
 		if(user!=null){			
 			for(int i=0; i< user.getRoles().size(); i++){
 				Role role=(Role) user.getRoles().get(i);

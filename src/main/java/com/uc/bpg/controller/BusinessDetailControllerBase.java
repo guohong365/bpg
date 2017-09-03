@@ -1,9 +1,10 @@
 package com.uc.bpg.controller;
 
-import com.uc.web.controller.basic.AbstractIntegerKeyDetailController;
+import com.uc.bpg.domain.UserProfile;
+import com.uc.web.controller.AbstractDetailController;
 
 public class BusinessDetailControllerBase<DetailType> 
-	extends AbstractIntegerKeyDetailController<DetailType> {
+	extends AbstractDetailController<Long, DetailType> {
 	
 	@Override
 	protected String getNewPageName() {
@@ -21,4 +22,7 @@ public class BusinessDetailControllerBase<DetailType>
 	protected String getDeletePageName() {
 		return getDeletePageName();
 	}	
+	protected UserProfile getUserProfile(){
+		return (UserProfile) getUser();
+	}
 }

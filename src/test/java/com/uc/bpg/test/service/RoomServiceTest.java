@@ -6,26 +6,20 @@ import org.junit.Test;
 
 import com.uc.bpg.domain.Room;
 import com.uc.bpg.forms.RoomQueryForm;
+import com.uc.bpg.service.RoomListService;
 import com.uc.bpg.test.TestBase;
-import com.uc.web.forms.WebListFormBase;
-import com.uc.web.forms.ui.componet.IPageCtrl;
-import com.uc.web.service.basic.IntegerKeyAppListService;
+import com.uc.web.forms.WebListForm;
 
 public class RoomServiceTest extends TestBase {
 	
 	@Resource(name="roomListService")
-	IntegerKeyAppListService<RoomQueryForm, Room> listService;
+	RoomListService listService;
 	
 	@Test
 	public void test(){
-		WebListFormBase<Long, RoomQueryForm, Room> webForm=new WebListFormBase<>();
+		WebListForm< RoomQueryForm, Room> webForm=new WebListForm<>();
 		webForm.setQuery(new RoomQueryForm());
 		listService.select(webForm);
-		
-		IPageCtrl pageCtrl=webForm.getPageCtrl();
-		pageCtrl.setCurrent(1L);
-		listService.select(webForm);
-		
 	}
 
 }

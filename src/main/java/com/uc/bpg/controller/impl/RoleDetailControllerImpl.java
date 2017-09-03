@@ -4,22 +4,23 @@ import java.util.List;
 import java.util.UUID;
 
 import com.uc.bpg.controller.BusinessDetailControllerBase;
+import com.uc.bpg.controller.RoleDetailController;
 import com.uc.bpg.domain.FunctionAvailable;
 import com.uc.bpg.domain.Role;
-import com.uc.bpg.service.RoleService;
+import com.uc.bpg.service.RoleDetailService;
 
-public class RoleDetailControllerImpl extends BusinessDetailControllerBase<Role>{
+public class RoleDetailControllerImpl extends BusinessDetailControllerBase<Role> implements RoleDetailController{
 
-	protected RoleService getRoleService(){
-		return (RoleService)getAppDetailService();
+	public RoleDetailService getService(){
+		return (RoleDetailService)super.getService();
 	}
 
 	@Override
-	protected Role onCreateNewDetail() {
+	protected Role onCreateEntity() {
 		Role detail=new Role();
 		detail.setInternal(false);
 		detail.setValid(true);
-		List<FunctionAvailable> functions=getRoleService().seletctFunctions();
+		List<FunctionAvailable> functions=getService().seletctFunctions();
 		detail.setFunctions(functions);
 		return detail;
 	}
@@ -35,7 +36,7 @@ public class RoleDetailControllerImpl extends BusinessDetailControllerBase<Role>
 		Role detail=new Role();
 		detail.setId(id);
 		detail.setValid(enabled);
-		getAppDetailService().updateSelective(detail);
+		getService().updateSelective(detail);
 	}
 	@Override
 	protected void saveCancelate(Role detail) {

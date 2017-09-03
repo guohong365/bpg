@@ -3,9 +3,9 @@ package com.uc.bpg.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.uc.web.domain.basic.IntegerUser;
+import com.uc.web.domain.basic.IntegerKeyUser;
 
-public class UserImpl extends IntegerUser  {
+public class UserImpl extends IntegerKeyUser  {
 	private String tele;
 	private String email;
 	private Boolean adminFlag;

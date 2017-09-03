@@ -5,11 +5,12 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.forms.DeviceQueryForm;
 import com.uc.bpg.service.BusinessListServiceBase;
+import com.uc.bpg.service.DeviceListService;
 import com.uc.utils.IntegerUtils;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
 
-public class DeviceListServiceImpl extends BusinessListServiceBase<DeviceQueryForm, Device>  {
+public class DeviceListServiceImpl extends BusinessListServiceBase<DeviceQueryForm, Device> implements DeviceListService {
 
 	@Override
 	public boolean prepareExample(DeviceQueryForm queryForm, Example example) {

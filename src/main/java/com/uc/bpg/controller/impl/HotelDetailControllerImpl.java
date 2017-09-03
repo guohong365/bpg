@@ -8,26 +8,27 @@ import java.util.UUID;
 import org.springframework.ui.Model;
 
 import com.uc.bpg.controller.BusinessDetailControllerBase;
+import com.uc.bpg.controller.HotelDetailController;
 import com.uc.bpg.domain.Hotel;
 import com.uc.bpg.domain.StrategeFormatHelper;
 import com.uc.web.controller.WebAction;
 import com.uc.web.domain.Code;
 import com.uc.web.domain.security.UserProfile;
 
-public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hotel> {
+public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hotel> implements HotelDetailController {
 	private static final String CODE_NAME_WEEK_DAYS = "_WEEK_DAYS";
 	private static final String CODE_NAME_MONTH_DAYS = "_MONTH_DAYS";
 	private static final String CODE_NAME_QUARTER_MONTHS = "_QUARTER_MONTHS";
 	private static final String CODE_NAME_MONTHS = "_MONTHS";
 	private static final String CODE_NAME_BILLING_CYCLE_TYPES="_BILLING_CYCLE_TYPES";
 	@Override
-	protected Hotel onCreateNewDetail() {
+	protected Hotel onCreateEntity() {
 		return new Hotel();
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetNewCodes(UserProfile<Long> user) {
-		Map<String, List<? extends Code<Long>>> map= super.onGetNewCodes(user);
+	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
+		Map<String, List<? extends Code<?>>> map= super.onGetNewCodes(user);
 		map.put(CODE_NAME_MONTHS, StrategeFormatHelper.getMonths());
 		map.put(CODE_NAME_MONTH_DAYS, StrategeFormatHelper.getMonthDays());
 		map.put(CODE_NAME_QUARTER_MONTHS, StrategeFormatHelper.getQuarterMonths());
@@ -36,7 +37,7 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetModifyCodes(UserProfile<Long> user, Hotel detail) {
+	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user, Hotel detail) {
 		return onGetNewCodes(user);
 	}
 	
@@ -67,13 +68,12 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 		hotel.setCancelater(enabled? null: getUserProfile().getUser().getId());
 		hotel.setCancelTime(enabled? null:Calendar.getInstance().getTime());
 		hotel.setValid(enabled);
-		getAppDetailService().updateSelective(hotel);
+		getService().updateSelective(hotel);
 	}
 	
 	@Override
-	protected void saveModify(Hotel detail) {
-		
-		getAppDetailService().updateSelective(detail);
+	protected void saveModify(Hotel detail) {		
+		getService().updateSelective(detail);
 	}
 	
 	@Override

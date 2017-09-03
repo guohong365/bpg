@@ -1,8 +1,8 @@
 package com.uc.bpg.service.impl;
 
 import com.uc.bpg.domain.Hotel;
-import com.uc.bpg.service.HotelService;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.bpg.service.HotelDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class HotelDetailServiceImpl extends GenericIntegerKeyAppDetailService<Hotel> implements HotelService {
+public class HotelDetailServiceImpl extends AppDetailServiceBase<Long, Hotel> implements HotelDetailService {
 }

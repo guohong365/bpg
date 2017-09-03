@@ -1,28 +1,29 @@
 package com.uc.bpg.service.impl;
 
+
 import java.util.List;
 
 import com.uc.bpg.domain.RoleAvailable;
 import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.persistence.UserMapper;
-import com.uc.bpg.service.UserService;
+import com.uc.bpg.service.UserDetailService;
 import com.uc.web.forms.MenuTreeItem;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class UserDetailServiceImpl extends GenericIntegerKeyAppDetailService<UserImpl> implements UserService {
+public class UserDetailServiceImpl extends AppDetailServiceBase<Long, UserImpl> implements UserDetailService {
 	
 	@Override
 	public int delete(UserImpl detail) {
 		return 0;
 	}
 	
-	protected UserMapper getUserMapper(){
-		return (UserMapper)getAppDetailMapper();
+	public UserMapper getMapper(){
+		return (UserMapper)super.getMapper();
 	}
 
 	@Override
 	public List<RoleAvailable> selectAvailableRoles() {
-		return getUserMapper().selectUserRoles(null, true);
+		return getMapper().selectUserRoles(null, true);
 	}
 
 	@Override
@@ -30,22 +31,22 @@ public class UserDetailServiceImpl extends GenericIntegerKeyAppDetailService<Use
 		UserImpl detail=new UserImpl();
 		detail.setId(id);
 		detail.setPassword(password);
-		return getAppDetailMapper().updateDetailSelective(detail);
+		return getMapper().updateDetailSelective(detail);
 	}
 
 	@Override
 	public List<? extends MenuTreeItem<Long>> selectUserMenuItems(Long userId) {
-		return getUserMapper().selectUserMenuItems(userId);		
+		return getMapper().selectUserMenuItems(userId);		
 	}
 
 	@Override
 	public void onAfterSelected(UserImpl detail) {
-		detail.setRoles(getUserMapper().selectUserRoles(detail.getId(), true));
+		detail.setRoles(getMapper().selectUserRoles(detail.getId(), true));
 	}
 
 	@Override
 	public List<RoleAvailable> selectAvailableRoles(Long userId) {
-		return getUserMapper().selectUserRoles(userId, true);
+		return getMapper().selectUserRoles(userId, true);
 	}
 
 }

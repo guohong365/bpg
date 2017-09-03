@@ -16,7 +16,7 @@ import com.uc.web.domain.security.IRoleFunctionDefine;
 import com.uc.web.forms.MenuTreeItem;
 
 
-public class SecurityServiceImpl implements SecurityService {
+public class SecurityServiceImpl implements SecurityService{
 	
 	private UserMapper userDetailMapper;
 	private OrgnizationMapper orgnizaiontDetaillMapper;

@@ -10,32 +10,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.uc.bpg.controller.DeviceController;
+import com.uc.bpg.controller.DeviceDetailListController;
 import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.forms.AllotHisQueryForm;
-import com.uc.web.controller.DetailController;
-import com.uc.web.controller.basic.AbstractIntegerKeyDetailListControllerProxy;
+import com.uc.web.controller.AbstractDetailListControllerProxy;
+import com.uc.web.controller.ControllerBase;
 @Controller
 @RequestMapping(value="${controller.proxy.uri.background.device}")
-public class DeviceDetailListControllerProxy extends AbstractIntegerKeyDetailListControllerProxy<Device, AllotHisQueryForm, AllotHistory> implements DeviceController {
+public class DeviceDetailListControllerProxy 
+	extends AbstractDetailListControllerProxy<Long, Device, AllotHisQueryForm, AllotHistory>
+	implements DeviceDetailListController {
 	
 	@Value(value="${controller.proxy.uri.background.device}")
-	private String baseUri;
-
 	@Override
-	protected String onGetBaseUri() {
-		return baseUri;
+	public void setBaseUri(String baseUri) {
+		super.setBaseUri(baseUri);
 	}
-	
 	@Resource(name="${controller.impl.detail.background.device}")
 	@Override
-	public void setDetailController(DetailController<Long, Device> detailController) {
-		super.setDetailController(detailController);
+	public void setController(ControllerBase controller) {
+		super.setController(controller);
 	}
-	
-	DeviceController getDeviceController(){		
-		return (DeviceController) getDetailController();
+	public DeviceDetailListController getController(){		
+		return (DeviceDetailListController) super.getController();
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class DeviceDetailListControllerProxy extends AbstractIntegerKeyDetailLis
 			Long param,
 			@RequestParam(value="batchFile")
 			MultipartFile file) {		
-		return getDeviceController().postBatchFile(action,param, file);
+		return getController().postBatchFile(action,param, file);
 	}
 	
 }

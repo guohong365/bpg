@@ -12,16 +12,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uc.bpg.Constant;
+import com.uc.bpg.constant.CODES;
 import com.uc.bpg.controller.BusinessDetailListControllerBase;
-import com.uc.bpg.controller.DeviceController;
-import com.uc.bpg.controller.IDeviceController;
+import com.uc.bpg.controller.DeviceDetailListController;
 import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.Hotel;
 import com.uc.bpg.domain.Orgnization;
 import com.uc.bpg.forms.AllotHisQueryForm;
 import com.uc.bpg.service.CodesService;
-import com.uc.bpg.service.DeviceService;
+import com.uc.bpg.service.DeviceDetailService;
 import com.uc.bpg.uitls.BatchProcessResult;
 import com.uc.bpg.uitls.BatchProcessResultItem;
 import com.uc.bpg.uitls.DeviceBatchFile;
@@ -31,10 +31,8 @@ import com.uc.web.domain.basic.BasicCode;
 import com.uc.web.domain.security.UserProfile;
 
 public class DeviceDetailControllerImpl 
-	extends BusinessDetailListControllerBase<Device, AllotHisQueryForm, AllotHistory> implements DeviceController, IDeviceController {
+	extends BusinessDetailListControllerBase<Device, AllotHisQueryForm, AllotHistory> implements DeviceDetailListController {
 	
-	private static final String PARAM_ROOM_LIST = "_rooms";
-	private static final String CODE_NAME_OPERATIONS = "_OPTS";
 	private CodesService codesService;
 	
 	public void setCodesService(CodesService codesService) {
@@ -45,25 +43,25 @@ public class DeviceDetailControllerImpl
 		return codesService;
 	}
 	
-	public DeviceService getDeviceService() {
-		return (DeviceService) getAppDetailService();
+	public DeviceDetailService getService() {
+		return (DeviceDetailService) super.getService();
 	}
 		
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetNewCodes(UserProfile<Long> user) {
+	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
 		return onGetModifyCodes(user, null);
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<Long>>> onGetModifyCodes(UserProfile<Long> user,
+	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user,
 			Device detail) {
-		Map<String, List<? extends Code<Long>>> map= super.onGetModifyCodes(user, detail);
-		map.put(CODE_TYPE_NAME, getCodesService().selectTypes(false));
+		Map<String, List<? extends Code<?>>> map= super.onGetModifyCodes(user, detail);
+		map.put(CODES.DEVICE_TYPE, getCodesService().selectTypes(false));
 		return map;
 	}
 	
 	@Override
-	protected Device onCreateNewDetail() {
+	protected Device onCreateEntity() {
 		Device detail= new Device();
 		detail.setValid(true);
 		return detail;
@@ -118,7 +116,7 @@ public class DeviceDetailControllerImpl
 	private String onWithdrawAll(Model model) {
 		Orgnization orgnization=(Orgnization) getUserProfile().getOrgnization();
 		String msg;
-		int count= getDeviceService().updateWithdrawAll(getUserProfile().getUser().getId(), orgnization.getId());
+		int count= getService().updateWithdrawAll(getUserProfile().getUser().getId(), orgnization.getId());
 		msg=String.format("成功收回%d个设备", count);
 		model.addAttribute(PARAM_NAME_DLG_MESSAGE, msg);
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "收回设备");
@@ -126,18 +124,18 @@ public class DeviceDetailControllerImpl
 	}
 
 	private String onRandomAllot(Model model) {		
-		int count= getDeviceService().randomAllot(getUserProfile().getUser().getId(), getUserProfile().getOrgnization().getId());
+		int count= getService().randomAllot(getUserProfile().getUser().getId(), getUserProfile().getOrgnization().getId());
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "随机分配");
 		model.addAttribute(PARAM_NAME_DLG_MESSAGE, String.format("随机分配%d个设备。", count));
 		return "/utils/messageBox";
 	}
 
 	protected String onGetAllotPublic(String action, Long deviceId, Model model) {
-		Device device=getAppDetailService().selectById(deviceId);
+		Device device=getService().selectById(deviceId);
 		device.setPublicUsage(ACTION_ALLOT_PUBLIC.equals(action));
 		device.setModifier(getUserProfile().getUser().getId());
 		device.setModifyTime(Calendar.getInstance().getTime());
-		getDeviceService().updateAllot(device, ACTION_ALLOT_PUBLIC.equals(action)? Constant.DEVICE_OPERATION_ALLOT_PUBLIC:Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC);
+		getService().updateAllot(device, ACTION_ALLOT_PUBLIC.equals(action)? Constant.DEVICE_OPERATION_ALLOT_PUBLIC:Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC);
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "操作结果");
 		model.addAttribute(PARAM_NAME_DLG_MESSAGE, String.format(ACTION_ALLOT_PUBLIC.equals(action)?"成功设置公用设备[%s]":"成功解除公用设备[%s]", device.getSerialNo()));
 		return "utils/messageBox";
@@ -147,7 +145,7 @@ public class DeviceDetailControllerImpl
 	protected String onGetViewHis(String action, Long selectedId, Model model) {
 		model.addAttribute(PARAM_NAME_ACTION, ACTION_VIEW_HIS);
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "分配历史");
-		model.addAttribute(PARAM_NAME_DETAIL, getAppDetailService().selectById(selectedId));
+		model.addAttribute(PARAM_NAME_DETAIL, getService().selectById(selectedId));
 		AllotHisQueryForm queryForm=new AllotHisQueryForm();
 		queryForm.setQuerySelectedId(selectedId);
 		List<BasicCode> opts=new ArrayList<>();
@@ -157,7 +155,7 @@ public class DeviceDetailControllerImpl
 		opts.add(new BasicCode(Constant.DEVICE_OPERATION_ALLOT_PUBLIC, Constant.DEVICE_OPERATION_ALLOT_PUBLIC));
 		opts.add(new BasicCode(Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC, Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC));
 		opts.add(new BasicCode(Constant.DEVICE_OPERATION_SCRAP, Constant.DEVICE_OPERATION_SCRAP));
-		model.addAttribute(CODE_NAME_OPERATIONS, opts);
+		model.addAttribute(CODES.DEVICE_OPERATIONS, opts);
 		getListController().postListPage(queryForm, model);
 		
 		return "common/allotHistory/list";
@@ -192,16 +190,16 @@ public class DeviceDetailControllerImpl
 	}
 	
 	protected String onPostScrap(Device detail) {
-		Device device=getDeviceService().selectById(detail.getId());
+		Device device=getService().selectById(detail.getId());
 		device.setModifier(getUserProfile().getUser().getId());
 		device.setModifyTime(Calendar.getInstance().getTime());
 		device.setValid(false);
-		getDeviceService().updateAllot(device, Constant.DEVICE_OPERATION_SCRAP);
+		getService().updateAllot(device, Constant.DEVICE_OPERATION_SCRAP);
 		return "OK";
 	}
 
 	protected String onPostAllot(String action, Device detail) {
-		Device device=getAppDetailService().selectById(detail.getId());
+		Device device=getService().selectById(detail.getId());
 		if(isForeground()){
 		  device.setRoom(ACTION_ALLOT.equals(action)?detail.getRoom():null);	
 		} else {
@@ -209,7 +207,7 @@ public class DeviceDetailControllerImpl
 		}
 		device.setModifier(getUserProfile().getUser().getId());		
 		device.setModifyTime(Calendar.getInstance().getTime());
-		getDeviceService().updateAllot(device,ACTION_ALLOT.equals(action)? Constant.DEVICE_OPERATION_ALLOT:Constant.DEVICE_OPERATION_WITHDRAW);
+		getService().updateAllot(device,ACTION_ALLOT.equals(action)? Constant.DEVICE_OPERATION_ALLOT:Constant.DEVICE_OPERATION_WITHDRAW);
 		return "OK";
 	}
 
@@ -218,11 +216,11 @@ public class DeviceDetailControllerImpl
 		device.setId(selectedId);
 		model.addAttribute(PARAM_NAME_DETAIL, device);
 		if(isForeground()){
-			model.addAttribute(PARAM_ROOM_LIST, getDeviceService().selectAllocableRooms(getUserProfile().getOrgnization().getId()));
+			model.addAttribute(CODES.ROOM_LIST, getService().selectAllocableRooms(getUserProfile().getOrgnization().getId()));
 			model.addAttribute(PARAM_NAME_ACTION_NAME, "分配设备到房间");
 			
 		} else {
-			model.addAttribute(CODE_HOTEL_NAME, getCodesService().selectAllocableHotelCodes());
+			model.addAttribute(CODES.HOTELS, getCodesService().selectAllocableHotelCodes());
 			model.addAttribute(PARAM_NAME_ACTION_NAME, "分配设备到酒店");
 		}
 		
@@ -232,7 +230,7 @@ public class DeviceDetailControllerImpl
 	}
 
 	protected String onGetBatchAdd(Model model) {
-		Map<String, List<? extends Code<Long>>> map = onGetNewCodes(getUserProfile());
+		Map<String, List<? extends Code<?>>> map = onGetNewCodes(getUser());
 		model.addAttribute(PARAM_NAME_ACTION, ACTION_BATCH_ADD);
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "批量添加");
 		model.addAllAttributes(map);		
@@ -314,7 +312,7 @@ public class DeviceDetailControllerImpl
 			return;
 		}
 		try{
-			getDeviceService().updateBatchScrap(devices);
+			getService().updateBatchScrap(devices);
 			result.setMsg("批量报废成功！");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -343,7 +341,7 @@ public class DeviceDetailControllerImpl
 			return;
 		}
 		try{
-			getDeviceService().updateBatchWithdraw(devices);
+			getService().updateBatchWithdraw(devices);
 			result.setMsg("批量分配成功！");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -352,7 +350,7 @@ public class DeviceDetailControllerImpl
 	}
 
 	protected void processAllot(DeviceBatchFile batchFile, BatchProcessResult result) {
-		Hotel hotel=getDeviceService().selectHotel(batchFile.getParam());
+		Hotel hotel=getService().selectHotel(batchFile.getParam());
 		long count=hotel.getTotalDevice()-hotel.getOwnedDevice();
 		if(count < batchFile.getItems().size()){
 			result.setMsg(String.format("批量分配失败！原因:酒店[%s]可分配数为%d,批量分配数超过限制[%s]！",
@@ -394,7 +392,7 @@ public class DeviceDetailControllerImpl
 			return;
 		}
 		try{
-			getDeviceService().updateBatchAllot(devices);
+			getService().updateBatchAllot(devices);
 			result.setMsg("批量分配成功！");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -426,7 +424,7 @@ public class DeviceDetailControllerImpl
 			return;
 		}
 		try {
-			getDeviceService().insertBatchAdd(devices);
+			getService().insertBatchAdd(devices);
 			result.setMsg(String.format("成功添加设备：%d个", devices.size()));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -435,22 +433,22 @@ public class DeviceDetailControllerImpl
 	}
 	 
 	protected boolean alreadyExist(String serial) {
-		return getDeviceService().selectExistsSerial(serial);
+		return getService().selectExistsSerial(serial);
 	}
 	
 	protected boolean alreadyAllot(String serial, Long hotel){
-		return getDeviceService().selectAlreadyAllot(serial, hotel);
+		return getService().selectAlreadyAllot(serial, hotel);
 	}
 
 	public String onGetBatchAllot(Model model) {		;
-		model.addAttribute(CODE_HOTEL_NAME, getCodesService().selectAllocableHotelCodes());
+		model.addAttribute(CODES.HOTELS, getCodesService().selectAllocableHotelCodes());
 		model.addAttribute(PARAM_NAME_ACTION, ACTION_BATCH_ALLOT);
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "批量分配");
 		return getPageBasePath() + "/batchAllot";
 	}
 
 	public String onGetBatchWithdraw(Model model) {
-		model.addAttribute(CODE_HOTEL_NAME, getCodesService().selectAllocableHotelCodes());
+		model.addAttribute(CODES.HOTELS, getCodesService().selectAllocableHotelCodes());
 		model.addAttribute(PARAM_NAME_ACTION, ACTION_BATCH_WITHDRAW);
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "批量收回");
 		return getPageBasePath() + "/batchAllot";

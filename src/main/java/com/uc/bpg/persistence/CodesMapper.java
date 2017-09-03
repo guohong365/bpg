@@ -6,8 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.uc.bpg.domain.MenuTreeItem;
 import com.uc.web.domain.basic.IntegerCode;
+import com.uc.web.persistence.Mapper;
 
-public interface CodesMapper {
+public interface CodesMapper extends Mapper{
 	List<IntegerCode> selectTypes(
 			@Param("forEdit")
 			boolean forEdit);

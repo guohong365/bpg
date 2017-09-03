@@ -11,8 +11,9 @@ import com.uc.bpg.persistence.DeviceMapper;
 import com.uc.bpg.persistence.ExamineMapper;
 import com.uc.bpg.persistence.ReceiverMapper;
 import com.uc.bpg.service.DataReceiverService;
+import com.uc.web.service.ServiceBase;
 
-public class DataReceiverServiceImpl implements DataReceiverService {
+public class DataReceiverServiceImpl extends ServiceBase implements DataReceiverService {
 
 	private DeviceMapper deviceMapper;
 	private ReceiverMapper receiverMapper;

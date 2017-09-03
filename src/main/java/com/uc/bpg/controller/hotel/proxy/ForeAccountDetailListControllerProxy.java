@@ -9,27 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.forms.DeviceUsageQueryForm;
-import com.uc.web.controller.DetailListController;
-import com.uc.web.controller.basic.AbstractIntegerKeyDetailListControllerProxy;
+import com.uc.web.controller.AbstractDetailListControllerProxy;
+import com.uc.web.controller.ControllerBase;
 @Controller
 @RequestMapping("${controller.proxy.uri.hotel.account}")
 public class ForeAccountDetailListControllerProxy 
-	extends AbstractIntegerKeyDetailListControllerProxy<Bill, DeviceUsageQueryForm, DeviceUsage> {
+	extends AbstractDetailListControllerProxy<Long, Bill, DeviceUsageQueryForm, DeviceUsage> {
 	
 	@Value(value="${controller.proxy.uri.hotel.account}")
-	private String baseUri;
-
 	@Override
-	protected String onGetBaseUri() {
-		return baseUri;		
+	public void setBaseUri(String baseUri) {
+		super.setBaseUri(baseUri);
 	}
 	
 	
-	@Override
 	@Resource(name="${controller.impl.detail.hotel.account}")
-	public void setDetailListController(
-			DetailListController<Long, Bill, DeviceUsageQueryForm, DeviceUsage> controller) {
-		super.setDetailListController(controller);
+	@Override
+	public void setController(ControllerBase controller) {
+		super.setController(controller);
 	}
 	
 

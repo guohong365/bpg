@@ -3,10 +3,10 @@ package com.uc.bpg.service;
 import com.uc.bpg.Constant;
 import com.uc.bpg.forms.IQueryFormBase;
 import com.uc.web.persistence.Example;
-import com.uc.web.service.basic.GenericIntegerKeyAppListService;
+import com.uc.web.service.AppWebListServiceBase;
 
 public class BusinessListServiceBase<QueryFormType extends IQueryFormBase, DetailType> 
-	extends GenericIntegerKeyAppListService<QueryFormType, DetailType> {
+	extends AppWebListServiceBase<QueryFormType, DetailType> {
 
 	@Override
 	public boolean prepareExample(QueryFormType queryForm, Example example) {

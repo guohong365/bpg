@@ -2,7 +2,7 @@ package com.uc.bpg.forms;
 
 import java.util.Date;
 
-public class StrategeQueryForm extends QueryFormBase {
+public class StrategeQueryForm extends DetailListQueryForm {
 	private String queryName;
 	private Long queryTotalDeviceFrom;
 	private Long queryTotalDeviceTo;

@@ -7,10 +7,10 @@ import com.uc.bpg.forms.RoomQueryForm;
 import com.uc.bpg.service.RoomListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.basic.GenericIntegerKeyAppListService;
+import com.uc.web.service.AppWebListServiceBase;
 
 
-public class RoomListServiceImpl extends GenericIntegerKeyAppListService<RoomQueryForm,Room> implements RoomListService{
+public class RoomListServiceImpl extends AppWebListServiceBase<RoomQueryForm,Room> implements RoomListService{
 	@Override
 	public boolean prepareExample(RoomQueryForm queryForm, Example example) {
 		QueryCondition condition=example.or();

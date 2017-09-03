@@ -6,24 +6,25 @@ import java.util.List;
 import org.springframework.ui.Model;
 
 import com.uc.bpg.Constant;
+import com.uc.bpg.controller.AccountListController;
 import com.uc.bpg.controller.BusinessListControllerBase;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.forms.BillQueryForm;
 import com.uc.web.domain.basic.BasicCode;
 import com.uc.web.domain.security.UserProfile;
 
-public class AccountListControllerImpl extends BusinessListControllerBase<BillQueryForm, Bill>{
+public class AccountListControllerImpl extends BusinessListControllerBase<BillQueryForm, Bill> implements AccountListController{
 	private static final String CODE_BILL_STATE="_QUERY_STATE";
 	
 	@Override
-	protected BillQueryForm onCreateNewQueryForm() {
+	protected BillQueryForm onCreateQueryForm() {
 		BillQueryForm queryForm= new BillQueryForm();
 		queryForm.setQueryState(Constant.BILL_STATE_UNPAYED);
 		return queryForm;
 	}
 	
 	@Override
-	protected void onSetListModel(UserProfile<Long> user, Model model) {
+	protected void onSetListModel(UserProfile user, Model model) {
 		List<BasicCode> codes=new ArrayList<>(); 
 		codes.add(new BasicCode("", "全部"));		
 		codes.add(new BasicCode(Constant.BILL_STATE_UNPAYED,Constant.BILL_STATE_UNPAYED));

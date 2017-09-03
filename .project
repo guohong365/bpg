@@ -3,7 +3,7 @@
 	<name>bpg</name>
 	<comment></comment>
 	<projects>
-		<project>webapp2</project>
+		<project>com.uc.webapp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

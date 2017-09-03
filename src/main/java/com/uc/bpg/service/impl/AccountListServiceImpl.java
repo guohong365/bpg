@@ -6,11 +6,12 @@ import org.springframework.util.StringUtils;
 
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.forms.BillQueryForm;
+import com.uc.bpg.service.AccountListService;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
 
-public class AccountListServiceImpl extends BusinessListServiceBase<BillQueryForm, Bill> {
+public class AccountListServiceImpl extends BusinessListServiceBase<BillQueryForm, Bill> implements AccountListService {
 
 	@Override
 	public boolean prepareExample(BillQueryForm queryForm, Example example) {

@@ -2,9 +2,9 @@ package com.uc.bpg.domain;
 
 import java.util.List;
 
-import com.uc.web.domain.basic.IntegerRole;
+import com.uc.web.domain.basic.IntegerKeyRole;
 
-public class Role extends IntegerRole {
+public class Role extends IntegerKeyRole {
 	private String uuid;
 	private String description;
 	private List<FunctionAvailable> functions;

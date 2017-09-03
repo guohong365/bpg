@@ -4,11 +4,12 @@ import org.springframework.util.StringUtils;
 
 import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.forms.AllotHisQueryForm;
+import com.uc.bpg.service.AllotHistoryListService;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
 
-public class AllotHistoryListServiceImpl extends BusinessListServiceBase<AllotHisQueryForm, AllotHistory> {
+public class AllotHistoryListServiceImpl extends BusinessListServiceBase<AllotHisQueryForm, AllotHistory> implements AllotHistoryListService {
 	
 	@Override
 	public boolean prepareExample(AllotHisQueryForm queryForm, Example example) {

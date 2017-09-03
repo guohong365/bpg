@@ -1,8 +1,8 @@
 package com.uc.bpg.service;
 
 import com.uc.bpg.domain.CheckIn;
-import com.uc.web.service.basic.IntegerKeyAppDetailService;
+import com.uc.web.service.AppDetailService;
 
-public interface CheckInDetailService extends IntegerKeyAppDetailService<CheckIn> {
+public interface CheckInDetailService extends AppDetailService<Long, CheckIn> {
 
 }

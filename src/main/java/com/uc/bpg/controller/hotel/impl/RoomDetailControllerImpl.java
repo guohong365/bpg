@@ -10,22 +10,22 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.controller.BusinessDetailControllerBase;
 import com.uc.bpg.controller.RoomDetailController;
 import com.uc.bpg.domain.Room;
+import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.service.RoomDetailService;
 import com.uc.bpg.uitls.BatchProcessResult;
 import com.uc.bpg.uitls.BatchProcessResultItem;
 import com.uc.web.controller.WebAction;
-import com.uc.web.domain.security.UserProfile;
 
 public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room> implements RoomDetailController{
 	private static final String ACTION_BATCH_ADD = "batchNew";
 
 	@Override
-	protected Room onCreateNewDetail() {
+	protected Room onCreateEntity() {
 		return new Room();
 	}
 	
-	RoomDetailService getRoomDetailService(){
-		return (RoomDetailService) getAppDetailService();
+	public RoomDetailService getService(){
+		return (RoomDetailService) super.getService();
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 		boolean failed=false;
 		for(int i=begin; i<=end; i++){
 			String roomNo=String.format(pattern, storey, i);
-			if(getRoomDetailService().selectExistsRoom(hotel, storey, roomNo)){
+			if(getService().selectExistsRoom(hotel, storey, roomNo)){
 				result.add(new BatchProcessResultItem(roomNo, "房间号已存在。", false));
 				failed=false;
 				continue;
@@ -81,7 +81,7 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 			return result.toJson();
 		}
 		try{
-			getRoomDetailService().insertBatch(rooms);
+			getService().insertBatch(rooms);
 			result.setMsg(String.format("操作成功！新建[%d]房间。", rooms.size()));
 		}catch (Exception e) {
 			getLogger().error(e.toString());
@@ -91,10 +91,10 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 	}
 	
 	@Override
-	protected void onBeforSaveDetail(UserProfile<Long> user, String action, Room detail) throws Exception {
+	protected void onBeforSaveDetail(com.uc.web.domain.security.UserProfile user, String action, Room detail) throws Exception {
 		if(WebAction.NEW.equals(action)){
 			detail.setUuid(UUID.randomUUID().toString());
-			detail.setHotel(user.getOrgnization().getId());
+			detail.setHotel(((UserProfile)user).getOrgnization().getId());
 		}
 		super.onBeforSaveDetail(user, action, detail);
 	}

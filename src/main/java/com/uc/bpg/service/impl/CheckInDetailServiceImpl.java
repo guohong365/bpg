@@ -2,9 +2,9 @@ package com.uc.bpg.service.impl;
 
 import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.service.CheckInDetailService;
-import com.uc.web.service.basic.GenericIntegerKeyAppDetailService;
+import com.uc.web.service.AppDetailServiceBase;
 
-public class CheckInDetailServiceImpl extends GenericIntegerKeyAppDetailService<CheckIn> implements CheckInDetailService {
+public class CheckInDetailServiceImpl extends AppDetailServiceBase<Long, CheckIn> implements CheckInDetailService {
 	
 	@Override
 	public int insert(CheckIn entiry) {

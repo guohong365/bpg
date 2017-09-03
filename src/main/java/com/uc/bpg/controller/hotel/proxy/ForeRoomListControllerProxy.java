@@ -6,26 +6,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.uc.bpg.domain.Room;
 import com.uc.bpg.forms.RoomQueryForm;
-import com.uc.web.controller.ListController;
-import com.uc.web.controller.basic.AbstractIntegerKeyListControllerProxy;
+import com.uc.web.controller.AbstractListControllerProxy;
+import com.uc.web.controller.ControllerBase;
 
 @Controller
 @RequestMapping("${controller.proxy.uri.hotel.room}")
-public class ForeRoomListControllerProxy extends AbstractIntegerKeyListControllerProxy<RoomQueryForm, Room> {
+public class ForeRoomListControllerProxy extends AbstractListControllerProxy<RoomQueryForm> {
 
 	@Value("${controller.proxy.uri.hotel.room}")
-	private String baseUri;
-
 	@Override
-	protected String onGetBaseUri() {
-		return baseUri;
+	public void setBaseUri(String baseUri) {
+		super.setBaseUri(baseUri);
 	}
 	
 	@Resource(name="${controller.impl.list.hotel.room}")
 	@Override
-	public void setListController(ListController<Long, RoomQueryForm, Room> listController) {
-		super.setListController(listController);
+	public void setController(ControllerBase controller) {
+		super.setController(controller);
 	}
 }

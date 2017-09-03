@@ -3,27 +3,28 @@ package com.uc.bpg.controller.impl;
 import java.util.UUID;
 
 import com.uc.bpg.controller.BusinessDetailControllerBase;
+import com.uc.bpg.controller.DeviceTypeDetailController;
 import com.uc.bpg.domain.DeviceType;
-import com.uc.bpg.service.DeviceTypeService;
+import com.uc.bpg.service.DeviceTypeDetailService;
 
-public class DeviceTypeDetailControllerImpl extends BusinessDetailControllerBase<DeviceType> {
+public class DeviceTypeDetailControllerImpl extends BusinessDetailControllerBase<DeviceType> implements DeviceTypeDetailController {
 
 	@Override
-	protected DeviceType onCreateNewDetail() {
+	protected DeviceType onCreateEntity() {
 		DeviceType detail= new DeviceType();
 		detail.setValid(true);
 		detail.setUuid(UUID.randomUUID().toString());
 		return detail;
 	}
 	
-	DeviceTypeService getDeviceTypeService(){
-		return (DeviceTypeService) getAppDetailService();
+	public DeviceTypeDetailService getService(){
+		return (DeviceTypeDetailService) super.getService();
 	}
 	
 	@Override
 	protected void saveNew(DeviceType detail) {
 		if(detail.getShowOrder()==null){
-			Long order= getDeviceTypeService().selectNextShowOrder();
+			Long order= getService().selectNextShowOrder();
 			detail.setShowOrder(order);
 		}
 		super.saveNew(detail);
