@@ -25,7 +25,7 @@ import com.uc.bpg.test.TestBase;
 import com.uc.bpg.uitls.DeviceBatchFile;
 import com.uc.bpg.uitls.DeviceBatchFileParser;
 import com.uc.bpg.uitls.DeviceBatchFileParserImpl;
-import com.uc.web.forms.WebListForm;
+import com.uc.web.forms.ui.componet.PageCtrlImpl;
 
 @Transactional
 public class DeviceServiceTest extends TestBase {
@@ -41,9 +41,7 @@ public class DeviceServiceTest extends TestBase {
 	
 	@Test
 	public void test01(){
-		WebListForm<DeviceQueryForm, Device> webForm=new WebListForm<>();
-		webForm.setQuery(new DeviceQueryForm());
-		listService.select(webForm);		
+		listService.select(new DeviceQueryForm(), new PageCtrlImpl());		
 	}
 	@Ignore
 	@Test
