@@ -8,7 +8,7 @@ import com.uc.bpg.persistence.RoomMapper;
 import com.uc.bpg.service.RoomDetailService;
 
 
-public class RoomDetailServiceImpl extends AppDetailServiceBase<Long, Room> implements RoomDetailService{
+public class RoomDetailServiceImpl extends AppDetailServiceBase implements RoomDetailService{
 	public RoomMapper getRoomMapper() {
 		return (RoomMapper)getMapper();
 	}

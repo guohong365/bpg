@@ -3,12 +3,13 @@ package com.uc.bpg.domain;
 import java.util.Date;
 
 import com.uc.web.domain.AbstractOrgnization;
+import com.uc.web.domain.WithLongId;
 import com.uc.web.tools.annotation.AutoGenerateEntity;
 import com.uc.web.tools.annotation.ComponentType;
 import com.uc.web.tools.annotation.FormField;
 
 @AutoGenerateEntity
-public class Orgnization extends AbstractOrgnization<Long>  {
+public class OrgnizationImpl extends AbstractOrgnization implements WithLongId {
 	private String uuid;
 	@FormField(value="地址", order=10)
 	private String address;
@@ -29,6 +30,14 @@ public class Orgnization extends AbstractOrgnization<Long>  {
 	private String createrName;
 	@FormField(value="注销人", order=200, readOnly=true)
 	private String cancelaterName;
+	
+	public Long getId(){
+		return (Long) super.getId();
+	}
+	public void setId(Long id){
+		super.setId(id);
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}

@@ -24,11 +24,12 @@ public class DataRecieverServiceTest extends TestBase {
 	DeviceDetailService deviceService;
 	
 	@Resource(name="deviceMapper")
-	AppListMapper<Device> listMapper;
+	AppListMapper listMapper;
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test(){
-		List<Device> devices=listMapper.selectByExample(null, 0, 20);
+		List<Device> devices=(List<Device>) listMapper.selectByExample(null, 0, 20);
 		Date date=Calendar.getInstance().getTime();
 		BpData data=new BpData(110, 75, 65, 0, date);
 		

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.uc.bpg.persistence.RoleMapper">
-  <resultMap id="roleDetail" type="com.uc.bpg.domain.Role">
+  <resultMap id="roleDetail" type="com.uc.bpg.domain.RoleImpl">
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="UUID" jdbcType="CHAR" property="uuid" />
     <result column="NAME" jdbcType="VARCHAR" property="name" />
@@ -64,7 +64,7 @@
     from t_role
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.Role">
+  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.RoleImpl">
     delete from t_role
     where ID = #{id,jdbcType=INTEGER}
   </delete>
@@ -79,7 +79,7 @@
       </foreach>
     </if>
   </sql>  
-  <insert id="insertDetail" parameterType="com.uc.bpg.domain.Role">
+  <insert id="insertDetail" parameterType="com.uc.bpg.domain.RoleImpl">
     insert into t_role (UUID, NAME,  DESCRIPTION, VALID, INTERNAL )
     values (#{uuid,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, true, false);
     <if test="functions!=null">
@@ -96,7 +96,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Role">
+  <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.RoleImpl">
     update t_role
     <set>
       <if test="name != null">
@@ -115,7 +115,7 @@
     where ID = #{id,jdbcType=INTEGER};
     <include refid="updateRoleFunctions" />
   </update>
-  <update id="updateDetail" parameterType="com.uc.bpg.domain.Role">
+  <update id="updateDetail" parameterType="com.uc.bpg.domain.RoleImpl">
     update t_role
     set 
       NAME = #{name,jdbcType=VARCHAR},

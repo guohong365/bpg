@@ -18,7 +18,7 @@ import com.uc.bpg.controller.DeviceDetailListController;
 import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.Hotel;
-import com.uc.bpg.domain.Orgnization;
+import com.uc.bpg.domain.OrgnizationImpl;
 import com.uc.bpg.forms.AllotHisQueryForm;
 import com.uc.bpg.service.CodesService;
 import com.uc.bpg.service.DeviceDetailService;
@@ -27,7 +27,7 @@ import com.uc.bpg.uitls.BatchProcessResultItem;
 import com.uc.bpg.uitls.DeviceBatchFile;
 import com.uc.bpg.uitls.DeviceBatchFileParser;
 import com.uc.web.domain.Code;
-import com.uc.web.domain.basic.BasicCode;
+import com.uc.web.domain.CodeImpl;
 import com.uc.web.domain.security.UserProfile;
 
 public class DeviceDetailControllerImpl 
@@ -48,14 +48,13 @@ public class DeviceDetailControllerImpl
 	}
 		
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
+	protected Map<String, List<Code>> onGetNewCodes(UserProfile user) {
 		return onGetModifyCodes(user, null);
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user,
-			Device detail) {
-		Map<String, List<? extends Code<?>>> map= super.onGetModifyCodes(user, detail);
+	protected Map<String, List<Code>> onGetModifyCodes(UserProfile user, Object detail) {
+		Map<String, List<Code>> map= super.onGetModifyCodes(user, detail);
 		map.put(CODES.DEVICE_TYPE, getCodesService().selectTypes(false));
 		return map;
 	}
@@ -114,9 +113,9 @@ public class DeviceDetailControllerImpl
 	}
 	
 	private String onWithdrawAll(Model model) {
-		Orgnization orgnization=(Orgnization) getUserProfile().getOrgnization();
+		OrgnizationImpl orgnization=(OrgnizationImpl) getUser().getOrgnization();
 		String msg;
-		int count= getService().updateWithdrawAll(getUserProfile().getUser().getId(), orgnization.getId());
+		int count= getService().updateWithdrawAll((Long) getUser().getUser().getId(), orgnization.getId());
 		msg=String.format("成功收回%d个设备", count);
 		model.addAttribute(PARAM_NAME_DLG_MESSAGE, msg);
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "收回设备");
@@ -124,16 +123,16 @@ public class DeviceDetailControllerImpl
 	}
 
 	private String onRandomAllot(Model model) {		
-		int count= getService().randomAllot(getUserProfile().getUser().getId(), getUserProfile().getOrgnization().getId());
+		int count= getService().randomAllot((Long)getUser().getUser().getId(),(Long) getUser().getOrgnization().getId());
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "随机分配");
 		model.addAttribute(PARAM_NAME_DLG_MESSAGE, String.format("随机分配%d个设备。", count));
 		return "/utils/messageBox";
 	}
 
 	protected String onGetAllotPublic(String action, Long deviceId, Model model) {
-		Device device=getService().selectById(deviceId);
+		Device device=(Device) getService().selectById(deviceId);
 		device.setPublicUsage(ACTION_ALLOT_PUBLIC.equals(action));
-		device.setModifier(getUserProfile().getUser().getId());
+		device.setModifier((Long) getUser().getUser().getId());
 		device.setModifyTime(Calendar.getInstance().getTime());
 		getService().updateAllot(device, ACTION_ALLOT_PUBLIC.equals(action)? Constant.DEVICE_OPERATION_ALLOT_PUBLIC:Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC);
 		model.addAttribute(PARAM_NAME_DLG_TITLE, "操作结果");
@@ -147,14 +146,14 @@ public class DeviceDetailControllerImpl
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "分配历史");
 		model.addAttribute(PARAM_NAME_DETAIL, getService().selectById(selectedId));
 		AllotHisQueryForm queryForm=new AllotHisQueryForm();
-		queryForm.setQuerySelectedId(selectedId);
-		List<BasicCode> opts=new ArrayList<>();
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_NEW, Constant.DEVICE_OPERATION_NEW));
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_ALLOT, Constant.DEVICE_OPERATION_ALLOT));
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_WITHDRAW, Constant.DEVICE_OPERATION_WITHDRAW));
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_ALLOT_PUBLIC, Constant.DEVICE_OPERATION_ALLOT_PUBLIC));
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC, Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC));
-		opts.add(new BasicCode(Constant.DEVICE_OPERATION_SCRAP, Constant.DEVICE_OPERATION_SCRAP));
+		queryForm.setQueryMainId(selectedId);
+		List<Code> opts=new ArrayList<>();
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_NEW, Constant.DEVICE_OPERATION_NEW));
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_ALLOT, Constant.DEVICE_OPERATION_ALLOT));
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_WITHDRAW, Constant.DEVICE_OPERATION_WITHDRAW));
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_ALLOT_PUBLIC, Constant.DEVICE_OPERATION_ALLOT_PUBLIC));
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC, Constant.DEVICE_OPERATION_WITHDRAW_PUBLIC));
+		opts.add(new CodeImpl(Constant.DEVICE_OPERATION_SCRAP, Constant.DEVICE_OPERATION_SCRAP));
 		model.addAttribute(CODES.DEVICE_OPERATIONS, opts);
 		getListController().postListPage(queryForm, model);
 		
@@ -162,36 +161,37 @@ public class DeviceDetailControllerImpl
 	}
 
 	@Override
-	protected String onPostDetailPage(String action, Device detail) {
+	protected String onPostDetailPage(String action, Object detail) {
 		switch(action){
 		case ACTION_ALLOT:			
 		case ACTION_WITHDRAW:
-			return onPostAllot(action, detail);
+			return onPostAllot(action, (Device) detail);
 		case ACTION_SCRAP:
-			return onPostScrap(detail);			
+			return onPostScrap((Device) detail);			
 		}
 		return super.onPostDetailPage(action, detail);
 	}
 	
 	@Override
-	protected void saveModify(Device detail) {
-		detail.setModifier(getUserProfile().getUser().getId());
-		detail.setModifyTime(Calendar.getInstance().getTime());
+	protected void saveModify(Object detail) {
+		((Device) detail).setModifier((Long) getUser().getUser().getId());
+		((Device) detail).setModifyTime(Calendar.getInstance().getTime());
 		super.saveModify(detail);
 	}
 	
 	@Override
-	protected void saveNew(Device detail) {
+	protected void saveNew(Object entity) {
+		Device detail=(Device) entity;
 		detail.setUuid(UUID.randomUUID().toString());
-		detail.setInputer(getUserProfile().getUser().getId());
+		detail.setInputer((Long) getUser().getUser().getId());
 		detail.setInputTime(Calendar.getInstance().getTime());
 		detail.setValid(true);		
 		super.saveNew(detail);
 	}
 	
 	protected String onPostScrap(Device detail) {
-		Device device=getService().selectById(detail.getId());
-		device.setModifier(getUserProfile().getUser().getId());
+		Device device=(Device) getService().selectById(detail.getId());
+		device.setModifier((Long) getUser().getUser().getId());
 		device.setModifyTime(Calendar.getInstance().getTime());
 		device.setValid(false);
 		getService().updateAllot(device, Constant.DEVICE_OPERATION_SCRAP);
@@ -199,13 +199,13 @@ public class DeviceDetailControllerImpl
 	}
 
 	protected String onPostAllot(String action, Device detail) {
-		Device device=getService().selectById(detail.getId());
+		Device device=(Device) getService().selectById(detail.getId());
 		if(isForeground()){
 		  device.setRoom(ACTION_ALLOT.equals(action)?detail.getRoom():null);	
 		} else {
 		  device.setHotel(ACTION_ALLOT.equals(action) ? detail.getHotel():null);
 		}
-		device.setModifier(getUserProfile().getUser().getId());		
+		device.setModifier((Long) getUser().getUser().getId());		
 		device.setModifyTime(Calendar.getInstance().getTime());
 		getService().updateAllot(device,ACTION_ALLOT.equals(action)? Constant.DEVICE_OPERATION_ALLOT:Constant.DEVICE_OPERATION_WITHDRAW);
 		return "OK";
@@ -216,7 +216,7 @@ public class DeviceDetailControllerImpl
 		device.setId(selectedId);
 		model.addAttribute(PARAM_NAME_DETAIL, device);
 		if(isForeground()){
-			model.addAttribute(CODES.ROOM_LIST, getService().selectAllocableRooms(getUserProfile().getOrgnization().getId()));
+			model.addAttribute(CODES.ROOM_LIST, getService().selectAllocableRooms((Long) getUser().getOrgnization().getId()));
 			model.addAttribute(PARAM_NAME_ACTION_NAME, "分配设备到房间");
 			
 		} else {
@@ -230,7 +230,7 @@ public class DeviceDetailControllerImpl
 	}
 
 	protected String onGetBatchAdd(Model model) {
-		Map<String, List<? extends Code<?>>> map = onGetNewCodes(getUser());
+		Map<String, List<Code>> map = onGetNewCodes(getUser());
 		model.addAttribute(PARAM_NAME_ACTION, ACTION_BATCH_ADD);
 		model.addAttribute(PARAM_NAME_ACTION_NAME, "批量添加");
 		model.addAllAttributes(map);		
@@ -303,7 +303,7 @@ public class DeviceDetailControllerImpl
 			Date modifyTime=Calendar.getInstance().getTime();
 			Device device=new Device();
 			device.setSerialNo(serial);
-			device.setModifier(getUserProfile().getUser().getId());
+			device.setModifier((Long) getUser().getUser().getId());
 			device.setModifyTime(modifyTime);
 			devices.add(device);
 		}
@@ -332,7 +332,7 @@ public class DeviceDetailControllerImpl
 			Date modifyTime=Calendar.getInstance().getTime();
 			Device device=new Device();
 			device.setSerialNo(serial);
-			device.setModifier(getUserProfile().getUser().getId());
+			device.setModifier((Long) getUser().getUser().getId());
 			device.setModifyTime(modifyTime);
 			devices.add(device);
 		}
@@ -383,7 +383,7 @@ public class DeviceDetailControllerImpl
 			Device device=new Device();
 			device.setSerialNo(serial);
 			device.setHotel(batchFile.getParam());
-			device.setModifier(getUserProfile().getUser().getId());
+			device.setModifier((Long) getUser().getUser().getId());
 			device.setModifyTime(modifyTime);			
 			devices.add(device);
 		}
@@ -415,7 +415,7 @@ public class DeviceDetailControllerImpl
 			device.setUuid(UUID.randomUUID().toString());
 			device.setSerialNo(serial);
 			device.setType(batchFile.getParam());
-			device.setInputer(getUserProfile().getUser().getId());
+			device.setInputer((Long) getUser().getUser().getId());
 			device.setInputTime(inputTime);
 			devices.add(device);
 		}

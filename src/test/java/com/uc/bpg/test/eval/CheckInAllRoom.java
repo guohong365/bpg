@@ -47,16 +47,16 @@ public class CheckInAllRoom extends TestBase {
 		return null;
 	}
 	
-	private UserImpl findUser(List<UserImpl> users, Long orgId){
-		for(UserImpl user: users){
-			if(user.getOrg().equals(orgId)){
-				return user;
+	private UserImpl findUser(List<?> userImpls, Long orgId){
+		for(Object user: userImpls){
+			if(((UserImpl)user).getOrg().equals(orgId)){
+				return (UserImpl) user;
 			}
 		}
 		return null;
 	}
 	
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "unchecked" })
 	@Test
 	public void test1(){
 		
@@ -64,19 +64,19 @@ public class CheckInAllRoom extends TestBase {
 		example.or()
 		.andFieldIsNotNull("ROOM");
 		
-		List<Device> devices=deviceMapper.selectByExample(example, 0, 1000);
+		List<Device> devices=(List<Device>) deviceMapper.selectByExample(example, 0, 1000);
 		
 		assertNotNull(devices);
 		example.clear();
 		example.or()
 		.andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL)
 		.andFieldEqualTo("VALID", true);
-		List<Hotel> hotels=hotelMapper.selectByExample(example, 0, 1000);
+		List<?> hotels=hotelMapper.selectByExample(example, 0, 1000);
 		
 		example.clear();
 		example.or()
 		.andFieldEqualTo("VALID", true);
-		List<UserImpl> userImpls = userMapper.selectByExample(example, 0, 1000);
+		List<?> userImpls = userMapper.selectByExample(example, 0, 1000);
 		
 		for(Device device:devices){
 			//Hotel hotel=findHotel(hotels, device.getHotel());

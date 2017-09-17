@@ -10,11 +10,11 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.controller.BusinessDetailControllerBase;
 import com.uc.bpg.controller.RoomDetailController;
 import com.uc.bpg.domain.Room;
-import com.uc.bpg.domain.UserProfile;
 import com.uc.bpg.service.RoomDetailService;
 import com.uc.bpg.uitls.BatchProcessResult;
 import com.uc.bpg.uitls.BatchProcessResultItem;
 import com.uc.web.controller.WebAction;
+import com.uc.web.domain.security.UserProfile;
 
 public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room> implements RoomDetailController{
 	private static final String ACTION_BATCH_ADD = "batchNew";
@@ -29,7 +29,7 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 	}
 	
 	@Override
-	protected String onGetDetailPage(String action, Long selectedId, Model model) {
+	protected String onGetDetailPage(String action, Object selectedId, Model model) {
 		if(ACTION_BATCH_ADD.equals(action)){
 			model.addAttribute(PARAM_NAME_ACTION, ACTION_BATCH_ADD);
 			model.addAttribute(PARAM_NAME_ACTION_NAME, "批量创建");
@@ -59,7 +59,7 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 			return result.toJson();
 		}
 		List<Room> rooms=new ArrayList<>();
-		Long hotel=getUserProfile().getOrgnization().getId();
+		Long hotel=(Long) getUser().getOrgnization().getId();
 		boolean failed=false;
 		for(int i=begin; i<=end; i++){
 			String roomNo=String.format(pattern, storey, i);
@@ -91,10 +91,11 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 	}
 	
 	@Override
-	protected void onBeforSaveDetail(com.uc.web.domain.security.UserProfile user, String action, Room detail) throws Exception {
+	protected void onBeforSaveDetail(UserProfile user, String action, Object entity) throws Exception {
+		Room detail=(Room) entity;
 		if(WebAction.NEW.equals(action)){
 			detail.setUuid(UUID.randomUUID().toString());
-			detail.setHotel(((UserProfile)user).getOrgnization().getId());
+			detail.setHotel((Long) user.getOrgnization().getId());
 		}
 		super.onBeforSaveDetail(user, action, detail);
 	}

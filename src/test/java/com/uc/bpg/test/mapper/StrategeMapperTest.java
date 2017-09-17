@@ -15,7 +15,7 @@ public class StrategeMapperTest extends TestBase {
 	
 	@Test
 	public void test01(){
-		Stratege stratege=mapper.selectByUuid("root");
+		Stratege stratege=(Stratege) mapper.selectByUuid("root");
 		assertNotNull(stratege);
 		
 		String text=stratege.getBillingCycle();

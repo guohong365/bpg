@@ -36,6 +36,7 @@ public class StatusSender {
 			return stop;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
 			while (!isStop()) {
@@ -45,7 +46,7 @@ public class StatusSender {
 				Example example = new ExampleImpl();
 				example.or().andFieldEqualTo("VALID", true);
 				long count = mapper.selectCountByExample(example);
-				List<Device> devices = mapper.selectByExample(example, 0, count);
+				List<Device> devices = (List<Device>) mapper.selectByExample(example, 0, count);
 				for (Device device : devices) {
 					String param = genParam(device.getSerialNo());
 					try {

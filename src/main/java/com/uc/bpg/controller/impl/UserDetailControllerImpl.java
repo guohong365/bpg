@@ -14,7 +14,7 @@ import com.uc.bpg.service.CodesService;
 import com.uc.bpg.service.UserDetailService;
 import com.uc.web.controller.WebAction;
 import com.uc.web.domain.Code;
-import com.uc.web.domain.basic.IntegerCode;
+import com.uc.web.domain.WithId;
 import com.uc.web.domain.security.UserProfile;
 
 public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserImpl> implements UserDetailController{
@@ -41,12 +41,12 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 	}
 	
 	@Override
-	protected void onBeforSaveDetail(UserProfile user, String action, UserImpl detail)
-			throws Exception {
+	protected void onBeforSaveDetail(UserProfile user, String action, Object entity)	throws Exception {
+		UserImpl detail=(UserImpl) entity;
 		switch (action) {
 		case WebAction.NEW:
 			detail.setValid(true);
-			detail.setCreater(getUserProfile().getUser().getId());
+			detail.setCreater((Long) getUser().getUser().getId());
 			detail.setCreateTime(new Date());
 			getLogger().trace("has roles=" + (detail.getRoles()==null? 0 : detail.getRoles().size() ));
 			if(getLogger().isTraceEnabled() && detail.getRoles()!=null)
@@ -62,7 +62,7 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 			}
 			break;
 		case WebAction.CANCELATE:
-			detail.setCancelater(getUserProfile().getUser().getId());
+			detail.setCancelater((Long) getUser().getUser().getId());
 			detail.setCancelTime(new Date());
 			break;
 		case WebAction.REACTIVE:
@@ -75,8 +75,8 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 	}
 	
 	@Override
-	protected void saveReactive(UserImpl detail) {
-		UserImpl temp=getService().selectById(detail.getId());
+	protected void saveReactive(Object detail) {
+		UserImpl temp=(UserImpl) getService().selectById(((WithId)detail).getId());
 		temp.setCancelater(null);
 		temp.setCancelTime(null);
 		temp.setValid(true);
@@ -84,11 +84,12 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 	}
 	
 	@Override
-	protected void saveModify(UserImpl detail) {
+	protected void saveModify(Object detail) {
 		getService().updateSelective(detail);
 	}
 	@Override
-	protected void saveCancelate(UserImpl detail) {
+	protected void saveCancelate(Object entity) {
+		UserImpl detail=(UserImpl) entity;
 		UserImpl temp=new UserImpl();
         temp.setId(detail.getId());
         temp.setValid(false);
@@ -98,15 +99,15 @@ public class UserDetailControllerImpl extends BusinessDetailControllerBase<UserI
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
-		Map<String, List<? extends Code<?>>> map= super.onGetNewCodes(user);
-		List<IntegerCode> codes=  getCodesService().selectOrgCodes(null, true);
+	protected Map<String, List<Code>> onGetNewCodes(UserProfile user) {
+		Map<String, List<Code>> map= super.onGetNewCodes(user);
+		List<Code> codes=  getCodesService().selectOrgCodes(null, true);
 		map.put(ORG_CODE_NAME, codes);
 		return map;
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user,	UserImpl detail) {
+	protected Map<String, List<Code>> onGetModifyCodes(UserProfile user, Object detail) {
 		return onGetNewCodes(user);
 	}
 

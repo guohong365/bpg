@@ -41,6 +41,7 @@ public class BillGeneratorServiceImpl extends ServiceBase implements BillGenerat
 	public void setUsageMapper(DeviceUsageMapper usageMapper) {
 		this.usageMapper = usageMapper;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public
 	List<Hotel> selectHotels(){
@@ -50,8 +51,9 @@ public class BillGeneratorServiceImpl extends ServiceBase implements BillGenerat
 		.andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL)
 		.andFieldGreaterThan("OWNED_DEVICE", 0);
 		long count=getHotelMapper().selectCountByExample(example);
-		return getHotelMapper().selectByExample(example, 0, count);
+		return (List<Hotel>) getHotelMapper().selectByExample(example, 0, count);
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public
 	List<DeviceUsage> selectUnbilledUsage(Long hotel){
@@ -60,7 +62,7 @@ public class BillGeneratorServiceImpl extends ServiceBase implements BillGenerat
 		.andFieldEqualTo("HOTEL", hotel)
 		.andFieldEqualTo("IN_BILL", false);		
 		long count=getUsageMapper().selectCountByExample(example);
-		return getUsageMapper().selectByExample(example, 0, count);
+		return (List<DeviceUsage>) getUsageMapper().selectByExample(example, 0, count);
 	}
 	@Override
 	public

@@ -1,11 +1,11 @@
 package com.uc.bpg.controller;
 
-import com.uc.bpg.domain.UserProfile;
+import com.uc.bpg.domain.UserProfileImpl;
 import com.uc.bpg.forms.IQueryFormBase;
 import com.uc.web.controller.AbstractListController;
 
-public class BusinessListControllerBase<QureyFormType extends IQueryFormBase,  DetailType> 
-    extends AbstractListController<QureyFormType, DetailType> {
+public class BusinessListControllerBase<QureyFormType extends IQueryFormBase> 
+    extends AbstractListController<QureyFormType> {
 	
 	private boolean foreground;
 
@@ -20,11 +20,11 @@ public class BusinessListControllerBase<QureyFormType extends IQueryFormBase,  D
 	
 	protected void onSetUserQueryLimits(QureyFormType queryForm) {
 		if(isForeground()){
-			queryForm.setQueryHotel(getUserProfile().getOrgnization().getId());
+			queryForm.setQueryHotel((Long) getUser().getOrgnization().getId());
 		}
 	}
-	
-	UserProfile getUserProfile(){
-		return (UserProfile) getUser();
+	@Override
+	public UserProfileImpl getUser(){
+		return (UserProfileImpl)super.getUser();
 	}
 }

@@ -3,12 +3,13 @@ package com.uc.bpg.domain;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 import com.uc.web.tools.annotation.AutoGenerateEntity;
 import com.uc.web.tools.annotation.ComponentType;
 import com.uc.web.tools.annotation.FormField;
 
 @AutoGenerateEntity
-public class Device  extends EntityBase {
+public class Device  extends EntityBase implements WithLongId {
 	@FormField(hidden=true)
 	private Long id;
 	private String uuid;

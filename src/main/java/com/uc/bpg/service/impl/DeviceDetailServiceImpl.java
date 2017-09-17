@@ -17,7 +17,7 @@ import com.uc.web.persistence.Example;
 import com.uc.web.persistence.ExampleImpl;
 import com.uc.web.service.AppDetailServiceBase;
 
-public class DeviceDetailServiceImpl extends AppDetailServiceBase<Long, Device> implements DeviceDetailService {
+public class DeviceDetailServiceImpl extends AppDetailServiceBase implements DeviceDetailService {
 	private HotelMapper hotelMapper;
 	private RoomMapper roomMapper;
 	private AllotHistoryMapper allotHistoryMapper;
@@ -66,7 +66,7 @@ public class DeviceDetailServiceImpl extends AppDetailServiceBase<Long, Device> 
 
 	@Override
 	public Hotel selectHotel(Long hotel) {
-		return getHotelMapper().selectById(hotel);
+		return (Hotel) getHotelMapper().selectById(hotel);
 	}
 
 	@Override
@@ -95,12 +95,13 @@ public class DeviceDetailServiceImpl extends AppDetailServiceBase<Long, Device> 
 		return getMapper().selectAllocableRooms(hotelId);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int updateWithdrawAll(Long modifier, Long hotel) {
 		Example example=new ExampleImpl();
 		example.or().andFieldEqualTo("HOTEL", hotel).andFieldIsNotNull("ROOM");
 		long count=getMapper().selectCountByExample(example);
-		List<Device> devices=getMapper().selectByExample(example, 0, count);
+		List<Device> devices=(List<Device>) getMapper().selectByExample(example, 0, count);
 		if(devices.isEmpty()) return 0;
 		Date date=Calendar.getInstance().getTime();
 		for(Device device:devices){
@@ -111,19 +112,20 @@ public class DeviceDetailServiceImpl extends AppDetailServiceBase<Long, Device> 
 		return devices.size();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int randomAllot(Long modifier, Long hotel) {
 		Example example=new ExampleImpl();
 		example.or().andFieldEqualTo("HOTEL", hotel)
 		.andFieldIsNull("ROOM").andFieldEqualTo("PUBLIC_USAGE", false);		
 		Long count=getMapper().selectCountByExample(example);
-		List<Device> devices=getMapper().selectByExample(example, 0, count);
+		List<Device> devices=(List<Device>) getMapper().selectByExample(example, 0, count);
 		if(devices.isEmpty()) return 0;
 		
 		example.clear();
 		example.or().andFieldEqualTo("HOTEL", hotel).andFieldIsNull("DEVICE");
 		count=getRoomMapper().selectCountByExample(example);
-		List<Room> rooms=getRoomMapper().selectByExample(example, 0, count);
+		List<Room> rooms=(List<Room>) getRoomMapper().selectByExample(example, 0, count);
 		if(rooms.isEmpty()) return 0;
 		List<Device> allotDevice=new ArrayList<>();
 		int indexDevice=0;

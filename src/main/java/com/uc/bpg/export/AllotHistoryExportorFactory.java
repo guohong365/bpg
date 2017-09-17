@@ -1,26 +1,21 @@
 package com.uc.bpg.export;
 
-import java.util.List;
-import java.util.Map;
-
 import com.uc.bpg.domain.AllotHistory;
-import com.uc.bpg.domain.Device;
 import com.uc.bpg.forms.AllotHisQueryForm;
-import com.uc.utils.export.Exportor;
-import com.uc.utils.export.ExportorFactory;
-import com.uc.utils.export.excel.IExcelExportOptions;
-import com.uc.web.controller.DetailListController;
+import com.uc.utils.export.excel.app.FlatHeaderExportorFacotryBase;
 
-public class AllotHistoryExportorFactory implements ExportorFactory {
+public class AllotHistoryExportorFactory extends FlatHeaderExportorFacotryBase<AllotHisQueryForm, AllotHistory> {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Exportor create(Map<String, Object> options) {
-		return new AllotHistoryExportor(
-				(AllotHisQueryForm)options.get(DetailListController.EXPORTOR_OPTION_QUERY_FORM),
-				(Device)options.get(DetailListController.EXPORTOR_OPTION_DETAIL_DATA),
-				(List<AllotHistory>)options.get(DetailListController.EXPORTOR_OPTION_DATA),
-				(IExcelExportOptions)options.get(DetailListController.EXPORTOR_OPTION_EXTERNAL));
+	private static final String DEFAULT_TITLE = "设备分配历史";
+	private static final String DEFAULT_FILE_NAME="设备分配历史[%s].xls";
+	private static final String[] columns={
+			"操作时间","操作","酒店","房间","操作人"	
+	};
+	public AllotHistoryExportorFactory() {
+		setColumns(columns);
+		setFileName(DEFAULT_FILE_NAME);
+		setTitle(DEFAULT_TITLE);
+		setFormatter(new AllotHistoryFormatter());
 	}
 
 }

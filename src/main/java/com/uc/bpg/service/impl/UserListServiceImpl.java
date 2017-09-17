@@ -2,14 +2,13 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.forms.UserQueryForm;
+import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.UserListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.AppWebListServiceBase;
 
-public class UserListServiceImpl extends AppWebListServiceBase<UserQueryForm, UserImpl> implements UserListService{
+public class UserListServiceImpl extends BusinessListServiceBase<UserQueryForm> implements UserListService{
 
 	@Override
 	public boolean prepareExample(UserQueryForm queryForm, Example example) {

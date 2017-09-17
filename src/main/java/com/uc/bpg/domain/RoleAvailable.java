@@ -1,6 +1,6 @@
 package com.uc.bpg.domain;
 
-public class RoleAvailable extends Role  {
+public class RoleAvailable extends RoleImpl  {
 	private boolean available;
 
 	public boolean isAvailable() {

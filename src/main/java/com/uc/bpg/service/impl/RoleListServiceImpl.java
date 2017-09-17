@@ -2,14 +2,13 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.Role;
 import com.uc.bpg.forms.RoleQueryForm;
+import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.RoleListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.AppWebListServiceBase;
 
-public class RoleListServiceImpl extends AppWebListServiceBase<RoleQueryForm, Role> implements RoleListService{
+public class RoleListServiceImpl extends BusinessListServiceBase<RoleQueryForm> implements RoleListService{
 
 	@Override
 	public boolean prepareExample(RoleQueryForm queryForm, Example example) {

@@ -27,8 +27,8 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetNewCodes(UserProfile user) {
-		Map<String, List<? extends Code<?>>> map= super.onGetNewCodes(user);
+	protected Map<String, List<Code>> onGetNewCodes(UserProfile user) {
+		Map<String, List<Code>> map= super.onGetNewCodes(user);
 		map.put(CODE_NAME_MONTHS, StrategeFormatHelper.getMonths());
 		map.put(CODE_NAME_MONTH_DAYS, StrategeFormatHelper.getMonthDays());
 		map.put(CODE_NAME_QUARTER_MONTHS, StrategeFormatHelper.getQuarterMonths());
@@ -37,7 +37,7 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 	}
 	
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user, Hotel detail) {
+	protected Map<String, List<Code>> onGetModifyCodes(UserProfile user, Object detail) {
 		return onGetNewCodes(user);
 	}
 	
@@ -55,9 +55,10 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 	}
 	
 	@Override
-	protected void saveNew(Hotel detail) {
+	protected void saveNew(Object entity) {
+		Hotel detail=(Hotel) entity;
 		detail.setUuid(UUID.randomUUID().toString());
-		detail.setCreater(getUserProfile().getUser().getId());
+		detail.setCreater((Long) getUser().getUser().getId());
 		detail.setCreateTime(Calendar.getInstance().getTime());		
 		super.saveNew(detail);
 	}
@@ -65,25 +66,25 @@ public class HotelDetailControllerImpl extends BusinessDetailControllerBase<Hote
 	void enableHotel(Hotel detail, boolean enabled){
 		Hotel hotel=new Hotel();
 		hotel.setId(detail.getId());
-		hotel.setCancelater(enabled? null: getUserProfile().getUser().getId());
+		hotel.setCancelater(enabled? null:(Long) getUser().getUser().getId());
 		hotel.setCancelTime(enabled? null:Calendar.getInstance().getTime());
 		hotel.setValid(enabled);
 		getService().updateSelective(hotel);
 	}
 	
 	@Override
-	protected void saveModify(Hotel detail) {		
+	protected void saveModify(Object detail) {		
 		getService().updateSelective(detail);
 	}
 	
 	@Override
-	protected void saveCancelate(Hotel detail) {
-		enableHotel(detail, false);
+	protected void saveCancelate(Object detail) {
+		enableHotel((Hotel) detail, false);
 	}
 	
 	@Override
-	protected void saveReactive(Hotel detail) {
-		enableHotel(detail, true);
+	protected void saveReactive(Object detail) {
+		enableHotel((Hotel) detail, true);
 	}
 	
 }

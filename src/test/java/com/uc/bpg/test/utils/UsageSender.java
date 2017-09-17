@@ -28,6 +28,7 @@ public class UsageSender {
 				100 + random.nextInt(30), 50 + random.nextInt(30), date, serial);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		int countPerDevice = 10;
 		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(xmlConfigs);
@@ -38,7 +39,7 @@ public class UsageSender {
 		.andFieldIsNotNull("ROOM");
 		
 		long count = mapper.selectCountByExample(example);
-		List<Device> devices = mapper.selectByExample(example, 0, count);
+		List<Device> devices = (List<Device>) mapper.selectByExample(example, 0, count);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		for (int i = 0; i < countPerDevice; i++) {
 			for (Device device : devices) {

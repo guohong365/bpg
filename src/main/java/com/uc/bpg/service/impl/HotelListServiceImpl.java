@@ -2,14 +2,13 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.Hotel;
 import com.uc.bpg.forms.HotelQueryForm;
+import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.HotelListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.AppWebListServiceBase;
 
-public class HotelListServiceImpl extends AppWebListServiceBase<HotelQueryForm, Hotel> implements HotelListService{
+public class HotelListServiceImpl extends BusinessListServiceBase<HotelQueryForm> implements HotelListService{
 
 	@Override
 	public boolean prepareExample(HotelQueryForm queryForm, Example example) {

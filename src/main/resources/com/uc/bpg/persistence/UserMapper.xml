@@ -30,7 +30,7 @@
     <result column="INTERNAL" jdbcType="BIT" property="internal" />
     <result column="AVAILABLE" jdbcType="BIT" property="available"/>    
   </resultMap>
-  <resultMap type="com.uc.bpg.domain.MenuTreeItem" id="mentTreeItem" >
+  <resultMap type="com.uc.bpg.domain.MenuTreeItemImpl" id="mentTreeItem" >
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="PARENT" jdbcType="INTEGER" property="parent" />
     <result column="NAME" jdbcType="VARCHAR" property="name" />

@@ -4,13 +4,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 import com.uc.web.tools.annotation.AutoGenerateEntity;
 import com.uc.web.tools.annotation.ComponentType;
 import com.uc.web.tools.annotation.ListColumn;
 import com.uc.web.tools.annotation.QueryField;
 
 @AutoGenerateEntity(value="设备使用明细")
-public class DeviceUsage  extends EntityBase {
+public class DeviceUsage  extends EntityBase implements WithLongId {
 	@ListColumn(show=false, id=true)
 	private Long id;
 	private String uuid;

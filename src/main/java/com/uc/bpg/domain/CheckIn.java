@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 
-public class CheckIn extends EntityBase {
+public class CheckIn extends EntityBase implements WithLongId{
 	private Long id;
 	private String uuid;
 	private Long hotel;

@@ -63,6 +63,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		return usageMapper;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void insertStatus(Long hotel) {
 		Random random=new Random(Calendar.getInstance().getTimeInMillis());
@@ -71,7 +72,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		.andFieldEqualTo("VALID", true)
 		.andFieldEqualTo("HOTEL", hotel)
 		.andFieldIsNotNull("ROOM");
-		List<Device> devices=getDeviceMapper().selectByExample(example, 0, 1000);
+		List<Device> devices=(List<Device>) getDeviceMapper().selectByExample(example, 0, 1000);
 		DeviceStatus status=new DeviceStatus();
 		for(Device device:devices){
 			status.setBattery(random.nextInt(10));
@@ -83,6 +84,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void insertUsages(Long hotel, int times) {
 		Example example=new ExampleImpl();
@@ -90,7 +92,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		.andFieldEqualTo("VALID", true)
 		.andFieldEqualTo("HOTEL", hotel)
 		.andFieldIsNotNull("ROOM");
-		List<Device> devices=getDeviceMapper().selectByExample(example, 0, 1000);
+		List<Device> devices=(List<Device>) getDeviceMapper().selectByExample(example, 0, 1000);
 		DeviceUsage usage=new DeviceUsage();
 		for(Device device:devices){
 			for(int i=0; i< times; i++){
@@ -109,14 +111,15 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void insertBills(Long hotelId) {
-		Hotel hotel=getHotelMapper().selectById(hotelId);		
+		Hotel hotel=(Hotel) getHotelMapper().selectById(hotelId);		
 		Example example=new ExampleImpl();
 		example.or()
 		.andFieldEqualTo("HOTEL", hotel)
 		.andFieldEqualTo("IN_BILL", false);	
-		List<DeviceUsage> usages=getUsageMapper().selectByExample(example, 0, 1000);
+		List<DeviceUsage> usages=(List<DeviceUsage>) getUsageMapper().selectByExample(example, 0, 1000);
 		BigDecimal income=new BigDecimal("0");
 		BigDecimal payable=new BigDecimal("0");
 		for(DeviceUsage usage:usages){
@@ -134,6 +137,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		bill.setState(Constant.BILL_STATE_UNPAYED);
 		getBillMapper().insertGeneratedBill(bill, usages);		
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Hotel> selectHotels() {
 		Example example=new ExampleImpl();
@@ -141,7 +145,7 @@ public class DemoServiceImpl extends LoggerSupportorImpl implements DemoService 
 		.andFieldEqualTo("VALID", true)
 		.andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL)
 		.andFieldGreaterThan("OWNED_DEVICE", 0);
-		return getHotelMapper().selectByExample(example, 0, 1000);
+		return (List<Hotel>) getHotelMapper().selectByExample(example, 0, 1000);
 	}
 	
 	

@@ -16,19 +16,19 @@ public class CeckInMapperTest extends TestBase {
 	@Autowired
 	CheckInMapper mapper;
 	
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "unchecked" })
 	@Test
 	public void test(){
 		CheckInQueryForm queryForm=null;
 		Long count=mapper.selectCountOptimized(queryForm);
 		
-		List<CheckIn> list=mapper.selectOptimized(queryForm, 0, count);
+		List<CheckIn> list=(List<CheckIn>) mapper.selectOptimized(queryForm, 0, count);
 		
 		queryForm=new CheckInQueryForm();
 		
 		count=mapper.selectCountOptimized(queryForm);
 		
-		list=mapper.selectOptimized(queryForm, 0, count);
+		list=(List<CheckIn>) mapper.selectOptimized(queryForm, 0, count);
 		
 		queryForm.setQueryHotel(2L);
 		queryForm.setQueryRoomNo("83");
@@ -41,7 +41,7 @@ public class CeckInMapperTest extends TestBase {
 		queryForm.setQueryCheckInReceptionistName("李");
 		queryForm.setQueryCheckInReceptionistName("李");
 		count=mapper.selectCountOptimized(queryForm);
-		list=mapper.selectOptimized(queryForm, 0, count);
+		list=(List<CheckIn>) mapper.selectOptimized(queryForm, 0, count);
 		
 	}
 }

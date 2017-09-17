@@ -22,7 +22,8 @@ public class DeviceTypeDetailControllerImpl extends BusinessDetailControllerBase
 	}
 	
 	@Override
-	protected void saveNew(DeviceType detail) {
+	protected void saveNew(Object entity) {
+		DeviceType detail=(DeviceType) entity;
 		if(detail.getShowOrder()==null){
 			Long order= getService().selectNextShowOrder();
 			detail.setShowOrder(order);

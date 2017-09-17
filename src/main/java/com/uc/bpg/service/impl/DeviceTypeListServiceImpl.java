@@ -2,14 +2,13 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.DeviceType;
 import com.uc.bpg.forms.DeviceTypeQueryForm;
+import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.DeviceTypeListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.AppWebListServiceBase;
 
-public class DeviceTypeListServiceImpl extends AppWebListServiceBase<DeviceTypeQueryForm, DeviceType> implements DeviceTypeListService{
+public class DeviceTypeListServiceImpl extends BusinessListServiceBase<DeviceTypeQueryForm> implements DeviceTypeListService{
 
 	@Override
 	public boolean prepareExample(DeviceTypeQueryForm queryForm, Example example) {

@@ -9,15 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.uc.bpg.domain.MenuTree;
-import com.uc.bpg.domain.MenuTreeItem;
-import com.uc.bpg.domain.Role;
-import com.uc.bpg.domain.UserProfile;
+import com.uc.bpg.domain.MenuTreeImpl;
+import com.uc.bpg.domain.RoleImpl;
+import com.uc.bpg.domain.UserProfileImpl;
 import com.uc.bpg.service.CodesService;
 import com.uc.bpg.uitls.SystemFormHelper;
 import com.uc.utils.ObjectCacheImpl;
 import com.uc.web.controller.ControllerBaseImpl;
-import com.uc.web.domain.basic.NoParentFoundException;
+import com.uc.web.domain.MenuTree;
+import com.uc.web.domain.NoParentFoundException;
+import com.uc.web.forms.MenuTreeItem;
 import com.uc.web.forms.ui.IUIFormator;
 import com.uc.web.forms.ui.TreeView;
 import com.uc.web.utils.SystemConfig;
@@ -48,7 +49,7 @@ public class RootController extends ControllerBaseImpl {
 			if(menuTree==null){
 				List<MenuTreeItem> items=codesService.selectAllMenus();
 				try {
-					menuTree= MenuTree.buildMenuTree(items);
+					menuTree= MenuTreeImpl.buildMenuTree(items);
 					ObjectCacheImpl.getInstance().put("MENU_TREE", menuTree);
 				} catch (NoParentFoundException e) {
 					e.printStackTrace();
@@ -66,12 +67,10 @@ public class RootController extends ControllerBaseImpl {
 			
 			return "/ajax";			
 		}
-		
-	
-		UserProfile user=(UserProfile) getUser();		
+		UserProfileImpl user=(UserProfileImpl) getUser();			
 		if(user!=null){			
 			for(int i=0; i< user.getRoles().size(); i++){
-				Role role=(Role) user.getRoles().get(i);
+				RoleImpl role=(RoleImpl) user.getRoles().get(i);
 				if(role.getUuid().equals(ROLE_RECEPTIONIST)){
 					return "redirect:/hotel/reception/";
 				}

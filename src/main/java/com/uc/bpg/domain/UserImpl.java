@@ -3,9 +3,10 @@ package com.uc.bpg.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.uc.web.domain.basic.IntegerKeyUser;
+import com.uc.web.domain.AbstractUser;
+import com.uc.web.domain.WithLongId;
 
-public class UserImpl extends IntegerKeyUser  {
+public class UserImpl extends AbstractUser implements WithLongId {
 	private String tele;
 	private String email;
 	private Boolean adminFlag;
@@ -21,7 +22,9 @@ public class UserImpl extends IntegerKeyUser  {
 	private String cancelaterName;
 	private List<RoleAvailable> roles;
 	
-	
+	public Long getId(){
+		return (Long) super.getId();
+	}
 	
 	public String getTele() {
 		return tele;

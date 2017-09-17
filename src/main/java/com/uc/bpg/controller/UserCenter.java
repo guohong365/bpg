@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uc.bpg.domain.UserImpl;
-import com.uc.bpg.domain.UserProfile;
+import com.uc.bpg.domain.UserProfileImpl;
 import com.uc.bpg.service.UserDetailService;
 import com.uc.web.controller.ControllerBaseImpl;
 
@@ -24,13 +24,13 @@ public class UserCenter extends ControllerBaseImpl {
 	public @ResponseBody String doChangePwd(
 			@RequestParam(value="password", required=true) String oldPwd,
 			@RequestParam(value="newPassword", required=true) String newPwd){
-		UserProfile userInfo=(UserProfile) this.getUser();
+		UserProfileImpl userInfo=(UserProfileImpl) this.getUser();
 		assert userInfo!=null;		
 		getLogger().info("change password for user:" + userInfo.getUser().getName());
 		getLogger().debug("original pwd=[" + userInfo.getUser().getPassword() + "]");
 		getLogger().debug("old pwd=[" + oldPwd+"]");
 		getLogger().debug("new pwd=[" + newPwd + "]");
-		UserImpl user=userService.selectById(userInfo.getUser().getId());
+		UserImpl user=(UserImpl) userService.selectById(userInfo.getUser().getId());
 		if(user!=null && user.getPassword().equals(oldPwd)){
 			userService.updatePassword(user.getId(), newPwd);
 			getLogger().info("update pwd as:" + newPwd);

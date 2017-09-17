@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.uc.bpg.persistence.OrgnizationMapper">
-  <resultMap id="orgnizationDetail" type="com.uc.bpg.domain.Orgnization">
+  <resultMap id="orgnizationDetail" type="com.uc.bpg.domain.OrgnizationImpl">
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="UUID" jdbcType="CHAR" property="uuid" />
     <result column="PARENT" jdbcType="INTEGER" property="parent" />
@@ -68,11 +68,11 @@
     from t_orgnization
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.Orgnization">
+  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     delete from t_orgnization
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insertDetail" parameterType="com.uc.bpg.domain.Orgnization">
+  <insert id="insertDetail" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     insert into t_orgnization (UUID, PARENT, 
       NAME, ADDRESS, 
       TELE, LINKMAN, DESCRIPTION, 
@@ -91,7 +91,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Orgnization">
+  <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     update t_orgnization
     <set>
       <if test="parent != null">
@@ -124,7 +124,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateDetail" parameterType="com.uc.bpg.domain.Orgnization">
+  <update id="updateDetail" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     update t_orgnization
     set
       PARENT = #{parent,jdbcType=INTEGER},

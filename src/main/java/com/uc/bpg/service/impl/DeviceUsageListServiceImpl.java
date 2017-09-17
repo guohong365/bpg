@@ -2,22 +2,21 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.forms.DeviceUsageQueryForm;
+import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.DeviceUsageListService;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
-import com.uc.web.service.AppWebListServiceBase;
 
-public class DeviceUsageListServiceImpl extends AppWebListServiceBase<DeviceUsageQueryForm, DeviceUsage>
+public class DeviceUsageListServiceImpl extends BusinessListServiceBase<DeviceUsageQueryForm>
 	implements DeviceUsageListService{
 	
 	@Override
 	public boolean prepareExample(DeviceUsageQueryForm queryForm, Example example) {
 		if(super.prepareExample(queryForm, example)){
 			QueryCondition condition= example.or();
-			if(queryForm.getQuerySelectedId()!=null){
-				condition.andFieldEqualTo("BILL", queryForm.getQuerySelectedId());
+			if(queryForm.getQueryMainId()!=null){
+				condition.andFieldEqualTo("BILL", queryForm.getQueryMainId());
 			}
 			if(!StringUtils.isEmpty(queryForm.getQueryHotelName())){
 				condition.andFieldLike("HOTEL_NAME", queryForm.getQueryHotelName() + "%");

@@ -1,22 +1,16 @@
 package com.uc.bpg.export;
 
-import java.util.List;
-import java.util.Map;
-
 import com.uc.bpg.domain.Examine;
-import com.uc.utils.export.Exportor;
-import com.uc.utils.export.ExportorFactory;
-import com.uc.utils.export.excel.IExcelExportOptions;
-import com.uc.web.controller.ListController;
+import com.uc.bpg.forms.ExamineQueryForm;
+import com.uc.utils.export.excel.app.FlatHeaderExportorFacotryBase;
 
-public class ExamineExportorFacotry implements ExportorFactory {
-
-	@Override
-	public Exportor create(Map<String, Object> options) {
-		@SuppressWarnings("unchecked")
-		List<Examine> data=(List<Examine>) options.get(ListController.EXPORTOR_OPTION_DATA);
-		IExcelExportOptions opt=(IExcelExportOptions) options.get(ListController.EXPORTOR_OPTION_EXTERNAL);		
-		return new ExamineExportor(data, opt);
+public class ExamineExportorFacotry extends FlatHeaderExportorFacotryBase<ExamineQueryForm, Examine> {
+	private static final String[] columns={"MAC","状态","接收时间","数据"};
+	
+	public ExamineExportorFacotry() {
+		setTitle("数据接收记录");
+		setFileName("数据接收记录.xls");
+		setColumns(columns);
+		setFormatter(new ExamineFormatter());
 	}
-
 }

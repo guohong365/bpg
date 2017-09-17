@@ -3,7 +3,7 @@ package com.uc.bpg.forms;
 import java.util.Date;
 
 
-public class DeviceUsageQueryForm extends DetailListQueryForm {
+public class DeviceUsageQueryForm extends DetailListQueryFormImpl {
 	private Date queryUseTimeFrom;
 	private Date queryUseTimeTo;
 	private String queryHotelName;

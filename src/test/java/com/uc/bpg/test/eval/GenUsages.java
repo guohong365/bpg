@@ -44,15 +44,16 @@ public class GenUsages extends TestBase {
 	static final int USE_COUNT = 10;
 	static final long USE_INTERVAL = 10000;
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test1() {
 		Example example = new ExampleImpl();
 		example.or().andFieldIsNotNull("HOTEL");
-		devices = deviceMapper.selectByExample(example, 0, 1000);
+		devices = (List<Device>) deviceMapper.selectByExample(example, 0, 1000);
 				
 		//example.clear();
 		//example.or().andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL);
-		hotels = hotelMapper.selectByExample(null, 0, 1000);
+		hotels = (List<Hotel>) hotelMapper.selectByExample(null, 0, 1000);
 
 		for (Device device : devices) {
 			Hotel hotel = findHotel(hotels, device.getHotel());

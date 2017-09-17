@@ -15,6 +15,7 @@ import com.uc.bpg.domain.StrategeHistory;
 import com.uc.bpg.service.StrategeDetailService;
 import com.uc.web.controller.WebAction;
 import com.uc.web.domain.Code;
+import com.uc.web.domain.WithId;
 import com.uc.web.domain.security.UserProfile;
 import com.uc.web.utils.SystemConfig;
 
@@ -30,8 +31,8 @@ public class StrategeDetailControllerImpl extends BusinessDetailControllerBase<S
 	}
 		
 	@Override
-	protected Map<String, List<? extends Code<?>>> onGetModifyCodes(UserProfile user,	Stratege detail) {		
-		Map<String, List<? extends Code<?>>> map= super.onGetModifyCodes(user, detail);
+	protected Map<String, List<Code>> onGetModifyCodes(UserProfile user, Object detail) {		
+		Map<String, List<Code>> map= super.onGetModifyCodes(user, detail);
 		map.put(CODE_NAME_WEEK_DAYS, StrategeFormatHelper.getWeekDays());		
 		map.put(CODE_NAME_MONTH_DAYS, StrategeFormatHelper.getMonthDays());
 		map.put(CODE_NAME_QUARTER_MONTHS, StrategeFormatHelper.getQuarterMonths());
@@ -40,16 +41,16 @@ public class StrategeDetailControllerImpl extends BusinessDetailControllerBase<S
 	}
 	
 	@Override
-	protected String onGetDetailPage(String action, Long selectedId, Model model) {		
+	protected String onGetDetailPage(String action, Object selectedId, Model model) {		
 		return super.onGetDetailPage(action, getService().selectId(), model);
 	}
 	
 	@Override
-	protected void onBeforSaveDetail(UserProfile user, String action, Stratege detail)	throws Exception {
-		super.onBeforSaveDetail(user, action, detail);
-		
+	protected void onBeforSaveDetail(UserProfile user, String action, Object entity) throws Exception {
+		super.onBeforSaveDetail(user, action, entity);
+		Stratege detail = (Stratege) entity;
 		if(WebAction.MODIFY.equals(action)){			
-			Stratege old=getService().selectById(detail.getId());
+			Stratege old=(Stratege) getService().selectById(((WithId)detail).getId());
 			StrategeHistory history=new StrategeHistory();
 			
 			history.setUuid(UUID.randomUUID().toString());
@@ -68,8 +69,8 @@ public class StrategeDetailControllerImpl extends BusinessDetailControllerBase<S
 			detail.setCreateTime(new Date());
 			
 			if(!SystemConfig.noLogin()){
-				history.setModifier(getUserProfile().getUser().getId());
-				detail.setCreater(getUserProfile().getUser().getId());
+				history.setModifier((Long) getUser().getUser().getId());
+				detail.setCreater((Long) getUser().getUser().getId());
 			} else {
 				history.setModifier(1L);
 				detail.setCreater(1L);

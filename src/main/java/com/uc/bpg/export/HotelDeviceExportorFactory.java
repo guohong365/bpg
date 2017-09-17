@@ -1,21 +1,21 @@
 package com.uc.bpg.export;
 
-import java.util.List;
-import java.util.Map;
-
 import com.uc.bpg.domain.Device;
-import com.uc.utils.export.Exportor;
-import com.uc.utils.export.ExportorFactory;
-import com.uc.utils.export.excel.IExcelExportOptions;
-import com.uc.web.controller.ListController;
+import com.uc.bpg.forms.DeviceQueryForm;
+import com.uc.utils.export.excel.app.FlatHeaderExportorFacotryBase;
 
-public class HotelDeviceExportorFactory implements ExportorFactory {
-	@Override
-	public Exportor create(Map<String, Object> options) {
-		@SuppressWarnings("unchecked")
-		List<Device> data=(List<Device>) options.get(ListController.EXPORTOR_OPTION_DATA);
-		IExcelExportOptions opts=(IExcelExportOptions) options.get(ListController.EXPORTOR_OPTION_EXTERNAL);
-		return new HotelDeviceExportor(data, opts);
+public class HotelDeviceExportorFactory extends FlatHeaderExportorFacotryBase<DeviceQueryForm, Device> {
+	private static final String[] columns={
+			"设备名称","设备型号","设备编号","房间","状态"	
+		};
+		
+	private static final String DEFAULT_TITLE = "设备列表";
+	
+	public HotelDeviceExportorFactory() {
+		setColumns(columns);
+		setTitle(DEFAULT_TITLE);
+		setFileName(DEFAULT_TITLE + ".xls");
+		setFormatter(new HotelDeviceFormatter());
 	}
 
 }

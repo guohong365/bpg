@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import com.uc.bpg.domain.FunctionAvailable;
-import com.uc.bpg.domain.Role;
+import com.uc.bpg.domain.RoleImpl;
 import com.uc.bpg.service.RoleDetailService;
 import com.uc.bpg.test.TestBase;
 
@@ -20,7 +20,7 @@ public class RoleServiceTest extends TestBase {
 	
 	@Test
 	public void test(){
-		Role role=new Role();
+		RoleImpl role=new RoleImpl();
 		role.setUuid(UUID.randomUUID().toString());
 		role.setName("cccc");
 		List<FunctionAvailable> funcs=new ArrayList<>();

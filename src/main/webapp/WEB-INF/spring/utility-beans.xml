@@ -28,27 +28,5 @@
   <bean id="menuitemFormator" class="com.uc.web.forms.ui.ace.AceMenuItemFormator" />
   
   <bean id="submenuContainerProvider" class="com.uc.web.forms.ui.ace.AceSubmenuContainer" />
-  
-  <bean id="excelExportorOptions" class="com.uc.utils.export.excel.ExcelExportOptions" >
-    <property name="titleCellOptions" ref="titleOptions" />
-    <property name="dataCellOptions"><null /></property>
-    <property name="addtionalCellOptions" ref="additionOptions" />
-    <property name="columnHeaderCellOptions" ref="headerOptions" />
-  </bean>
-  
-  <bean id="colorRed" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField" value="org.apache.poi.ss.usermodel.IndexedColors.RED" />
-  </bean>
-  
-  <bean id="colorGreen" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField" value="org.apache.poi.ss.usermodel.IndexedColors.GREEN" />
-  </bean>
-  
-  <bean id="titleOptions" class="com.uc.utils.export.excel.DefaultTitleCellOptions" >
-    <property name="bkColor" ref="colorRed" />
-    <property name="color" ref="colorGreen" />
-  </bean>
-  <bean id="headerOptions" class="com.uc.utils.export.excel.DefaultColumnHeaderCellOptions" />
-  <bean id="additionOptions" class="com.uc.utils.export.excel.DefaultDataCellOptions" />
-  
+
 </beans>

@@ -17,13 +17,14 @@ public class HotelMapperTest extends TestBase {
 	@Autowired
 	HotelMapper mapper;
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test01(){
 		assertNotNull(mapper);
 		
 		Long count=mapper.selectCountByExample(null);
 		
-		List<Hotel> list=mapper.selectByExample(null, 0, count);
+		List<Hotel> list=(List<Hotel>) mapper.selectByExample(null, 0, count);
 		
 	    assertTrue(list.size()>0);
 		

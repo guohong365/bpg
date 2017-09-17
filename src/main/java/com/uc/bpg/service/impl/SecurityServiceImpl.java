@@ -2,17 +2,19 @@ package com.uc.bpg.service.impl;
 
 import java.util.List;
 
-import com.uc.bpg.domain.MenuTree;
-import com.uc.bpg.domain.Orgnization;
+import com.uc.bpg.domain.MenuTreeImpl;
+import com.uc.bpg.domain.OrgnizationImpl;
 import com.uc.bpg.domain.RoleAvailable;
 import com.uc.bpg.domain.UserImpl;
-import com.uc.bpg.domain.UserProfile;
+import com.uc.bpg.domain.UserProfileImpl;
 import com.uc.bpg.persistence.OrgnizationMapper;
 import com.uc.bpg.persistence.RoleFunctionDefineMapper;
 import com.uc.bpg.persistence.UserMapper;
 import com.uc.bpg.service.SecurityService;
-import com.uc.web.domain.basic.NoParentFoundException;
-import com.uc.web.domain.security.IRoleFunctionDefine;
+import com.uc.web.domain.MenuTree;
+import com.uc.web.domain.NoParentFoundException;
+import com.uc.web.domain.security.RoleFunctionDefine;
+import com.uc.web.domain.security.UserProfile;
 import com.uc.web.forms.MenuTreeItem;
 
 
@@ -37,19 +39,19 @@ public class SecurityServiceImpl implements SecurityService{
 	@Override
 	public UserProfile selectUserProfile(String loginId) {
 		
-		UserImpl user=userDetailMapper.selectByUuid(loginId);
+		UserImpl user=(UserImpl) userDetailMapper.selectByUuid(loginId);
 		if(user==null)
 			return null;
-		UserProfile userProfile=new UserProfile();
+		UserProfile userProfile=new UserProfileImpl();
 		userProfile.setUser(user);
-		Orgnization orgnizationDetailForm= orgnizaiontDetaillMapper.selectById(user.getOrg());
+		OrgnizationImpl orgnizationDetailForm= (OrgnizationImpl) orgnizaiontDetaillMapper.selectById(user.getOrg());
 		userProfile.setOrgnization(orgnizationDetailForm);
 		List<RoleAvailable> roles=userDetailMapper.selectUserRoles(user.getId(), false);
 		userProfile.addRole(roles);
-		List<? extends MenuTreeItem<Long>> menuTreeItems=userDetailMapper.selectUserMenuItems(user.getId());
+		List<? extends MenuTreeItem> menuTreeItems=userDetailMapper.selectUserMenuItems(user.getId());
 		MenuTree menuTree=null;
 		try {
-			menuTree=MenuTree.buildMenuTree(menuTreeItems);
+			menuTree=MenuTreeImpl.buildMenuTree(menuTreeItems);
 		} catch (NoParentFoundException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +63,7 @@ public class SecurityServiceImpl implements SecurityService{
 	}
 
 	@Override
-	public List<? extends IRoleFunctionDefine<Long>> selectRoleFunctionDefines() {
+	public List<RoleFunctionDefine> selectRoleFunctionDefines() {
 		return roleFunctionDefineMapper.selectRoleFunctionDefines();
 	}
 }

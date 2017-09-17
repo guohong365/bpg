@@ -8,7 +8,7 @@ import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.Room;
 import com.uc.web.persistence.AppMapper;
 
-public interface DeviceMapper extends AppMapper<Long, Device> {
+public interface DeviceMapper extends AppMapper {
 
 	void insertBatchAdd(
 			@Param("devices")

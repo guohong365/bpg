@@ -1,6 +1,6 @@
 package com.uc.bpg.controller;
 
-import com.uc.bpg.domain.UserProfile;
+import com.uc.bpg.domain.UserProfileImpl;
 import com.uc.web.controller.AbstractDetailController;
 
 public class BusinessDetailControllerBase<DetailType> 
@@ -22,7 +22,7 @@ public class BusinessDetailControllerBase<DetailType>
 	protected String getDeletePageName() {
 		return getDeletePageName();
 	}	
-	protected UserProfile getUserProfile(){
-		return (UserProfile) getUser();
+	public UserProfileImpl getUser(){
+		return (UserProfileImpl) super.getUser();
 	}
 }

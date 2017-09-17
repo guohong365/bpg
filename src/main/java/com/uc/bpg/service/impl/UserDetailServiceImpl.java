@@ -10,13 +10,8 @@ import com.uc.bpg.service.UserDetailService;
 import com.uc.web.forms.MenuTreeItem;
 import com.uc.web.service.AppDetailServiceBase;
 
-public class UserDetailServiceImpl extends AppDetailServiceBase<Long, UserImpl> implements UserDetailService {
-	
-	@Override
-	public int delete(UserImpl detail) {
-		return 0;
-	}
-	
+public class UserDetailServiceImpl extends AppDetailServiceBase implements UserDetailService {
+
 	public UserMapper getMapper(){
 		return (UserMapper)super.getMapper();
 	}
@@ -35,12 +30,13 @@ public class UserDetailServiceImpl extends AppDetailServiceBase<Long, UserImpl> 
 	}
 
 	@Override
-	public List<? extends MenuTreeItem<Long>> selectUserMenuItems(Long userId) {
+	public List<MenuTreeItem> selectUserMenuItems(Long userId) {
 		return getMapper().selectUserMenuItems(userId);		
 	}
 
 	@Override
-	public void onAfterSelected(UserImpl detail) {
+	public void onAfterSelected(Object entity) {
+		UserImpl detail=(UserImpl) entity;
 		detail.setRoles(getMapper().selectUserRoles(detail.getId(), true));
 	}
 

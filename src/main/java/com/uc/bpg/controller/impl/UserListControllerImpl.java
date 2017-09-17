@@ -1,11 +1,10 @@
 package com.uc.bpg.controller.impl;
 
 import com.uc.bpg.controller.UserListController;
-import com.uc.bpg.domain.UserImpl;
 import com.uc.bpg.forms.UserQueryForm;
 import com.uc.web.controller.AbstractListController;
 
-public class UserListControllerImpl extends AbstractListController<UserQueryForm, UserImpl> implements UserListController{
+public class UserListControllerImpl extends AbstractListController<UserQueryForm> implements UserListController{
 
 	@Override
 	protected UserQueryForm onCreateQueryForm() {

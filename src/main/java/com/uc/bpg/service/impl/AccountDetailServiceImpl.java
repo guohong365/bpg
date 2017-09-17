@@ -7,7 +7,7 @@ import com.uc.bpg.domain.Bill;
 import com.uc.bpg.service.AccountDetailService;
 import com.uc.web.service.AppDetailServiceBase;
 
-public class AccountDetailServiceImpl extends AppDetailServiceBase<Long, Bill> implements AccountDetailService {
+public class AccountDetailServiceImpl extends AppDetailServiceBase implements AccountDetailService {
 	@Override
 	public	int pay(Bill detail){
 		Bill bill=new Bill();

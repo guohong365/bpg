@@ -8,7 +8,7 @@ import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.web.persistence.AppMapper;
 
-public interface BillMapper extends AppMapper<Long, Bill> {
+public interface BillMapper extends AppMapper {
 
 	void insertGeneratedBill(
 			@Param("bill")

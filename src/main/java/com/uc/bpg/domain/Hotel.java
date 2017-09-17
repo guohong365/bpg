@@ -6,7 +6,7 @@ import com.uc.web.tools.annotation.ComponentType;
 import com.uc.web.tools.annotation.FormField;
 
 @AutoGenerateEntity
-public class Hotel extends Orgnization  {
+public class Hotel extends OrgnizationImpl  {
 	
 	private Integer ownedDevice;
 	@FormField(value="设备总数", required=true, order=20)

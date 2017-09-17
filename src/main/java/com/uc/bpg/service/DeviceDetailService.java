@@ -7,7 +7,7 @@ import com.uc.bpg.domain.Hotel;
 import com.uc.bpg.domain.Room;
 import com.uc.web.service.AppDetailService;
 
-public interface DeviceDetailService extends AppDetailService<Long, Device> {
+public interface DeviceDetailService extends AppDetailService {
 	void insertBatchAdd(List<Device> details);
 	boolean selectExistsSerial(String serial);
 	Hotel selectHotel(Long hotel);

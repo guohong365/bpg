@@ -1,8 +1,6 @@
 package com.uc.bpg.export;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -14,30 +12,14 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.forms.AllotHisQueryForm;
-import com.uc.utils.export.excel.ExcelColumnImpl;
+import com.uc.utils.export.ValueFormatter;
 import com.uc.utils.export.excel.ExcelHelper;
-import com.uc.utils.export.excel.ExcelSheetHeader;
-import com.uc.utils.export.excel.IExcelExportOptions;
-import com.uc.utils.export.excel.TableExportorBase;
+import com.uc.utils.export.excel.app.ExportHeader;
 
-public class AllotHistoryExportor extends TableExportorBase<AllotHistory> {
-	
-	private static final String DEFAULT_NAME = "设备分配历史[%s].xls";
-	
-	private String fileName;
-
-	public AllotHistoryExportor(AllotHisQueryForm queryForm, Device detail, List<AllotHistory> data, IExcelExportOptions options) {
-		super(new AllotHistoryExportorHeader(queryForm, detail, options), data, options);
-		fileName=String.format(DEFAULT_NAME, detail==null?"":detail.getSerialNo());
-	}
+public class AllotHistoryFormatter implements ValueFormatter<AllotHistory> {
 
 	@Override
-	public String getDefaultFileName() {
-		return fileName;
-	}
-
-	@Override
-	protected String onGetColumnValue(int column, AllotHistory item) {
+	public String get(int column, AllotHistory item) {
 		SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd HH:mm:ss");
 		switch(column){
 		case 0:
@@ -55,29 +37,15 @@ public class AllotHistoryExportor extends TableExportorBase<AllotHistory> {
 	}
 	
 	@Override
-	protected int getColumnCount() {
+	public int getCount() {
 		return 5;
 	}
 	
-	static class AllotHistoryExportorHeader extends ExcelSheetHeader{
-		private static final String[] columns={
-			"操作时间","操作","酒店","房间","操作人"	
-		};
-		private static final String SHEET_TITLE = "设备分配历史";
+	static class AllotHistoryExportorHeader extends ExportHeader<AllotHisQueryForm>{
+
 		private AllotHisQueryForm queryForm;
 		private Device device;		
-		public AllotHistoryExportorHeader(AllotHisQueryForm queryForm, Device device, IExcelExportOptions options){
-			super(options);
-			setTitle(SHEET_TITLE);
-			this
-			.addSubColumn(new ExcelColumnImpl(columns[0]))
-			.addSubColumn(new ExcelColumnImpl(columns[1]))
-			.addSubColumn(new ExcelColumnImpl(columns[2]))
-			.addSubColumn(new ExcelColumnImpl(columns[3]))
-			.addSubColumn(new ExcelColumnImpl(columns[4]));
-			this.queryForm=queryForm;
-			this.device=device;
-		}
+
 		@Override
 		protected int exprotAddtional(Sheet sheet, int beginRow, int startCol) {
 			if(device==null) return super.exprotAddtional(sheet, beginRow, startCol);

@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 import com.uc.bpg.Constant;
-import com.uc.web.domain.basic.BasicCode;
-import com.uc.web.domain.basic.IntegerCode;
+import com.uc.web.domain.Code;
+import com.uc.web.domain.CodeImpl;
 
 public class StrategeFormatHelper {
 	private static final String ERROR_PARAM="参数错误";
@@ -39,41 +39,41 @@ public class StrategeFormatHelper {
 		return ERROR_CONFIG;
 		
 	}
-	public static List<BasicCode> getCyleTypes(){
-		List<BasicCode> codes=new ArrayList<>();
-		codes.add(new BasicCode(Constant.BILL_CYCLE_WEEKLY, "每" + Constant.BILL_CYCLE_WEEKLY));
-		codes.add(new BasicCode(Constant.BILL_CYCLE_MONTHLY, "每" + Constant.BILL_CYCLE_MONTHLY));
-		codes.add(new BasicCode(Constant.BILL_CYCLE_QUARTERLY, "每" + Constant.BILL_CYCLE_QUARTERLY));
-		codes.add(new BasicCode(Constant.BILL_CYCLE_YEAERLY, "每" + Constant.BILL_CYCLE_YEAERLY));
+	public static List<Code> getCyleTypes(){
+		List<Code> codes=new ArrayList<>();
+		codes.add(new CodeImpl(Constant.BILL_CYCLE_WEEKLY, "每" + Constant.BILL_CYCLE_WEEKLY));
+		codes.add(new CodeImpl(Constant.BILL_CYCLE_MONTHLY, "每" + Constant.BILL_CYCLE_MONTHLY));
+		codes.add(new CodeImpl(Constant.BILL_CYCLE_QUARTERLY, "每" + Constant.BILL_CYCLE_QUARTERLY));
+		codes.add(new CodeImpl(Constant.BILL_CYCLE_YEAERLY, "每" + Constant.BILL_CYCLE_YEAERLY));
 		return codes;
 	}
-	public static List<IntegerCode> getMonths(){
-		List<IntegerCode> codes=new ArrayList<>();
+	public static List<Code> getMonths(){
+		List<Code> codes=new ArrayList<>();
 		for(int i=1; i<=12; i++){
-			codes.add(new IntegerCode((long) i, zhNumber[i] +"月"));
+			codes.add(new CodeImpl((long) i, zhNumber[i] +"月"));
 		}
 		return codes;
 	}
-	public static List<IntegerCode> getWeekDays(){
-		List<IntegerCode> codes=new ArrayList<>();
+	public static List<Code> getWeekDays(){
+		List<Code> codes=new ArrayList<>();
 		for(int i=1; i<=7; i++){
-			codes.add(new IntegerCode((long)i, weekDays[i]));
+			codes.add(new CodeImpl((long)i, weekDays[i]));
 		}
 		return codes;
 	}
 	
-	public static List<IntegerCode> getQuarterMonths(){
-		List<IntegerCode> codes=new ArrayList<>();
-		codes.add(new IntegerCode(1L, "第一个月"));
-		codes.add(new IntegerCode(2L, "第二个月"));
-		codes.add(new IntegerCode(3L, "第三个月"));
+	public static List<Code> getQuarterMonths(){
+		List<Code> codes=new ArrayList<>();
+		codes.add(new CodeImpl(1L, "第一个月"));
+		codes.add(new CodeImpl(2L, "第二个月"));
+		codes.add(new CodeImpl(3L, "第三个月"));
 		return codes;
 	}
 	
-	public static List<IntegerCode> getMonthDays(){
-		List<IntegerCode> codes=new ArrayList<>();
+	public static List<Code> getMonthDays(){
+		List<Code> codes=new ArrayList<>();
 		for(int i=1; i<=31; i++){
-			codes.add(new IntegerCode((long) i, zhNumber[i] +"日"));
+			codes.add(new CodeImpl((long) i, zhNumber[i] +"日"));
 		}
 		return codes;
 	}

@@ -1,8 +1,9 @@
 package com.uc.bpg.domain;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 
-public class DeviceType  extends EntityBase {
+public class DeviceType  extends EntityBase implements WithLongId {
 	private Long id;
 	private String uuid;
 	private String name;

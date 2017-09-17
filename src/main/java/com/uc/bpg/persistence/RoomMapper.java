@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.uc.bpg.domain.Room;
 import com.uc.web.persistence.AppMapper;
 
-public interface RoomMapper extends AppMapper<Long, Room> {
+public interface RoomMapper extends AppMapper {
 
 	boolean selectExistsRoom(
 			@Param("hotel")

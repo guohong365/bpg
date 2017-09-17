@@ -3,8 +3,9 @@ package com.uc.bpg.domain;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 
-public class DeviceStatus  extends EntityBase {
+public class DeviceStatus  extends EntityBase implements WithLongId {
     private Long id;
     private Long device;
     private String mac;

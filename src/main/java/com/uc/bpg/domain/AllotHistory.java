@@ -3,8 +3,9 @@ package com.uc.bpg.domain;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 
-public class AllotHistory extends EntityBase {
+public class AllotHistory extends EntityBase implements WithLongId {
 	private Long id;
 	private String uuid;
 	private String operation;

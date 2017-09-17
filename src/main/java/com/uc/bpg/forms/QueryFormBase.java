@@ -1,10 +1,10 @@
 package com.uc.bpg.forms;
 
-import com.uc.web.forms.QueryFormImpl;
+import com.uc.web.forms.ListQueryFormImpl;
 import com.uc.web.tools.annotation.ComponentType;
 import com.uc.web.tools.annotation.FormField;
 
-public class QueryFormBase extends QueryFormImpl<Long> implements IQueryFormBase {
+public class QueryFormBase extends ListQueryFormImpl implements IQueryFormBase {
 	@FormField(value="所有", order=9999, component=ComponentType.CHECKBOX)
     private Boolean queryAll;
     private Long queryHotel;

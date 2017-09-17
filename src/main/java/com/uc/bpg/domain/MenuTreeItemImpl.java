@@ -1,8 +1,9 @@
 package com.uc.bpg.domain;
 
 import com.uc.web.domain.AbstractMenu;
+import com.uc.web.forms.MenuTreeItem;
 
-public class MenuTreeItem extends AbstractMenu<Long> implements com.uc.web.forms.MenuTreeItem<Long>{
+public class MenuTreeItemImpl extends AbstractMenu implements MenuTreeItem{
 	private String icon;
 
 	public String getIcon() {

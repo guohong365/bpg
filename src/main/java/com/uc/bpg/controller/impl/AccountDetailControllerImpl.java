@@ -28,7 +28,7 @@ public class AccountDetailControllerImpl
 	}
 	
 	@Override
-	protected String onGetDetailPage(String action, Long selectedId, Model model) {
+	protected String onGetDetailPage(String action, Object selectedId, Model model) {
 		switch(action){
 		case ACTION_VIEW_DETAIL:
 			
@@ -47,7 +47,7 @@ public class AccountDetailControllerImpl
 		return getPageBasePath() + "/pay";
 	}
 
-	private String onGetViewDetailPage(Long selectedId, Model model) {
+	private String onGetViewDetailPage(Object selectedId, Model model) {
 		super.onGetDetailPage(WebAction.VIEW, selectedId, model);		
 		return getBillDetailPage();
 	}
@@ -57,11 +57,11 @@ public class AccountDetailControllerImpl
 	}
 
 	@Override
-	protected String onPostDetailPage(String action, Bill detail) {
+	protected String onPostDetailPage(String action, Object detail) {
 		switch(action){
 		case ACTION_PAY:			
 		case ACTION_VERIFY:
-			return onPostPay(action, detail);
+			return onPostPay(action, (Bill)detail);
 		}
 		return super.onPostDetailPage(action, detail);
 	}
@@ -69,11 +69,11 @@ public class AccountDetailControllerImpl
 	private String onPostPay(String action, Bill detail) {				
 		switch(action){
 		case ACTION_PAY:
-			detail.setPayer(getUserProfile().getUser().getId());
+			detail.setPayer((Long)getUser().getUser().getId());
 			getService().pay(detail);
 			break;
 		case ACTION_VERIFY:
-			detail.setVerifier(getUserProfile().getUser().getId());
+			detail.setVerifier((Long)getUser().getUser().getId());
 			getService().verify(detail);
 			break;
 		}

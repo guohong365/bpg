@@ -1,8 +1,9 @@
 package com.uc.bpg.domain;
 
-import com.uc.web.domain.security.basic.IntegerRoleFunctionDefine;
+import com.uc.web.domain.AbstractRoleFunctions;
 
-public class RoleFunctionDefine extends IntegerRoleFunctionDefine {
+
+public class RoleFunctionDefineImpl extends AbstractRoleFunctions {
 	private Long roleId;
 	private Long functionId;
 	public Long getRoleId() {
@@ -18,5 +19,9 @@ public class RoleFunctionDefine extends IntegerRoleFunctionDefine {
 		this.functionId = functionId;
 	}
 	
+	@Override
+	public RoleImpl getRole() {
+		return (RoleImpl) super.getRole();
+	}
 	
 }

@@ -2,7 +2,7 @@ package com.uc.bpg.forms;
 
 import java.util.Date;
 
-public class AllotHisQueryForm extends DetailListQueryForm  {
+public class AllotHisQueryForm extends DetailListQueryFormImpl  {
 	private String queryOperation;
 	private String queryRoom;
 	private Date queryOperateTimeFrom;

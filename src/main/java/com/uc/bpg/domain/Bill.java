@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
 import com.uc.web.tools.annotation.AutoGenerateEntity;
 import com.uc.web.tools.annotation.FormField;
 import com.uc.web.tools.annotation.ListColumn;
 
 @AutoGenerateEntity(value="账单信息", buttons={"确认收款|comfirm|btn-danger|fa fa-edit","查看|view|btn-primary|fa fa-search"})
-public class Bill extends EntityBase  {
+public class Bill extends EntityBase implements WithLongId {
 	@FormField(value="",order=0,hidden=true, id=true)
 	@ListColumn(value="", show=false, id=true)
 	private Long id;

@@ -2,18 +2,15 @@ package com.uc.bpg.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.uc.bpg.domain.AllotHistory;
 import com.uc.bpg.forms.AllotHisQueryForm;
 import com.uc.bpg.service.AllotHistoryListService;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.web.persistence.Example;
 import com.uc.web.persistence.QueryCondition;
 
-public class AllotHistoryListServiceImpl extends BusinessListServiceBase<AllotHisQueryForm, AllotHistory> implements AllotHistoryListService {
+public class AllotHistoryListServiceImpl extends BusinessListServiceBase<AllotHisQueryForm> implements AllotHistoryListService {
 	
-	@Override
 	public boolean prepareExample(AllotHisQueryForm queryForm, Example example) {
-		super.prepareExample(queryForm, example);
 		QueryCondition condition=example.or();
 		if(queryForm.getQueryHotel()!=null && queryForm.getQueryHotel()>0){
 			condition.andFieldEqualTo("HOTEL", queryForm.getQueryHotel());
@@ -35,10 +32,10 @@ public class AllotHistoryListServiceImpl extends BusinessListServiceBase<AllotHi
 		} else {
 			queryForm.setQueryRoom(null);
 		}
-		if(queryForm.getQuerySelectedId()!=null && queryForm.getQuerySelectedId()>0){
-			condition.andFieldEqualTo("DEVICE", queryForm.getQuerySelectedId());
+		if(queryForm.getQueryMainId()!=null && queryForm.getQueryMainId()>0){
+			condition.andFieldEqualTo("DEVICE", queryForm.getQueryMainId());
 		} else {
-			queryForm.setQuerySelectedId(null);
+			queryForm.setQueryMainId(null);
 		}
 		if(queryForm.getQueryOperateTimeFrom()!=null){
 			condition.andFieldGreaterThanOrEqualTo("OPERATE_TIME", queryForm.getQueryOperateTimeFrom());

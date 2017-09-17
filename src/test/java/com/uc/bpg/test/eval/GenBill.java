@@ -29,9 +29,10 @@ public class GenBill extends TestBase{
 	DeviceUsageMapper usageMapper;
 	
 	List<Hotel> hotels;
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test(){
-		hotels=hotelMapper.selectByExample(null, 0, 1000);
+		hotels=(List<Hotel>) hotelMapper.selectByExample(null, 0, 1000);
 		Example example=new ExampleImpl();
 		for(Hotel hotel:hotels){
 			example.clear();
@@ -47,7 +48,7 @@ public class GenBill extends TestBase{
 			BigDecimal charge=new BigDecimal("0");
 			BigDecimal rent=new BigDecimal("0");
 			BigDecimal basicCharge=new BigDecimal("0");
-			List<DeviceUsage> usages=usageMapper.selectByExample(example, 0, count);
+			List<DeviceUsage> usages=(List<DeviceUsage>) usageMapper.selectByExample(example, 0, count);
 			for(DeviceUsage usage:usages){
 				charge=charge.add(usage.getCharge());
 				rent=rent.add(usage.getRent());

@@ -2,7 +2,10 @@ package com.uc.bpg.domain;
 
 import java.util.Date;
 
-public class Examine {
+import com.uc.web.domain.EntityBase;
+import com.uc.web.domain.WithLongId;
+
+public class Examine extends EntityBase implements WithLongId {
 	private Long id;
 	private String mac;
 	private Integer status;

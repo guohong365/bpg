@@ -5,10 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.uc.bpg.domain.FunctionAvailable;
-import com.uc.bpg.domain.Role;
 import com.uc.web.persistence.AppMapper;
 
-public interface RoleMapper extends AppMapper<Long, Role> {
+public interface RoleMapper extends AppMapper {
 
 	List<FunctionAvailable> selectFunctions(
 			@Param("roleId")
