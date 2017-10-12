@@ -11,7 +11,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta charset="utf-8" />
-<title><%=SystemConfig.getConfig("system.name", "")%></title>
+<title><%=SystemConfig.getInstance().getConfigString("system.name", "")%></title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <!-- bootstrap & fontawesome -->
@@ -77,8 +77,8 @@
         <a href="#" class="navbar-brand">
           <small>
             <i class="fa fa-medkit bigger"></i>
-            <%=SystemConfig.getConfig("system.name", "")%><small><%=(SystemConfig.getConfig("SystemType", "").equals("test")?"-测试版":"") %>
-              Ver.<%=SystemConfig.getConfig("system.version", "")%></small>
+            <%=SystemConfig.getInstance().getConfigString("system.name", "")%><small><%=(SystemConfig.getInstance().getConfigString("SystemType", "").equals("test")?"-测试版":"") %>
+              Ver.<%=SystemConfig.getInstance().getConfigString("system.version", "")%></small>
           </small>
         </a>
 

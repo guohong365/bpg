@@ -40,7 +40,6 @@
 		<property name="service" ref="deviceListService" />
 		<property name="codesService" ref="codesService" />
 		<property name="exportorFactory" ref="deviceExportorFactory" />
-		<property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="deviceExportorFactory" class="com.uc.bpg.export.DeviceExportorFactory" />
 	
@@ -57,7 +56,6 @@
 		<property name="deviceService" ref="deviceDetailService" />
 		<property name="pageBasePath" value="/common/allotHistory" />
 		<property name="exportorFactory" ref="allotHistoryExportorFactory" />
-		<property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
   <bean id="allotHistoryExportorFactory" class="com.uc.bpg.export.AllotHistoryExportorFactory" />
 
@@ -89,7 +87,6 @@
 		<property name="moduleTitle" value="酒店管理" />
 		<property name="entityName" value="酒店" />
 		<property name="exportorFactory" ref="hotelExportorFactory" />
-		<property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="hotelExportorFactory" class="com.uc.bpg.export.HotelExportorFactory" />
 	<bean id="backHotelDetailController" class="com.uc.bpg.controller.impl.HotelDetailControllerImpl">
@@ -104,7 +101,6 @@
 		<property name="moduleTitle" value="账单管理" />
 		<property name="pageBasePath" value="/background/account" />
 		<property name="exportorFactory" ref="accountExportorFactory" />
-		<property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="accountExportorFactory" class="com.uc.bpg.export.AccountExportorFactory" />
 	<bean id="backAccountDetailController" class="com.uc.bpg.controller.impl.AccountDetailControllerImpl">
@@ -119,7 +115,6 @@
 	  <property name="moduleTitle" value="账务统计" />
 	  <property name="pageBasePath" value="/backgound/stat/bill" />
 	  <property name="exportorFactory" ref="backStatisticBillExportorFactory" />
-	  <property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="backStatisticBillExportorFactory" class="com.uc.bpg.export.BackStatisticBillExportorFactory" />	
 
@@ -133,7 +128,6 @@
 		<property name="pageBasePath" value="/hotel/device" />
 		<property name="moduleTitle" value="设备管理" />
 		<property name="exportorFactory" ref="hotelDeviceExportorFactory" />
-		<property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="foreDeviceDetailController" class="com.uc.bpg.controller.impl.DeviceDetailControllerImpl">
 		<property name="service" ref="deviceDetailService" />
@@ -184,12 +178,18 @@
 	 <property name="pageBasePath" value="/hotel/checkin" />
 	 <property name="moduleTitle" value="入住记录" />
 	 <property name="exportorFactory" ref="checkInExportorFacotry" />
-	 <property name="exportorOptions" ref="excelExportorOptions" />
 	</bean>
 	<bean id="foreCheckInDetailController" class="com.uc.bpg.controller.hotel.impl.CheckInDetailControllerImpl">
 	 <property name="service" ref="checkInDetailService" />
 	 <property name="pageBasePath" value="/hotel/checkin" />
 	 <property name="moduleTitle" value="入住记录" />
 	 <property name="entityName" value="入住记录" />
+	</bean>
+	
+	<bean id="examineListController" class="com.uc.bpg.controller.impl.ExamineListControllerImpl">
+	  <property name="service" ref="examineService" />
+	  <property name="pageBasePath" value="/examine" />
+	  <property name="moduleTitle" value="测试" />
+	  <property name="entityName" value="测试记录" />
 	</bean>
 </beans>

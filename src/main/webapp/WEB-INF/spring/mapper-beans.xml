@@ -85,4 +85,8 @@
     <property name="mapperInterface" value="com.uc.bpg.persistence.StatisticBillMapper" />
     <property name="sqlSessionFactory" ref="sqlSessionFactory" />
   </bean>
+  <bean id="examineMapper"  class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.uc.bpg.persistence.ExamineMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
 </beans>

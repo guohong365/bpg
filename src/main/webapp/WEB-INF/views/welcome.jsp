@@ -11,7 +11,7 @@
 		<div class="alert alert-block alert-success">
 			<i class="icon-ok green"></i> 
 			<h1>欢迎使用 <strong class="green">
-			<%=SystemConfig.getConfig("system.name", "") %><%=(SystemConfig.getConfig("SystemType","").equals("test")?"-测试版":"")%> (<%=SystemConfig.getConfig("system.version", "") %>)
+			<%=SystemConfig.getInstance().getConfigString("system.name", "") %><%=(SystemConfig.getInstance().getConfigString("SystemType","").equals("test")?"-测试版":"")%> (<%=SystemConfig.getInstance().getConfigString("system.version", "") %>)
 			</strong>。</h1>
 		</div>
     <div class="row">

@@ -21,7 +21,7 @@ public class UserDetailControllerProxy extends AbstractDetailControllerProxy<Lon
 		super.setBaseUri(baseUri);
 	}
 	
-	@Resource(name="${controller.impl.user}")
+	@Resource(name="${controller.impl.detail.user}")
 	@Override
 	public void setController(ControllerBase controller) {
 		super.setController(controller);

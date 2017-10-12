@@ -1,9 +1,9 @@
 package com.uc.bpg.domain;
 
-import com.uc.web.domain.AbstractRoleFunctions;
+import com.uc.web.domain.security.AbstractRoleFunctionDefine;
 
 
-public class RoleFunctionDefineImpl extends AbstractRoleFunctions {
+public class RoleFunctionDefineImpl extends AbstractRoleFunctionDefine {
 	private Long roleId;
 	private Long functionId;
 	public Long getRoleId() {

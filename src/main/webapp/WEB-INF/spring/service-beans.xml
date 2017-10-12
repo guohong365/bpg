@@ -114,4 +114,7 @@
     <property name="usageMapper" ref="deviceUsageMapper" />
     <property name="receiverMapper" ref="receiverMapper" />
   </bean>
+  <bean id="examineService" class="com.uc.bpg.service.impl.ExamineListServiceImpl">
+  	<property name="mapper" ref="examineMapper" />
+  </bean>
 </beans>

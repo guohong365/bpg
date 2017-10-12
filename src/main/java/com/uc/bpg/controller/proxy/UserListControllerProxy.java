@@ -21,7 +21,7 @@ public class UserListControllerProxy extends AbstractListControllerProxy<UserQue
 		super.setBaseUri(baseUri);
 	}
 	
-	@Resource(name="${controller.impl.user}")
+	@Resource(name="${controller.impl.list.user}")
 	@Override
 	public void setController(ControllerBase controller) {
 		super.setController(controller);
