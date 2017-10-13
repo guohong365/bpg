@@ -5,29 +5,23 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.forms.DeviceTypeQueryForm;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.DeviceTypeListService;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.QueryCondition;
+import com.uc.web.forms.ListQueryForm;
 
 public class DeviceTypeListServiceImpl extends BusinessListServiceBase<DeviceTypeQueryForm> implements DeviceTypeListService{
-
 	@Override
-	public boolean prepareExample(DeviceTypeQueryForm queryForm, Example example) {
-		QueryCondition condition=example.or();
-		if(StringUtils.isEmpty(queryForm.getQueryName())){
-			queryForm.setQueryName(null);
-		} else {
-			condition.andFieldLike("NAME", queryForm.getQueryName()+"%");
+	public boolean prepareQueryForm(ListQueryForm queryForm) {
+		super.prepareQueryForm(queryForm);
+		DeviceTypeQueryForm deviceTypeQueryForm=(DeviceTypeQueryForm) queryForm;
+		if(StringUtils.isEmpty(deviceTypeQueryForm.getQueryName())){
+			deviceTypeQueryForm.setQueryName(null);
 		}
-		if(StringUtils.isEmpty(queryForm.getQueryProduct())){
-			queryForm.setQueryProduct(null);
+		if(StringUtils.isEmpty(deviceTypeQueryForm.getQueryProduct())){
+			deviceTypeQueryForm.setQueryProduct(null);
+		} 
+		if(deviceTypeQueryForm.getQueryAll()==null || !deviceTypeQueryForm.getQueryAll()){
+			deviceTypeQueryForm.setQueryAll(false);
 		} else {
-			condition.andFieldLike("PRODUCT", queryForm.getQueryProduct()+"%");
-		}
-		if(queryForm.getQueryAll()==null || !queryForm.getQueryAll()){
-			queryForm.setQueryAll(false);
-			condition.andFieldEqualTo("VALID", true);
-		} else {
-			queryForm.setQueryAll(true);
+			deviceTypeQueryForm.setQueryAll(true);
 		}
 		
 		return true;

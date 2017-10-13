@@ -158,9 +158,9 @@
               <input type="hidden" id="selectedId" name="selectedId" value="" />
               <input type="hidden" id="queryInput.queryOrderBy" name="queryInput.queryOrderBy" value="${queryInput.queryOrderBy }" />
               <input type="hidden" id="queryInput.queryOrder" name="queryInput.queryOrder" value="${queryInput.queryOrder}" />
-              <input type="hidden" id="pageCtrl.pageCount" name="pageCtrl.pageCount" value="${pageCtrl.pageCount}" />
-              <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
-              <input type="hidden" id="pageCtrl.current" name="pageCtrl.current" value="${pageCtrl.current }" />
+            <input type="hidden" id="pageCtrl.pageSize" name="pageCtrl.pageSize" value="${pageCtrl.pageSize}" />
+            <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
+            <input type="hidden" id="pageCtrl.offset" name="pageCtrl.offset" value="${pageCtrl.offset }" />
               <input type="hidden" id="queryInput.queryHotelName" name="queryInput.queryHotelName" value="${queryInput.queryHotelName}" />
               <input type="hidden" id="queryInput.queryPayableFrom" name="queryInput.queryPayableFrom" value="${queryInput.queryPayableFrom}" />
               <input type="hidden" id="queryInput.queryPayableTo" name="queryInput.queryPayableTo" value="${queryInput.queryPayableTo}" />
@@ -297,7 +297,7 @@
                 <!-- functon button begin -->
                 <c:choose>
                   <c:when test="${pageCtrl.total > 0 }">
-                    <div class="col-xs-12 col-sm-6">共${pageCtrl.pageCount }页${pageCtrl.total }条记录, 当前第${pageCtrl.current + 1}页</div>
+                    <div class="col-xs-12 col-sm-6">共${pageCtrl.pageCount }页${pageCtrl.total }条记录, 当前第${pageCtrl.page + 1}页</div>
                   </c:when>
                   <c:otherwise>
                     <div class="col-xs-12 col-sm-6">无记录</div>
@@ -306,11 +306,11 @@
                 <div class="col-xs-12 col-sm-6">
                   <div>
                     <c:set var="disableFirst" value="btn-info"></c:set>
-                    <c:if test="${pageCtrl.current==0}">
+                    <c:if test="${pageCtrl.page==0}">
                       <c:set var="disableFirst" value="disabled"></c:set>
                     </c:if>
                     <c:set var="disableLast" value="btn-info"></c:set>
-                    <c:if test="${pageCtrl.total==0 or pageCtrl.current==pageCtrl.pageCount -1 }">
+                    <c:if test="${pageCtrl.total==0 or pageCtrl.page==pageCtrl.pageCount -1 }">
                       <c:set var="disableLast" value="disabled"></c:set>
                     </c:if>
                     <ul class="pagination">

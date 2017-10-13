@@ -5,7 +5,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="webapp2-1.0.0-BUILD-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/webapp2/webapp2">
+        <dependent-module archiveName="webapp2-1.0.0-BUILD-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.uc.webapp/com.uc.webapp">
             <dependency-type>uses</dependency-type>
         </dependent-module>
 		<property name="java-output-path" value="target/classes"/>
