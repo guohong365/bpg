@@ -32,6 +32,7 @@
 	<bean id="dataReceiverService" class="com.uc.bpg.service.impl.DataReceiverServiceImpl">
 		<property name="deviceMapper" ref="deviceMapper" />
 		<property name="receiverMapper" ref="receiverMapper" />
+		<property name="examineMapper" ref="examineMapper" />
 	</bean>
 
 	<bean id="deviceListService" class="com.uc.bpg.service.impl.DeviceListServiceImpl">

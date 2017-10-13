@@ -74,9 +74,7 @@ public class RootController extends ControllerBaseImpl {
 				if(role.getUuid().equals(ROLE_RECEPTIONIST)){
 					return "redirect:/hotel/reception/";
 				}
-				if(role.getUuid().equals(ROLE_FACTORY_EXAMINE)){
-					return "redirect:/examine/list";
-				}
+				
 			}
 			
 			StringBuilder menus=new StringBuilder();
