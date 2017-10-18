@@ -1,5 +1,6 @@
 package com.uc.bpg.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import com.uc.bpg.domain.BpData;
@@ -48,7 +49,14 @@ public class DataReceiverServiceImpl extends ServiceBase implements DataReceiver
 		examine.setMac(mac);
 		examine.setStatus(status);
 		if(data!=null){
-			examine.setData(data.toString());
+		    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			examine.setData(
+					String.format("高压:[%d]/低压:[%d] 心率:[%d] ano=[%d] 测量时间：[%s]", 							
+							data.getHighPressure(), 
+							data.getLowPressure(), 
+							data.getHeartBeatRate(),
+							data.getHeartBeatAnnotation(),
+							format.format(data.getExamineTime())));
 		} else {
 			examine.setData("状态报告");
 		}

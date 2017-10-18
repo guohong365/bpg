@@ -70,6 +70,7 @@ public class DataReveiverControllerImpl extends LoggerSupportorImpl {
 				useTime=Calendar.getInstance().getTime();
 			}		    
 		    BpData data=new BpData(Integer.parseInt(highPressure), Integer.parseInt(lowPressure), Integer.parseInt(heartBeatRate), Integer.parseInt(heartBeatAnnottation), useTime);
+		    System.err.println(data.toString());
 		    DeviceStatus statusDetail=new DeviceStatus(mac, Integer.parseInt(status), Integer.parseInt(battery), new Date());		    
 		    getServcie().insertUsage(mac, data, statusDetail);			    
 		}
@@ -93,6 +94,9 @@ public class DataReveiverControllerImpl extends LoggerSupportorImpl {
 			String battery,
 			@RequestParam(value="Sts", required=true)
 			String status){
+		if(getLogger().isTraceEnabled()){
+			System.err.println("mac="+ mac + " bat=" + battery + " Sts=" + status);
+		}
 		DeviceStatus detial=new DeviceStatus(mac, Integer.parseInt(status), Integer.parseInt(battery), new Date());
 		getServcie().insertStatus(mac,detial);		
 		return getReturnString();
