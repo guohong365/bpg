@@ -121,13 +121,6 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-xs-12">
-
-                          <div class="form-group">
-                            <form:label path="adminFlag" cssClass="control-label col-xs-12 col-sm-3">是系统管理员：</form:label>
-                            <form:checkbox path="adminFlag" cssClass="middle" />
-                          </div>
-                        </div>
                       </div>
                     </div>
                     <c:if test="${action != 'new' }">

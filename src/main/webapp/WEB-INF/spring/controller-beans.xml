@@ -170,6 +170,7 @@
 	<bean id="deviceUsageRecordListController"
 		class="com.uc.bpg.controller.impl.DeviceUsageRecordListControllerImpl">
 		<property name="service" ref="deviceUsageListService" />
+		<property name="pageBasePath" value="/common/usage" />
 	</bean>
 	
 	<bean id="checkInExportorFacotry" class="com.uc.bpg.export.CheckInExportorFactory" />

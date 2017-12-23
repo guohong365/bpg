@@ -10,7 +10,7 @@ import com.uc.web.service.AppDetailServiceBase;
 
 public class RoleDetailServiceImpl extends AppDetailServiceBase implements RoleDetailService {
 	public RoleMapper getMapper(){
-		return (RoleMapper)getMapper();
+		return (RoleMapper)super.getMapper();
 	}
 	
 	@Override

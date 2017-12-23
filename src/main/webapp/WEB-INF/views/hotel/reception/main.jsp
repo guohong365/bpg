@@ -11,7 +11,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta charset="utf-8" />
-<title><%=SystemConfig.getConfig("system.name", "")%></title>
+<title><%=SystemConfig.getInstance().getConfigString("system.name", "")%></title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <!-- bootstrap & fontawesome -->
@@ -115,8 +115,8 @@ div.check_in img:hover{
         <a href="#" class="navbar-brand">
           <small>
             <i class="fa fa-medkit bigger"></i>
-            <%=SystemConfig.getConfig("system.name", "")%><small><%=(SystemConfig.getConfig("SystemType", "").equals("test")?"-测试版":"") %>
-              Ver.<%=SystemConfig.getConfig("system.version", "")%></small>
+            <%=SystemConfig.getInstance().getConfigString("system.name", "")%><small><%=(SystemConfig.getInstance().getConfigString("SystemType", "").equals("test")?"-测试版":"") %>
+              Ver.<%=SystemConfig.getInstance().getConfigString("system.version", "")%></small>
           </small>
         </a>
         <!-- /section:basics/navbar.layout.brand -->
@@ -253,17 +253,17 @@ div.check_in img:hover{
           <div class="modal-dialog">          
             <div class="modal-content">
               <form id="room_checkout_form" action="#">
-              <div class="modal-header">
-                <button class="close" data-dismiss="modal" type="button">&times;</button>
-                <h4 class="blue">退房</h4>
-              </div>
-              <div id="checkout-content" class="modal-body">
+                <div class="modal-header">
+                  <button class="close" data-dismiss="modal" type="button">&times;</button>
+                  <h4 class="blue">退房</h4>
+                </div>
+                <div id="checkout-content" class="modal-body">
                 
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">确定</button>
-                <button class="btn" data-dismiss="modal" type="button">取消</button>
-              </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit">确定</button>
+                  <button class="btn" data-dismiss="modal" type="button">取消</button>
+                </div>
               </form>
             </div>
           </div>
@@ -483,11 +483,11 @@ div.check_in img:hover{
 			var html='<div class="row"><div class="col-xs-12"><div class="widget-box"><div class="widget-header red"><h4 class="widget-title">'+
 			        data.roomNo +
 			        '</h4></div><div class="widget-body"><div class="widget-main"><div class="row"><div class="col-xs-12 col-sm-6">'+
-			        '共使用' + (data.data && data.data.usages? data.data.usages.length:0)+'次'
+			        '共使用' + (data.data.usages? data.data.usages.length:0)+'次'
 			        +'</div></div>';
-			if(data.data && data.data.usages && data.data.usages.length>0){
-				  html +='<input type="hidden" name="checkIn" value="'+ data.data.checkIn +'" />';
-				  html +='<input type="hidden" name="charge" value="' + data.data.charge +'" />';
+			html +='<input type="hidden" name="checkIn" value="'+ data.data.checkIn +'" />';
+			html +='<input type="hidden" name="charge" value="' + data.data.charge +'" />';        
+			if(data.data.usages && data.data.usages.length>0){				  
 				  html +='<div id="detailTable" class="row hidden"><div class="col-xs-12"><table class="table table-striped"><thead><tr><td>设备号</td><td>使用时间</td><td>收费</td></tr></thead>'+
 				  '<tbody>';
 				  for(var i=0; i<data.data.usages.length; i++){
@@ -571,12 +571,20 @@ div.check_in img:hover{
 		
 		$('#room_checkout_form').on('submit', function(event){
 			event.preventDefault();
+			console.log($('#room_checkout_form'));
+			var data=$('#room_checkout_form').serialize();
+			console.log(data);		
+			
 			$.ajax({
 				type : 'post',
 				url:  '<c:url value="/hotel/reception/checkout" />',
-				data : $('#room_checkout_form').serialize(),
+				data : data,
 				dataType : 'text'
-			}).fail(function(){
+			})
+			.complete(function(){
+				$('#room_checkout_dlg').modal('hide');
+			})
+			.fail(function(){
 				$.gritter.add({
 			    title:'退房',
 			    text:'执行退房结算错误，请联系系统管理员！',
@@ -595,8 +603,7 @@ div.check_in img:hover{
 				    text:'执行退房结算错误，请联系系统管理员！',
 				    class_name:'gritter-error'
 				    });
-				}
-				$('#room_checkout_dlg').modal('hide');
+				}				
 			});
 			
 		});

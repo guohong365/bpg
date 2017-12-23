@@ -232,7 +232,7 @@
                       <c:if test="${item.hotel !=null and item.valid}">
                         <c:set var="allotName" value="收回" />
                         <c:set var="allotAction" value="withdraw" />
-                        <c:set var="allotClass" value="btn-warning"/>
+                        <c:set var="allotClass" value="btn-warning ${item.roomNo==null or item.publicUsage? '':'disabled'}"/>
                         <c:set var="disabled" value="disabled" />
                       </c:if>
                       <c:if test="${!item.valid}">
@@ -336,7 +336,7 @@
 		});
 		
 		$('#listResult').on('click', '[data-view-history]',  function(){
-			var selectWin=window.open('<c:url value="${baseUrl}/detail?action=viewHis&selectedId='+$(this).attr('data-item') +'" />',"historyWin","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=yes, width=1024, height=768")			
+			var selectWin=window.open('<c:url value="${baseUrl}/detail?action=viewHis&selectedId='+$(this).attr('data-item') +'" />',"historyWin","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=yes, width=1024, height=768");			
 		});
 		
 	});

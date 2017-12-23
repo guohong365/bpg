@@ -13,6 +13,7 @@
     <result column="DEVICE_SERIAL" jdbcType="VARCHAR" property="deviceSerial"/>
     <result column="HOTEL_NAME" jdbcType="VARCHAR" property="hotelName"/>
     <result column="DEVICE_STATUS" jdbcType="VARCHAR" property="deviceStatus"/>
+    <result column="CAN_CANCEL" jdbcType="BIT" property="canCancel"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -44,13 +45,22 @@
     </where>
   </sql>
   <sql id="columns">
-    ID, UUID, HOTEL, STOREY, ROOM_NO,VALID, DEVICE,DEVICE_NAME, DEVICE_SERIAL,DEVICE_STATUS, HOTEL_NAME
+    ID, UUID, HOTEL, STOREY, ROOM_NO,VALID, DEVICE,DEVICE_NAME, DEVICE_SERIAL,DEVICE_STATUS, HOTEL_NAME, CAN_CANCEL
   </sql>
   <sql id="selectSql">
-    select a.ID, a.UUID, a.HOTEL, a.STOREY, a.ROOM_NO, a.VALID,
-      b.ID as DEVICE, b.SERIAL_NO as DEVICE_SERIAL,
+    select 
+      a.ID as ID, 
+      a.UUID as UUID, 
+      a.HOTEL as HOTEL, 
+      a.STOREY as STOREY, 
+      a.ROOM_NO as ROOM_NO, 
+      a.VALID as VALID,
+      b.ID as DEVICE, 
+      b.SERIAL_NO as DEVICE_SERIAL,
       concat_ws(' ', c.PRODUCT,c.NAME) as DEVICE_NAME,  
-      d.STATUS as DEVICE_STATUS, e.NAME as HOTEL_NAME
+      d.STATUS as DEVICE_STATUS, 
+      e.NAME as HOTEL_NAME,
+      (b.ID is null) as CAN_CANCEL 
     from t_room a
     left join t_device b on b.ROOM = a.ID
     left join t_type c on c.ID=b.TYPE

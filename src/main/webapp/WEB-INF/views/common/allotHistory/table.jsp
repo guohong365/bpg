@@ -20,7 +20,7 @@
     <input type="hidden" id="action" name="action" value="${action}" />
     <input type="hidden" id="selectedId" name="selectedId" value="" />
     <input type="hidden" id="queryInput.queryRoom" name="queryInput.queryRoom" value="${queryInput.queryRoom }" />
-    <input type="hidden" id="queryInput.querySelectedId" name="queryInput.querySelectedId" value="${queryInput.querySelectedId}">
+    <input type="hidden" id="queryInput.queryMainId" name="queryInput.queryMainId" value="${queryInput.queryMainId}">
     <input type="hidden" id="queryInput.queryHotelName" name="queryInput.queryHotelName" value="${queryInput.queryHotelName }" />
     <input type="hidden" id="queryInput.queryOperation" name="queryInput.queryOperation" value="${queryInput.queryOperation }" />
     <input type="hidden" id="queryInput.queryOperaterName" name="queryInput.queryOperaterName" value="${queryInput.queryOperaterName }" />

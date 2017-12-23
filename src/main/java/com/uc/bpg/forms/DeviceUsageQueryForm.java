@@ -45,6 +45,5 @@ public class DeviceUsageQueryForm extends DetailListQueryFormImpl {
 	}
 	public void setQueryRoomNo(String queryRoomNo) {
 		this.queryRoomNo = queryRoomNo;
-	}
-	
+	}	
 }

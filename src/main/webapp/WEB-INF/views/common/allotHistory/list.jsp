@@ -171,7 +171,7 @@
                   <div class="row"><!-- search condition begin -->
                     <div class="col-xs-12">
                       <form:form class="form-horizontal" role="form" modelAttribute="queryInput" action="#">
-                        <form:hidden path="querySelectedId"/>
+                        <form:hidden path="queryMainId"/>
                         <form:hidden path="queryHotel"/>
                         <div class="row">
                           <div class="col-xs-12 col-sm-6">
@@ -261,7 +261,7 @@
                         <input type="hidden" id="action" name="action" value="${action}" />
                         <input type="hidden" id="selectedId" name="selectedId" value="" />
                         <input type="hidden" id="queryInput.queryRoom" name="queryInput.queryRoom" value="${queryInput.queryRoom }" />
-                        <input type="hidden" id="queryInput.querySelectedId" name="queryInput.querySelectedId" value="${queryInput.querySelectedId}">
+                        <input type="hidden" id="queryInput.queryMainId" name="queryInput.queryMainId" value="${queryInput.queryMainId}">
                         <input type="hidden" id="queryInput.queryHotelName" name="queryInput.queryHotelName" value="${queryInput.queryHotelName }" />
                         <input type="hidden" id="queryInput.queryOperation" name="queryInput.queryOperation" value="${queryInput.queryOperation }" />
                         <input type="hidden" id="queryInput.queryOperaterName" name="queryInput.queryOperaterName" value="${queryInput.queryOperaterName }" />

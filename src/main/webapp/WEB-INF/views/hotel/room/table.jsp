@@ -113,9 +113,16 @@
                           <button data-original-title="修改" data-rel="tooltip" title="" class="btn btn-xs btn-warning" data-action="modify" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-edit bigger-120"></i>修改
                           </button>
-                          <button data-original-title="注销" data-rel="tooltip" title="" class="btn btn-xs btn-danger" data-action="cancel" data-item="${item.id }" type="button">
+                          <c:if test="${item.valid}">
+                          <button data-original-title="注销" data-rel="tooltip" title="" class="btn btn-xs btn-danger ${item.canCancel?'':'disabled'}" data-action="cancel" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-trash-o bigger-120"></i>注销
                           </button>
+                          </c:if>
+                          <c:if test="${!item.valid}">
+                          <button data-original-title="激活" data-rel="tooltip" title="" class="btn btn-xs btn-success }" data-action="reactive" data-item="${item.id }" type="button">
+                            <i class="ace-icon fa fa-check bigger-120"></i>激活
+                          </button>
+                          </c:if>
                         </div>
                       </td>
                     </tr>

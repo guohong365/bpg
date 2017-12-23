@@ -54,11 +54,6 @@
                           <div class="col-xs-12 col-sm-3">用户描述：</div>
                           <div class="col-xs-12 col-sm-9 blue">${detailInput.description}</div>
                         </div>
-                        <c:if test="detailInput.adminFlag">
-                          <div class="form-group col-xs-12">
-                            <div class="col-xs-12 blue">系统管理员</div>
-                          </div>
-                        </c:if>
                       </div>
                     </div>
                     <div class="hr hr-2"></div>

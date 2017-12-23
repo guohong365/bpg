@@ -32,6 +32,6 @@ public class BusinessDetailListControllerBase<DetailType, ChildQueryType extends
 	}
 	@Override
 	public UserProfileImpl getUser(){
-		return (UserProfileImpl) getUser();
+		return (UserProfileImpl) super.getUser();
 	}
 }

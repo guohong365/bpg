@@ -31,6 +31,9 @@ public class Room  extends EntityBase {
 	private String deviceSerial;
 	@ListColumn(value="设备状态",order=5)
 	private Integer deviceStatus;
+	
+	private Boolean canCancel;
+	
 	public String getDeviceStatusString(){
 		return DeviceStatusDecode.decode(getDeviceStatus());
 	}
@@ -99,6 +102,12 @@ public class Room  extends EntityBase {
 	}
 	public void setDeviceStatus(Integer deviceStatus) {
 		this.deviceStatus = deviceStatus;
+	}
+	public Boolean getCanCancel() {
+		return canCancel;
+	}
+	public void setCanCancel(Boolean canCancel) {
+		this.canCancel = canCancel;
 	}
 	
 	

@@ -16,7 +16,7 @@ public class DeviceBatchFileParserImpl extends LoggerSupportorImpl implements De
 		getLogger().trace(allLiens);
 		
 		String[] lines=allLiens.split("\r\n|\n");
-		
+		 
 		int index=0;
 		String line;
 		String action = null;

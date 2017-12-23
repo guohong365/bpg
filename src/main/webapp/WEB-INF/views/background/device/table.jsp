@@ -105,11 +105,7 @@
                   <c:set var="delClass" value=""></c:set>
                   <c:if test="${!item.valid}">
                     <c:set var="delClass" value="deleted-text red"></c:set>
-                  </c:if>
-                  <c:set var="roomUsage" value="${item.roomNo}"></c:set>
-                  <c:if test="${item.publicUsage}">
-                    <c:set var="roomUsage" value="公用"></c:set>
-                  </c:if>        
+                  </c:if>                         
                   <c:set var="statuseClass" value=""></c:set>
                   <c:choose>
                     <c:when test="${item.status==0}">
@@ -131,7 +127,7 @@
                     <td>${item.typeName}</td>
                     <td>${item.serialNo}</td>
                     <td>${item.hotelName}</td>
-                    <td>${roomUsage}</td>
+                    <td>${item.publicUsage? '公用': item.roomNo}</td>
                     <td><span class="label ${statusClass}">${item.statusDetail}</span></td> 
                     <td>
                       <c:set var="disabled" value="" />
@@ -142,7 +138,7 @@
                       <c:if test="${item.hotel !=null and item.valid}">
                         <c:set var="allotName" value="收回" />
                         <c:set var="allotAction" value="withdraw" />
-                        <c:set var="allotClass" value="btn-warning"/>
+                        <c:set var="allotClass" value="btn-warning ${item.roomNo!=null or item.publicUsage ? '':'disabled'}"/>
                         <c:set var="disabled" value="disabled" />
                       </c:if>
                       <c:if test="${!item.valid}">

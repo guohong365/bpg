@@ -257,8 +257,8 @@
 		onClickAction : function( event ) {			
 			var actionName = $(event.target).attr('data-action');
 			console.log('action button clicked: ' + actionName);
-			var action = $('#action');
-			action.val(actionName);
+			var $action = $('#action');
+			$action.val(actionName);
 			var selectedId =$(event.target).attr('data-item');			
 			$('#selectedId').val(selectedId);			
 			console.log('event.taget: ' + event.target);			
@@ -269,7 +269,7 @@
 				async: false,
 				type : "GET",
 				url : this._o.detailUrl,
-				data : $('#FORM_TABLE_FUNCTION').serialize(),
+				data : 'action='+$action.val()+'&selectedId=' + selectedId,
 				dataType : "html"
 			}).done(function(data) {
 				console.log('detail dialog loaded....');

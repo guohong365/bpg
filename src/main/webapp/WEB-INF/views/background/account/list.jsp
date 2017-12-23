@@ -286,6 +286,9 @@
                           <button data-original-title="查看" data-rel="tooltip" title="" class="btn btn-xs btn-primary" data-action="view" data-item="${item.id }" type="button">
                             <i class="ace-icon fa fa-search bigger-120"></i>查看
                           </button>
+                          <button data-original-title="明细" data-rel="tooltip" title="" class="btn btn-xs btn-success" data-view-detail="detailList" data-item="${item.id }" type="button">
+                            <i class="ace-icon fa fa-search bigger-120"></i>明细
+                          </button>                          
                         </div>
                       </td>
                     </tr>  
@@ -387,5 +390,9 @@
 			},
 			baseUrl : '<c:url value="${baseUrl}" />',
 		});
+		
+	    $('#listResult').on('click', '[data-view-detail]', function(){
+	        var selectWin=window.open('<c:url value="${baseUrl}/detail?action=viewDetail&selectedId='+$(this).attr('data-item') +'" />',"billDetail","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=yes, width=1024, height=768");
+	      });		
 	});
 </script>

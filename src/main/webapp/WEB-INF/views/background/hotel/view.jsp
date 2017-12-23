@@ -157,7 +157,7 @@
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">注销人：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static blue"><fmt:formatDate value="${detailInput.cancelaterName}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                            <p class="form-control-static blue">${detailInput.cancelaterName}</p>
                           </div>
                         </div>
                       </div>
@@ -165,7 +165,7 @@
                         <div class="form-group">
                           <label class="control-label col-xs-12 col-sm-4">注销时间：</label>
                           <div class="col-xs-12 col-sm-8">
-                            <p class="form-control-static blue">${detailInput.cancelTime}</p>
+                            <p class="form-control-static blue"><fmt:formatDate value="${detailInput.cancelTime}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                           </div>
                         </div>
                       </div>

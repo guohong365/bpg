@@ -93,11 +93,28 @@ public class RoomDetailControllerImpl extends BusinessDetailControllerBase<Room>
 	@Override
 	protected void onBeforSaveDetail(UserProfile user, String action, Object entity) throws Exception {
 		Room detail=(Room) entity;
-		if(WebAction.NEW.equals(action)){
+		switch (action) {
+		case WebAction.NEW:
 			detail.setUuid(UUID.randomUUID().toString());
 			detail.setHotel((Long) user.getOrgnization().getId());
+			break;
 		}
 		super.onBeforSaveDetail(user, action, detail);
+	}
+	
+	@Override
+	protected void saveCancelate(Object detail) {
+		Room room=new Room();
+		room.setId(((Room)detail).getId());
+		room.setValid(false);
+		getService().updateSelective(room);
+	}
+	@Override
+	protected void saveReactive(Object detail) {
+		Room room=new Room();
+		room.setId(((Room)detail).getId());
+		room.setValid(true);
+		getService().updateSelective(room);		
 	}
 	
 }

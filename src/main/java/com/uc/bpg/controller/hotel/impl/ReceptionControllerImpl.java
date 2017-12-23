@@ -1,5 +1,7 @@
 package com.uc.bpg.controller.hotel.impl;
 
+import static org.junit.Assert.fail;
+
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +52,16 @@ public class ReceptionControllerImpl  extends ControllerProxyBaseImpl {
 	
 	public ReceptionService getService() {
 		return (ReceptionService) super.getService();
+	}
+	
+	@Override
+	public String getModuleName() {
+		return "酒店前台子系统";
+	}
+	
+	@Override
+	public String getModuleTitle() {
+		return "酒店前台子系统";
 	}
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
@@ -121,14 +133,14 @@ public class ReceptionControllerImpl  extends ControllerProxyBaseImpl {
 			Long checkIn,
 			@RequestParam("charge")
 			BigDecimal charge,
-			@RequestParam("id")
+			@RequestParam(value="id", required=false)
 			List<Long> ids,
 			Model model){
 		getLogger().trace("checkIn={}", checkIn);
 		getLogger().trace(ids==null?"": ids.toString());
 		Charging charging=new Charging();
 		BigDecimal chargingStandard;
-		if(ids.size()>0){
+		if(ids!=null && ids.size()>0){
 			chargingStandard=getService().selectChargingStandard(ids);
 		} else {
 			chargingStandard=new BigDecimal(0);

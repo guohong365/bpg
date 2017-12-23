@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="modal-body">
-          <div class="row">
+          <div class="row"> 
             <div class="col-xs-12">
               <div class="widget-box">
                 <div class="widget-header blue">

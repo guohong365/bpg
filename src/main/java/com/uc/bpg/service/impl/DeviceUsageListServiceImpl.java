@@ -30,11 +30,7 @@ public class DeviceUsageListServiceImpl extends BusinessListServiceBase<DeviceUs
 				condition.andFieldLessThanOrEqualTo("USE_TIME", queryForm.getQueryUseTimeTo());
 			}
 			if(queryForm.getQueryPayed()!=null){
-				if(queryForm.getQueryPayed()){
-					condition.andFieldEqualTo("PAYED", true);
-				}else {
-					condition.andFieldEqualTo("PAYED", false);
-				}
+				condition.andFieldEqualTo("PAYED", queryForm.getQueryPayed());
 			}			
 			return true;
 		} else {

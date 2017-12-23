@@ -29,9 +29,9 @@ public class AccountDetailControllerImpl
 	
 	@Override
 	protected String onGetDetailPage(String action, Object selectedId, Model model) {
+		getLogger().trace("account detail: action=" + action);
 		switch(action){
-		case ACTION_VIEW_DETAIL:
-			
+		case ACTION_VIEW_DETAIL:			
 			return onGetViewDetailPage(selectedId, model);
 		case ACTION_PAY:
 		case ACTION_VERIFY:
@@ -52,7 +52,7 @@ public class AccountDetailControllerImpl
 		return getBillDetailPage();
 	}
 	
-	private String getBillDetailPage() {
+	private String getBillDetailPage() {		
 		return "common/usage/list";
 	}
 

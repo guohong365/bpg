@@ -16,8 +16,6 @@
 <property name="enabled" value="true" />
 </bean>
 
-
-
 <task:scheduler id="billGeneratorScheduler" pool-size="1"/>
 
 <task:scheduled-tasks scheduler="billGeneratorScheduler">
