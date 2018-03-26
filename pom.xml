@@ -173,8 +173,47 @@
 			<version>1.0.0-BUILD-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<profiles>
+	  <profile>
+	    <id>debug</id>
+	    <activation>
+	      <activeByDefault>true</activeByDefault>	      
+	    </activation>
+	    <properties>
+	      <package.name>bpg-debug</package.name>
+	      <target.build>debug</target.build>
+	    </properties>
+	  </profile>
+	  <profile>
+	    <id>release</id>
+	    <properties>
+	      <package.name>bpg</package.name>
+	      <target.build>release</target.build>
+	    </properties>
+	  </profile>
+	  <profile>
+	    <id>test</id>
+	    <properties>
+	      <package.name>bpg-test</package.name>
+	      <target.build>test</target.build>
+	    </properties>
+	  </profile>
+	</profiles>
 	<build>
-		<finalName>bpg</finalName>
+	  <resources>
+	    <resource>
+	      <directory>src/main/resources</directory>
+	      <excludes>
+	        <exclude>debug/*</exclude>
+	        <exclude>release/*</exclude>
+	        <exclude>test/*</exclude>
+	      </excludes>
+	    </resource>
+	    <resource>
+	      <directory>src/main/resources/${target.build}</directory>
+	    </resource>
+	  </resources>
+		<finalName>${package.name}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
