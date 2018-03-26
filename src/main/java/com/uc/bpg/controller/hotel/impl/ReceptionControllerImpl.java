@@ -1,7 +1,5 @@
 package com.uc.bpg.controller.hotel.impl;
 
-import static org.junit.Assert.fail;
-
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;

@@ -98,9 +98,7 @@
      </if>
    </set>  
  </update>
- <delete id="deleteDetail" parameterType="com.uc.bpg.domain.DeviceType">
-   delete from t_type where ID = #{id, jdbcType=INTEGER}
- </delete>    
+
  <select id="selectNextOrder" resultType="java.lang.Long">
   select ifnull(max(SHOW_ORDER),0) + 1 from t_type
  </select>

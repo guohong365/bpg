@@ -26,11 +26,11 @@
 	<!-- Application Loggers -->
 	
 	<logger name="com.uc">
-		<level value="error" />
+		<level value="trace" />
 	</logger>
 	
 	 <logger name="com.uc.bpg.test" additivity="false">
-    <level value="error" />
+    <level value="trace" />
     <appender-ref ref="console1"/>
   </logger>
 	
@@ -38,7 +38,7 @@
 	<!-- 3rdparty Loggers -->
 	
 	<logger name="org.springframework.core">
-		<level value="error" />
+		<level value="trace" />
 	</logger>
 
 	<logger name="org.springframework.beans">
@@ -46,15 +46,15 @@
 	</logger>
 	
 	<logger name="org.springframework.context">
-		<level value="error" />
+		<level value="trace" />
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="error" />
+		<level value="trace" />
 	</logger>
 	
   <logger name="org.springframework.security">
-    <level value="error" />
+    <level value="info" />
   </logger>
 
 	<!-- Root Logger -->
