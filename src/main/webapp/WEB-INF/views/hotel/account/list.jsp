@@ -348,7 +348,6 @@
 			language : 'zh-CN'
 		});
 		$('#content_container').bindPage({
-			bindPagation : false,
 			reset : function() {
 				$('#queryHotelName').val();
 				$('#queryPayableFrom').val();

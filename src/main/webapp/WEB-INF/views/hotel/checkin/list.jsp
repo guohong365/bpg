@@ -94,62 +94,13 @@
               <table class="table table-striped table-bordered table-hover dataTable no-footer">
                 <thead>
                   <tr>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='房间' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="房间">房间</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="房间">房间</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='入住时间' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="入住时间">入住时间</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="入住时间">入住时间</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='退房时间' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="退房时间">退房时间</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="退房时间">退房时间</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='使用次数' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="使用次数">使用次数</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="使用次数">使用次数</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='应付款' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="应付款">应付款</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="应付款">应付款</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='入住登记' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="入住登记">入住登记</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="入住登记">入住登记</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='退房登记' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="退房登记">退房登记</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="退房登记">退房登记</th>
-                      </c:otherwise>
-                    </c:choose>                    
+                    <th class="center sorting${queryInput.queryOrderBy =='房间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='房间' ? 'data-active=\"true\"' : '' } data-column="房间">房间</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='入住时间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='入住时间' ? 'data-active=\"true\"' : '' } data-column="入住时间">入住时间</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='退房时间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='退房时间' ? 'data-active=\"true\"' : '' } data-column="退房时间">退房时间</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='使用次数' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='使用次数' ? 'data-active=\"true\"' : '' } data-column="使用次数">使用次数</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='应付款' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='应付款' ? 'data-active=\"true\"' : '' } data-column="应付款">应付款</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='入住登记' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='入住登记' ? 'data-active=\"true\"' : '' } data-column="入住登记">入住登记</th>
+                    <th class="center sorting${queryInput.queryOrderBy =='退房登记' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='退房登记' ? 'data-active=\"true\"' : '' } data-column="退房登记">退房登记</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -238,7 +189,6 @@
 			language : 'zh-CN'
 		});
 		$('#content_container').bindPage({
-			bindPagation : false,
 			reset : function() {
 				$('#queryPayableFrom').val();
 				$('#queryPayableTo').val();

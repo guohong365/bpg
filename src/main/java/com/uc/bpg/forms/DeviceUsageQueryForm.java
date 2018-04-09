@@ -46,4 +46,12 @@ public class DeviceUsageQueryForm extends DetailListQueryFormImpl {
 	public void setQueryRoomNo(String queryRoomNo) {
 		this.queryRoomNo = queryRoomNo;
 	}	
+	static final String ORDER_BY_COLUMN_USE_TIME="";
+	static final String ORDER_BY_COLUMN_ROOM_NO="";
+	static final String ORDER_BY_COLUMN_CHARGE="";
+	static final String ORDER_BY_COLUMN_PAYED="";
+	static final String ORDER_BY_COLUMN_USE_TIME_NAME="";
+	static final String ORDER_BY_COLUMN_ROOM_NO_NAME="";
+	static final String ORDER_BY_COLUMN_CHARGE_NAME="";
+	static final String ORDER_BY_COLUMN_PAYED_NAME="";
 }

@@ -5,37 +5,23 @@ import org.springframework.util.StringUtils;
 import com.uc.bpg.forms.DeviceUsageQueryForm;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.DeviceUsageListService;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.QueryCondition;
+import com.uc.web.forms.ListQueryForm;
 
 public class DeviceUsageListServiceImpl extends BusinessListServiceBase<DeviceUsageQueryForm>
 	implements DeviceUsageListService{
-	
 	@Override
-	public boolean prepareExample(DeviceUsageQueryForm queryForm, Example example) {
-		if(super.prepareExample(queryForm, example)){
-			QueryCondition condition= example.or();
-			if(queryForm.getQueryMainId()!=null){
-				condition.andFieldEqualTo("BILL", queryForm.getQueryMainId());
-			}
-			if(!StringUtils.isEmpty(queryForm.getQueryHotelName())){
-				condition.andFieldLike("HOTEL_NAME", queryForm.getQueryHotelName() + "%");
-			} else {
-				queryForm.setQueryHotelName(null);
-			}
-			if(queryForm.getQueryUseTimeFrom()!=null){
-				condition.andFieldGreaterThanOrEqualTo("USE_TIME", queryForm.getQueryUseTimeFrom());
-			} 
-			if(queryForm.getQueryUseTimeTo()!=null){
-				condition.andFieldLessThanOrEqualTo("USE_TIME", queryForm.getQueryUseTimeTo());
-			}
-			if(queryForm.getQueryPayed()!=null){
-				condition.andFieldEqualTo("PAYED", queryForm.getQueryPayed());
-			}			
-			return true;
-		} else {
-			return false;
+	public boolean prepareQueryForm(ListQueryForm query) {
+		super.prepareQueryForm(query);
+		DeviceUsageQueryForm queryForm=(DeviceUsageQueryForm) query;
+		if(StringUtils.isEmpty(queryForm.getQueryHotelName())){
+			queryForm.setQueryHotelName(null);
 		}
+		queryForm.setQueryPayed(queryForm.getQueryPayed()!=null && queryForm.getQueryPayed());
+		queryForm.setQueryInBill(queryForm.getQueryInBill()!=null && queryForm.getQueryInBill());
+		if(StringUtils.isEmpty(queryForm.getQueryRoomNo())) {
+			queryForm.setQueryRoomNo(null);
+		}		
+		return true;
 	}
 
 }

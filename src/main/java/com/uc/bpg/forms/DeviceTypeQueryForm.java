@@ -4,9 +4,9 @@ import java.util.Map;
 
 
 public class DeviceTypeQueryForm extends QueryFormBase  {
-	public static final String COL_NAME="NAME";
-	public static final String COL_PRODUCT="PRODUCT";
-	public static final String COL_SHOW_ORDER="SHOW_ORDER";
+	public static final String ORDER_BY_COLUMN_NAME="型号";
+	public static final String ORDER_BY_COLUMN_PRODUCT="产品名称";
+	public static final String ORDER_BY_COLUMN_SHOW_ORDER="显示顺序";
 	
 	private String queryName;
 	private String queryProduct;
@@ -15,9 +15,9 @@ public class DeviceTypeQueryForm extends QueryFormBase  {
 	@Override
 	protected void buildOrderByColumnMap() {
 		Map<String, String> map= getColumnMap();
-		map.put(COL_NAME, COL_NAME);
-		map.put(COL_PRODUCT, COL_PRODUCT);
-		map.put(COL_SHOW_ORDER, COL_SHOW_ORDER);		
+		map.put(ORDER_BY_COLUMN_NAME, "NAME");
+		map.put(ORDER_BY_COLUMN_PRODUCT, "PRODUCT");
+		map.put(ORDER_BY_COLUMN_SHOW_ORDER, "SHOW_ORDER");		
 	}
 
 

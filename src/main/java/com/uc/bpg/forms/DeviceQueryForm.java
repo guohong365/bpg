@@ -1,7 +1,6 @@
 package com.uc.bpg.forms;
 
 public class DeviceQueryForm extends QueryFormBase{
-	private Long queryHotel;
 	private String querySerialNo;
 	private String queryName;
 	private Long queryType;
@@ -10,12 +9,6 @@ public class DeviceQueryForm extends QueryFormBase{
 	private Boolean queryPublicUsage;
 	private Integer queryStatus;
 	
-	public Long getQueryHotel() {
-		return queryHotel;
-	}
-	public void setQueryHotel(Long queryHotel) {
-		this.queryHotel = queryHotel;
-	}
 	public String getQuerySerialNo() {
 		return querySerialNo;
 	}

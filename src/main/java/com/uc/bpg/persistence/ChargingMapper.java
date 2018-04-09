@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.uc.web.persistence.AppMapper;
+import com.uc.web.persistence.AppInsertMapper;
+import com.uc.web.persistence.AppOptimizedMapper;
+import com.uc.web.persistence.AppSelectByKeyMapper;
 
-public interface ChargingMapper extends AppMapper {
+public interface ChargingMapper extends AppInsertMapper, AppSelectByKeyMapper, AppOptimizedMapper {
 
 	BigDecimal selectChargingStandard(
 			@Param("ids")

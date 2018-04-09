@@ -2,16 +2,15 @@ package com.uc.bpg.service.impl;
 
 import java.util.List;
 
-import com.uc.bpg.Constant;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.domain.Hotel;
+import com.uc.bpg.forms.DeviceUsageQueryForm;
+import com.uc.bpg.forms.HotelQueryForm;
 import com.uc.bpg.persistence.BillMapper;
 import com.uc.bpg.persistence.DeviceUsageMapper;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.service.BillGeneratorSevice;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 import com.uc.web.service.ServiceBase;
 
 public class BillGeneratorServiceImpl extends ServiceBase implements BillGeneratorSevice{
@@ -45,24 +44,22 @@ public class BillGeneratorServiceImpl extends ServiceBase implements BillGenerat
 	@Override
 	public
 	List<Hotel> selectHotels(){
-		Example example=new ExampleImpl();
-		example.or()
-		.andFieldEqualTo("VALID", true)
-		.andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL)
-		.andFieldGreaterThan("OWNED_DEVICE", 0);
-		long count=getHotelMapper().selectCountByExample(example);
-		return (List<Hotel>) getHotelMapper().selectByExample(example, 0, count);
+		HotelQueryForm hotelQueryForm=new HotelQueryForm();
+		hotelQueryForm.setQueryAll(false);
+		hotelQueryForm.setQueryOwnedDeviceFrom(1);
+		long count=getHotelMapper().selectCountOptimized(hotelQueryForm);
+		return (List<Hotel>) getHotelMapper().selectOptimized(hotelQueryForm, 0, count);
 	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public
 	List<DeviceUsage> selectUnbilledUsage(Long hotel){
-		Example example=new ExampleImpl();
-		example.or()
-		.andFieldEqualTo("HOTEL", hotel)
-		.andFieldEqualTo("IN_BILL", false);		
-		long count=getUsageMapper().selectCountByExample(example);
-		return (List<DeviceUsage>) getUsageMapper().selectByExample(example, 0, count);
+		DeviceUsageQueryForm usageQueryForm=new DeviceUsageQueryForm();
+		usageQueryForm.setQueryHotel(hotel);
+		usageQueryForm.setQueryInBill(false);
+		
+		long count=getUsageMapper().selectCountOptimized(usageQueryForm);
+		return (List<DeviceUsage>) getUsageMapper().selectOptimized(usageQueryForm, 0, count);
 	}
 	@Override
 	public

@@ -18,60 +18,33 @@
     <result column="TYPE" jdbcType="CHAR" property="type"/>
     <result column="CREATER_NAME" jdbcType="VARCHAR" property="createrName"/>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="columns">
-    ID, UUID, PARENT, NAME, ADDRESS, TELE, LINKMAN, DESCRIPTION, VALID, CREATER, 
-    CREATE_TIME, TYPE
-  </sql>
-  <select id="selectByExample" parameterType="map" resultMap="orgnizationDetail">
-    select
-    <include refid="columns" />
-    from t_orgnization
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />    
-      <if test="example.orderByClause != null">
-        order by ${example.orderByClause}
-      </if>  
+    <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
     </if>
+  </sql> 
+  
+  <sql id="selectSql">
+    select ID, UUID, PARENT, NAME, ADDRESS, TELE, LINKMAN, DESCRIPTION, VALID, CREATER, 
+    CREATE_TIME, TYPE
+    from t_orgnization
+  </sql>
+  <sql id="whereSql">
+  </sql>
+  <select id="selectOptimized" parameterType="map" resultMap="orgnizationDetail">
+    <include refid="selectSql" />
+    <include refid="whereSql"/>
+    <include refid="orderBySql" />
+    limit ${offset}, ${count}
+  </select>
+  <select id="selectCountOptimized">
+  select COUNT(*) from t_orgnization
+  <include refid="whereSql" />
   </select>
   <select id="selectById" parameterType="java.lang.Long" resultMap="orgnizationDetail">
-    select 
-    <include refid="columns" />
-    from t_orgnization
+    <include refid="selectSql" />
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteDetail" parameterType="com.uc.bpg.domain.OrgnizationImpl">
-    delete from t_orgnization
-    where ID = #{id,jdbcType=INTEGER}
-  </delete>
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     insert into t_orgnization (UUID, PARENT, 
       NAME, ADDRESS, 
@@ -85,12 +58,6 @@
       #{type,jdbcType=VARCHAR}
       )
   </insert>
-   <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
-    select count(*) from t_orgnization
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
   <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.OrgnizationImpl">
     update t_orgnization
     <set>

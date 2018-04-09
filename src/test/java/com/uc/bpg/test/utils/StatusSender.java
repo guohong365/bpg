@@ -7,9 +7,8 @@ import java.util.Random;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.uc.bpg.domain.Device;
+import com.uc.bpg.forms.DeviceQueryForm;
 import com.uc.bpg.persistence.DeviceMapper;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 import com.uc.web.utils.HttpRequester;
 
 public class StatusSender {
@@ -43,10 +42,11 @@ public class StatusSender {
 				System.err.println();
 				System.err.println("report status.....");
 				System.err.println();
-				Example example = new ExampleImpl();
-				example.or().andFieldEqualTo("VALID", true);
-				long count = mapper.selectCountByExample(example);
-				List<Device> devices = (List<Device>) mapper.selectByExample(example, 0, count);
+				
+				DeviceQueryForm queryForm=new DeviceQueryForm();
+				queryForm.setQueryAll(false);				
+				long count = mapper.selectCountOptimized(queryForm);
+				List<Device> devices =(List<Device>) mapper.selectOptimized(queryForm, 0, count);
 				for (Device device : devices) {
 					String param = genParam(device.getSerialNo());
 					try {

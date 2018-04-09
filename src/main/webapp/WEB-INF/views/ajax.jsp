@@ -324,6 +324,8 @@
   <script type="text/javascript" src='<c:url value="/resources/js/date-time/daterangepicker.min.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/date-time/locales/bootstrap-datepicker.zh-CN.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/chosen.jquery.min.js" />' ></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.loader.js" />' ></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.utils.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.page-helper.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.form-helper.js" />' ></script>
   <script type="text/javascript" src='<c:url value="/resources/js/uc/jquery.uc.validate.methods.js" />' ></script>

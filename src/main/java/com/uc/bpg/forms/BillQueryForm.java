@@ -33,6 +33,8 @@ public class BillQueryForm extends QueryFormBase {
 	@FormField(value="确认人", order=7)
 	private String queryVerifierName;
 	
+	private String[] queryStates;
+	
 	static final String ORDER_BY_COLUMN_GENERATED_TIME="生成时间";
 	static final String ORDER_BY_COLUMN_HOTEL_NAME="酒店";
 	static final String ORDER_BY_COLUMN_INCOME="酒店收入";
@@ -142,6 +144,16 @@ public class BillQueryForm extends QueryFormBase {
 	}
 	public void setQueryVerifierName(String queryVerifierName) {
 		this.queryVerifierName = queryVerifierName;
+	}
+
+
+	public String[] getQueryStates() {
+		return queryStates;
+	}
+
+
+	public void setQueryStates(String[] queryStates) {
+		this.queryStates = queryStates;
 	}
 	
 }

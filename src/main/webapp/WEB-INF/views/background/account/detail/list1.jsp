@@ -12,8 +12,7 @@
       <!-- search condition begin -->
       <div class="col-xs-12">
         <form:form class="form-horizontal" role="form" modelAttribute="queryInput" action="#">
-          <div class="row">
-          </div>
+          <div class="row"></div>
           <div class="row">
             <div class="col-xs-12">
               <div class="form-group align-right">
@@ -52,9 +51,9 @@
               <input type="hidden" id="selectedId" name="selectedId" value="" />
               <input type="hidden" id="queryInput.queryOrderBy" name="queryInput.queryOrderBy" value="${queryInput.queryOrderBy }" />
               <input type="hidden" id="queryInput.queryOrder" name="queryInput.queryOrder" value="${queryInput.queryOrder}" />
-              <input type="hidden" id="pageCtrl.pageCount" name="pageCtrl.pageCount" value="${pageCtrl.pageCount}" />
-              <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
-              <input type="hidden" id="pageCtrl.current" name="pageCtrl.current" value="${pageCtrl.current }" />
+            <input type="hidden" id="pageCtrl.pageSize" name="pageCtrl.pageSize" value="${pageCtrl.pageSize}" />
+            <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
+            <input type="hidden" id="pageCtrl.offset" name="pageCtrl.offset" value="${pageCtrl.offset }" />
               <!-- table data begin-->
               <table class="table table-striped table-bordered table-hover dataTable no-footer">
                 <thead>
@@ -167,7 +166,7 @@
                       <c:set var="disableFirst" value="disabled"></c:set>
                     </c:if>
                     <c:set var="disableLast" value="btn-info"></c:set>
-                    <c:if test="${pageCtrl.page==0 or pageCtrl.page==pageCtrl.pageCount -1 }">
+                    <c:if test="${pageCtrl.current==0 or pageCtrl.page==pageCtrl.pageCount -1 }">
                       <c:set var="disableLast" value="disabled"></c:set>
                     </c:if>
                     <ul class="pagination">
@@ -194,11 +193,10 @@
         <div id="dialogPanel"></div>
       </div>
     </div>
-  </div>  
     <!-- result table end -->
- </div> 
+  </div>
   <!-- PAGE CONTENT ENDS -->
-
+</div>
 <!-- page specific plugin scripts -->
 <script type="text/javascript">
 	var scripts = [ null, null ];

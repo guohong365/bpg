@@ -6,70 +6,36 @@ import com.uc.bpg.forms.DeviceQueryForm;
 import com.uc.bpg.service.BusinessListServiceBase;
 import com.uc.bpg.service.DeviceListService;
 import com.uc.utils.IntegerUtils;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.QueryCondition;
+import com.uc.web.forms.ListQueryForm;
 
 public class DeviceListServiceImpl extends BusinessListServiceBase<DeviceQueryForm> implements DeviceListService {
 
 	@Override
-	public boolean prepareExample(DeviceQueryForm queryForm, Example example) {
-		super.prepareExample(queryForm, example);
-		QueryCondition condition=example.or();
-		if(!IntegerUtils.isEmpty(queryForm.getQueryType())){
-			condition.andFieldEqualTo("TYPE", queryForm.getQueryType());
-		} else {
+	public boolean prepareQueryForm(ListQueryForm query) {
+		DeviceQueryForm queryForm=(DeviceQueryForm)query;
+		super.prepareQueryForm(queryForm);		
+		if(IntegerUtils.isEmpty(queryForm.getQueryType())){			
 			queryForm.setQueryType(null);
 		}
 		
-		if(!IntegerUtils.isEmpty(queryForm.getQueryHotel())){
-			condition.andFieldEqualTo("HOTEL", queryForm.getQueryHotel());
-		} else {
+		if(IntegerUtils.isEmpty(queryForm.getQueryHotel())){
 			queryForm.setQueryHotel(null);
 		}
-		if(queryForm.getQueryAll()==null || !queryForm.getQueryAll()){
-			condition.andFieldEqualTo("VALID", true);
-			queryForm.setQueryAll(false);
-		} else{
-			queryForm.setQueryAll(true);
-		}
-		if(queryForm.getQueryPublicUsage()!=null){
-			if(queryForm.getQueryPublicUsage()){
-				condition.andFieldEqualTo("PUBLIC_USAGE", true);
-			}else {
-				condition.andFieldEqualTo("PUBLIC_USAGE", false);
-			}
-		}
-		if(!StringUtils.isEmpty(queryForm.getQueryHotelName())){
-			condition.andFieldLike("HOTEL_NAME", queryForm.getQueryHotelName()+"%");
-		} else {
+		queryForm.setQueryAll(queryForm.getQueryAll()!=null && queryForm.getQueryAll());
+		
+		queryForm.setQueryPublicUsage(queryForm.getQueryPublicUsage()!=null && queryForm.getQueryPublicUsage());
+		
+		if(StringUtils.isEmpty(queryForm.getQueryHotelName())){			
 			queryForm.setQueryHotelName(null);
 		}
-		if(!StringUtils.isEmpty(queryForm.getQueryName())){
-			condition.andFieldLike("NAME", queryForm.getQueryName() +"%");
-		} else {
+		if(StringUtils.isEmpty(queryForm.getQueryName())){
 			queryForm.setQueryName(null);
 		}
 		
-		if(!StringUtils.isEmpty(queryForm.getQuerySerialNo())){
-			condition.andFieldLike("SERIAL_NO", queryForm.getQuerySerialNo()+"%");
+		if(StringUtils.isEmpty(queryForm.getQuerySerialNo())){
+			queryForm.setQuerySerialNo(null);
 		}
-		if(!IntegerUtils.isEmpty(queryForm.getQueryStatus())){
-			switch(queryForm.getQueryStatus()){
-			case 1: 
-				condition.andFieldEqualTo("STATUS", 0);
-				break;
-			case 2:
-				condition.andFieldEqualTo("STATUS", 15);
-				break;
-			case 3:
-				condition.andFieldBetween("STATUS", 1, 8);
-				break;
-			case 4:
-				condition.andFieldNotBetween("STATUS", 0, 8)
-				.andFieldNotEqualTo("STATUS", 15);
-				break;
-			}
-		} else {
+		if(IntegerUtils.isEmpty(queryForm.getQueryStatus())){
 			queryForm.setQueryStatus(null);
 		}
 		return true;

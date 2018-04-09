@@ -9,18 +9,17 @@ import java.util.UUID;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.uc.bpg.Constant;
 import com.uc.bpg.domain.CheckIn;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.Hotel;
 import com.uc.bpg.domain.UserImpl;
+import com.uc.bpg.forms.HotelQueryForm;
+import com.uc.bpg.forms.UserQueryForm;
 import com.uc.bpg.persistence.CheckInMapper;
 import com.uc.bpg.persistence.DeviceMapper;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.persistence.UserMapper;
 import com.uc.bpg.test.TestBase;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 
 public class CheckInAllRoom extends TestBase {
 	
@@ -56,27 +55,19 @@ public class CheckInAllRoom extends TestBase {
 		return null;
 	}
 	
-	@SuppressWarnings({ "unused", "unchecked" })
+	@SuppressWarnings({ "unused" })
 	@Test
 	public void test1(){
-		
-		Example example=new ExampleImpl();
-		example.or()
-		.andFieldIsNotNull("ROOM");
-		
-		List<Device> devices=(List<Device>) deviceMapper.selectByExample(example, 0, 1000);
+		HotelQueryForm queryForm=new HotelQueryForm();
+		List<Device> devices=(List<Device>) deviceMapper.selectAllocatedDevices(null);
 		
 		assertNotNull(devices);
-		example.clear();
-		example.or()
-		.andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL)
-		.andFieldEqualTo("VALID", true);
-		List<?> hotels=hotelMapper.selectByExample(example, 0, 1000);
+		queryForm.setQueryAll(false);		
+		List<?> hotels=hotelMapper.selectOptimized(queryForm, 0, 1000);
 		
-		example.clear();
-		example.or()
-		.andFieldEqualTo("VALID", true);
-		List<?> userImpls = userMapper.selectByExample(example, 0, 1000);
+		UserQueryForm userQueryForm=new UserQueryForm();
+		userQueryForm.setQueryAll(false);		
+		List<?> userImpls = userMapper.selectOptimized(userQueryForm, 0,  1000);
 		
 		for(Device device:devices){
 			//Hotel hotel=findHotel(hotels, device.getHotel());

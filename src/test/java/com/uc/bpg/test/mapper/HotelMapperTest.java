@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.uc.bpg.domain.Hotel;
+import com.uc.bpg.forms.HotelQueryForm;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.test.TestBase;
 
@@ -21,10 +22,10 @@ public class HotelMapperTest extends TestBase {
 	@Test
 	public void test01(){
 		assertNotNull(mapper);
+		HotelQueryForm queryForm=new HotelQueryForm();
+		Long count=mapper.selectCountOptimized(queryForm);
 		
-		Long count=mapper.selectCountByExample(null);
-		
-		List<Hotel> list=(List<Hotel>) mapper.selectByExample(null, 0, count);
+		List<Hotel> list=(List<Hotel>) mapper.selectOptimized(queryForm, 0, count);
 		
 	    assertTrue(list.size()>0);
 		

@@ -33,68 +33,19 @@
     <input type="hidden" id="queryInput.queryAll" name="queryInput.queryAll" value="${queryInput.queryAll }" />
     <input type="hidden" id="queryInput.queryOrderBy" name="queryInput.queryOrderBy" value="${queryInput.queryOrderBy }" />
     <input type="hidden" id="queryInput.queryOrder" name="queryInput.queryOrder" value="${queryInput.queryOrder}" />
-            <input type="hidden" id="pageCtrl.pageSize" name="pageCtrl.pageSize" value="${pageCtrl.pageSize}" />
-            <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
-            <input type="hidden" id="pageCtrl.offset" name="pageCtrl.offset" value="${pageCtrl.offset }" />
+    <input type="hidden" id="pageCtrl.pageSize" name="pageCtrl.pageSize" value="${pageCtrl.pageSize}" />
+    <input type="hidden" id="pageCtrl.total" name="pageCtrl.total" value="${pageCtrl.total }" />
+    <input type="hidden" id="pageCtrl.offset" name="pageCtrl.offset" value="${pageCtrl.offset }" />
     <table class="table table-striped table-bordered table-hover dataTable no-footer">
       <thead>
         <tr>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='酒店名称' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="酒店名称">酒店名称</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="酒店名称">酒店名称</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='设备总数' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="设备总数">设备总数</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="设备总数">设备总数</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='公用设备总数' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="公用设备总数">公用设备总数</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="公用设备总数">公用设备总数</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='已拥有' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="已拥有">已拥有</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="已拥有">已拥有</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='结算标准' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="结算标准">结算标准</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="结算标准">结算标准</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='分成比例' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="分成比例">分成比例</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="分成比例">分成比例</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy=='酒店收费' }">
-              <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="酒店收费">酒店收费</th>
-            </c:when>
-            <c:otherwise>
-              <th class="sorting" data-column="酒店收费">酒店收费</th>
-            </c:otherwise>
-          </c:choose>
+          <th class="sortine${queryInput.queryOrderBy eq '酒店名称' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : '' }" data-column="酒店名称">酒店名称</th>
+          <th class="sorting${queryInput.queryOrderBy eq '设备总数' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : ''}" data-column="设备总数">设备总数</th>
+          <th class="sorting${queryInput.queryOrderBy eq '公用设备总数' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : ''}" data-column="公用设备总数">公用设备总数</th>
+          <th class="sorting${queryInput.queryOrderBy eq '已拥有' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : ''}" data-column="已拥有">已拥有</th>
+          <th class="sorting${queryInput.queryOrderBy eq '结算标准' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : '' }" data-column="结算标准">结算标准</th>
+          <th class="sorting${queryInput.queryOrderBy eq '分成比例' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : ''}" data-column="分成比例">分成比例</th>
+          <th class="sorting${queryInput.queryOrderBy eq '酒店收费' ? '_'.concat(queryInput.queryOrder).concat(' data-active=\"true\"') : ''}" data-column="酒店收费">酒店收费</th>
           <th>结算周期</th>
           <th>地址</th>
           <th>联系人</th>

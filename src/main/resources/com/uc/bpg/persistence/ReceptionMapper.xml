@@ -49,35 +49,7 @@
     <result column="DEVICE_SERIAL" jdbcType="VARCHAR" property="deviceSerial"/>
     <result column="ROOM_NO" jdbcType="VARCHAR" property="roomNo"/>        
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
+  
   <select id="selectUsageByCheckIn" parameterType="java.lang.Long" resultMap="deviceUsageDetail" >
     select a.ID, a.CHARGE, a.USE_TIME, c.SERIAL_NO as DEVICE_SERIAL from t_device_usage a 
     left join t_check_in b on b.ROOM = a.ROOM and b.ID=#{chekinId,jdbcType=INTEGER}

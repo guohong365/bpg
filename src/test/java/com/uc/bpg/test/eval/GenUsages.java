@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.domain.Hotel;
+import com.uc.bpg.forms.HotelQueryForm;
 import com.uc.bpg.persistence.DeviceMapper;
 import com.uc.bpg.persistence.DeviceUsageMapper;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.persistence.ReceiverMapper;
 import com.uc.bpg.test.TestBase;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 
 public class GenUsages extends TestBase {
 
@@ -46,14 +45,12 @@ public class GenUsages extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test1() {
-		Example example = new ExampleImpl();
-		example.or().andFieldIsNotNull("HOTEL");
-		devices = (List<Device>) deviceMapper.selectByExample(example, 0, 1000);
-				
+	public void test1() {		
+		devices = (List<Device>) deviceMapper.selectAllocatedDevices(null);
+		HotelQueryForm hotelQueryForm=new HotelQueryForm();		
 		//example.clear();
 		//example.or().andFieldEqualTo("TYPE", Constant.ORG_TYPE_HOTEL);
-		hotels = (List<Hotel>) hotelMapper.selectByExample(null, 0, 1000);
+		hotels = (List<Hotel>) hotelMapper.selectOptimized(hotelQueryForm, 0, 1000);
 
 		for (Device device : devices) {
 			Hotel hotel = findHotel(hotels, device.getHotel());

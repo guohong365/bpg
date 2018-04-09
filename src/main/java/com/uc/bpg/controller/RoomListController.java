@@ -5,4 +5,5 @@ import com.uc.web.controller.ListController;
 
 
 public interface RoomListController extends ListController<RoomQueryForm>{
+	
 }

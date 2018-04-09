@@ -9,8 +9,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.persistence.DeviceMapper;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 import com.uc.web.utils.HttpRequester;
 
 public class UsageSender {
@@ -28,18 +26,12 @@ public class UsageSender {
 				100 + random.nextInt(30), 50 + random.nextInt(30), date, serial);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		int countPerDevice = 10;
 		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(xmlConfigs);
 		DeviceMapper mapper = context.getBean(DeviceMapper.class);
-		Example example = new ExampleImpl();
-		example.or()
-		.andFieldEqualTo("VALID", true)
-		.andFieldIsNotNull("ROOM");
-		
-		long count = mapper.selectCountByExample(example);
-		List<Device> devices = (List<Device>) mapper.selectByExample(example, 0, count);
+
+		List<Device> devices = (List<Device>) mapper.selectAllocatedDevices(null);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		for (int i = 0; i < countPerDevice; i++) {
 			for (Device device : devices) {

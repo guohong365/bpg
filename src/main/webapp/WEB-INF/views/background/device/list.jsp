@@ -139,54 +139,12 @@
             <table class="table table-striped table-bordered table-hover dataTable no-footer">
               <thead>
                 <tr>
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='名称' }">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="名称">名称</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="名称">名称</th>
-                    </c:otherwise>  
-                  </c:choose>
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='型号' }">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="型号">型号</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="型号">型号</th>
-                    </c:otherwise>
-                  </c:choose>
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='序列号'}">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="序列号">序列号</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="序列号">序列号</th>
-                    </c:otherwise>
-                  </c:choose>
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='酒店' }">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="酒店">酒店</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="酒店">酒店</th>
-                    </c:otherwise>
-                  </c:choose>    
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='房间' }">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="房间">房间</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="房间">房间</th>
-                    </c:otherwise>
-                  </c:choose>    
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy=='状态' }">
-                      <th class="sorting_${queryInput.queryOrder }" data-active="true" data-column="状态">状态</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="状态">状态</th>
-                    </c:otherwise>
-                  </c:choose>    
+                  <th class="sorting${queryInput.queryOrderBy eq '名称' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '名称' ? 'data-active=\"true\"' : '' } data-column="名称">名称</th>
+                  <th class="sorting${queryInput.queryOrderBy eq '型号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '型号' ? 'data-active=\"true\"' : '' } data-column="型号">型号</th>
+                  <th class="sorting${queryInput.queryOrderBy eq '序列号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '序列号' ? 'data-active=\"true\"' : ''} data-column="序列号">序列号</th>
+                  <th class="sorting${queryInput.queryOrderBy eq '酒店' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '酒店' ? 'data-active=\"true\"' : ''} data-column="酒店">酒店</th>
+                  <th class="sorting${queryInput.queryOrderBy eq '房间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '房间' ? 'data-active=\"true\"' : ''} data-column="房间">房间</th>
+                  <th class="sorting${queryInput.queryOrderBy eq '状态' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '状态' ? 'data-active=\"true\"' : ''} data-column="状态">状态</th>
                   <th></th>
                 </tr>
               </thead>

@@ -6,9 +6,17 @@ import org.apache.ibatis.annotations.Param;
 
 import com.uc.bpg.domain.Device;
 import com.uc.bpg.domain.Room;
-import com.uc.web.persistence.AppMapper;
+import com.uc.web.persistence.AppInsertMapper;
+import com.uc.web.persistence.AppOptimizedMapper;
+import com.uc.web.persistence.AppSelectByKeyMapper;
+import com.uc.web.persistence.AppUpdateMapper;
 
-public interface DeviceMapper extends AppMapper {
+public interface DeviceMapper 
+	extends 
+	AppInsertMapper,
+	AppUpdateMapper,
+	AppSelectByKeyMapper,
+	AppOptimizedMapper {
 
 	void insertBatchAdd(
 			@Param("devices")
@@ -32,7 +40,8 @@ public interface DeviceMapper extends AppMapper {
 			@Param("devices")
 			List<Device> devices);
 
-	List<Room> selectAllocableRooms(Long hotelId);
+	List<Room> selectAllocableRooms(@Param("hotel")Long hotelId);
+	List<Device> selectAllocatedDevices(@Param("hotel")Long hotelId);
 	
 	boolean selectCanAllotPublic(Long hotel);
 
@@ -44,6 +53,9 @@ public interface DeviceMapper extends AppMapper {
 
 	int updateWithdrawAll(
 			@Param("devices")
-			List<Device> devices);
+			List<Device> devices, 
+			@Param("modifier") Long modifier);
+
+	List<Device> selectAllocableDevices(@Param("hotel")Long hotel);
 
 }

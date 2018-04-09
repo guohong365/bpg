@@ -28,78 +28,15 @@
     <table class="table table-striped table-bordered table-hover dataTable no-footer">
       <thead>
         <tr>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='使用时间' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="使用时间">使用时间</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="使用时间">使用时间</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='酒店收款' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="酒店收款">酒店收款</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="酒店收款">酒店收款</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='结算标准' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="结算标准">结算标准</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="结算标准">结算标准</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='分成比例' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="分成比例">分成比例</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="分成比例">分成比例</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='应付款' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="应付款">应付款</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="应付款">应付款</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='房间' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="房间">房间</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="房间">房间</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='设备名称' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="设备名称">设备名称</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="设备名称">设备名称</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='序列号' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="序列号">序列号</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="序列号">序列号</th>
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${queryInput.queryOrderBy =='已结账' }">
-              <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="已结账">已结账</th>
-            </c:when>
-            <c:otherwise>
-              <th class="center sorting" data-column="已结账">已结账</th>
-            </c:otherwise>
-          </c:choose>
+          <th class="center sorting${queryInput.queryOrderBy =='使用时间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='使用时间' ? 'data-active=\"true\"' : ''} data-column="使用时间">使用时间</th>
+          <th class="center sorting${queryInput.queryOrderBy =='酒店收款' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='酒店收款' ? 'data-active=\"true\"' : ''} data-column="酒店收款">酒店收款</th>
+          <th class="center sorting${queryInput.queryOrderBy =='结算标准' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='结算标准' ? 'data-active=\"true\"' : ''} data-column="结算标准">结算标准</th>
+          <th class="center sorting${queryInput.queryOrderBy =='分成比例' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='分成比例' ? 'data-active=\"true\"' : ''} data-column="分成比例">分成比例</th>
+          <th class="center sorting${queryInput.queryOrderBy =='应付款' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='应付款' ? 'data-active=\"true\"' : ''} data-column="应付款">应付款</th>
+          <th class="center sorting${queryInput.queryOrderBy =='房间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='房间' ? 'data-active=\"true\"' : ''} data-column="房间">房间</th>
+          <th class="center sorting${queryInput.queryOrderBy =='设备名称' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='设备名称' ? 'data-active=\"true\"' : ''} data-column="设备名称">设备名称</th>
+          <th class="center sorting${queryInput.queryOrderBy =='序列号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='序列号' ? 'data-active=\"true\"' : ''} data-column="序列号">序列号</th>
+          <th class="center sorting${queryInput.queryOrderBy =='已结账' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='已结账' ? 'data-active=\"true\"' : ''} data-column="已结账">已结账</th>
         </tr>
       </thead>
       <tbody>

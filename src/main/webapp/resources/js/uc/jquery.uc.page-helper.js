@@ -10,7 +10,10 @@
 			bindExport : true,
 			bindColumnSelect : true,
 			bindDetailInput :true,
+			actionAttr : 'data-action',
+			actionItem : 'data-item',	
 			
+			anchor : '.page-content-area',			
 			baseUrl : '',
 			detailUrl : '',
 			refreshUrl : '',
@@ -24,8 +27,10 @@
 			},
 			afterSave : function() {
 				$('[id="pageCtrl.total"').val('-1');	
+				$('[id="pageCtrl.offset"').val('-1');
 				return true;
 			},
+			closeAfterSave: true,
 			reset : function() {
 				// $('#queryInput').reset(); 
 			},
@@ -41,8 +46,8 @@
 		$(element).on('click', '#btnSearch', $.proxy(this.onClickSearch,binder));
 		console.info('search form search button is binded......');
 		if(this._o.bindAction){
-			$(element).on('click', '[data-action]', $.proxy(this.onClickAction, binder));
-			console.info('action buttons are binded ......');
+			$(element).on('click', '[' + this._o.actionAttr +']', $.proxy(this.onClickAction, binder));
+			console.info('action with ['+ this._o.actionAttr +'] buttons are binded ......');
 		} else {
 			console.warn('action buttons are not binded......');
 		}
@@ -78,14 +83,13 @@
 		} else {
 			console.warn('column select button is not binded.......');
 		}
-		
 	};
 
 	ListPageOperatorBinder.prototype = {
 		constructor : ListPageOperatorBinder,
 		
 		setOption : function(options) {
-			console.log('optoins type is :' + typeof options);
+			console.log('optoins type is :' + typeof options);			
 			if (typeof options === 'object') {
 				if (typeof options.bindSorter === 'boolean') {
 					console.info('options set sorter:' + options.bindSorter);
@@ -110,6 +114,15 @@
 				if(typeof options.bindColumnSelect === 'boolean'){
 					console.debug('options set bint to columnSelect' +  options.bindColumnSelect);
 					this._o.bindColumnSelect=options.bindColumnSelect;
+				}
+				
+				if(typeof options.actionAttr === 'string'){
+					console.debug('options set action attr : ' + options.actionAttr );
+					this._o.actionAttr=options.actionAttr;
+				}
+				if(typeof options.actionItem === 'string'){
+					console.debug('options set action item : ' + options.actionItem );
+					this._o.actionItem=options.actionItem;
 				}
 				
 				if(typeof options.baseUrl === 'string'){
@@ -142,6 +155,10 @@
 					this._o.selectColumnUrl = options.selectColumnUrl;
 				}
 				
+				if(typeof options.closeAfterSave ==='boolean') {
+					console.info('options set close after save as :' + options.closeAfterSave);
+					this._o.closeAfterSave=options.closeAfterSave;
+				}
 				if (typeof options.afterSave === 'function') {
 					console.info('afterSave overrided....');
 					this._o.afterSave = options.afterSave;
@@ -155,6 +172,7 @@
 					this._o.reset = options.reset;
 				}
 				if(typeof options.afterClickAction =='function'){
+					
 					this._o.afterClickAction=options.afterClickAction;
 				}
 				if(typeof options.beforeClickAction=='function'){
@@ -179,6 +197,9 @@
 			console.info('  bindExport=[' + o.bindExport +']');
 			console.info('  bindColumnSelect=[' + o.bindColumnSelect + ']');
 			console.info('  bindDetailInput=[' + o.bindDetailInput +']');
+			
+			console.info('  actionAttr=['+ o.actionAttr +']');
+			console.info('  actionItem=['+ o.actionItem +']');
 				
 			console.info('  baseUrl=[' + o.baseUrl +']');
 			console.info('  detailUrl=[' + o.detailUrl + ']');
@@ -186,6 +207,7 @@
 			console.info('  listUrl=[' + o.listUrl + ']');
 			console.info('  exportUrl=[' + o.exportUrl + ']');
 			console.info('  selectColumnUrl=[' + o.selectColumnUrl + ']');
+			console.info('  closeAfterSave=['+ o.closeAfterSave +']');
 		},
 		
 
@@ -235,41 +257,39 @@
 			return false;
 		},
 		onRefresh : function() {
-			//$('[name="pageCtrl.total"]').val(-1);
-			$.ajax({
-				async : false,
-				type : 'POST',
+			$('#listResult').loadHtml({
+				container : '#listResult',
+				anchor : this._o.anchor,
 				url : this._o.refreshUrl,
 				data : $('#FORM_TABLE_FUNCTION').serialize(),
-				dataType : 'html'
-			}).done(function(data) {
-				console.log('refresh table loaded...');				
-				$('#listResult').html(data);
-			}).fail(function() {
-				$.gritter.add({
-					title:'查询',
-					text:'系统错误，查询失败!',
-					class_name:'gritter-error'
-				});
-			});
+				type : 'post',
+				notationOnSuccess : false,
+				notationOnFailed : true,
+				failedTitle : '查询',
+				failedText : '系统错误，查询失败!'
+			});			
 		},
 
 		onClickAction : function( event ) {			
-			var actionName = $(event.target).attr('data-action');
+			console.log('action clicked : actionAttr[' + this._o.actionAttr + ']')
+			var actionName = $(event.target).attr(this._o.actionAttr);
+			
 			console.log('action button clicked: ' + actionName);
-			var $action = $('#action');
-			$action.val(actionName);
-			var selectedId =$(event.target).attr('data-item');			
+			var action = $('#action');
+			action.val(actionName);
+			console.log('action value=' + action.val());
+			var selectedId =$(event.target).attr(this._o.actionItem);			
 			$('#selectedId').val(selectedId);			
 			console.log('event.taget: ' + event.target);			
 			if(this._o.beforeClickAction && typeof this._o.befroeClickAction == 'function'){
 				this._o.beforeClickAction(actionName);
 			}
+			$this=this;
 			$.ajax({
-				async: false,
+				async: true,
 				type : "GET",
 				url : this._o.detailUrl,
-				data : 'action='+$action.val()+'&selectedId=' + selectedId,
+				data : $('#FORM_TABLE_FUNCTION').serialize(),
 				dataType : "html"
 			}).done(function(data) {
 				console.log('detail dialog loaded....');
@@ -281,17 +301,17 @@
 					text:'系统错误，加载页面失败，请联系系统管理员',
 					class_name:'gritter-error'
 				});
+			}).complete(function(){
+				if($this._o.afterClickAction && typeof $this._o.afterClickAction=='function'){
+					$this._o.afterClickAction(actionName, selectedId);
+				}
 			});
-			
-			if(this._o.afterClickAction && typeof this._o.afterClickAction=='function'){
-				this._o.afterClickAction(actionName, selectedId);
-			}
 			return false;
 		},
 		onClickSortingColumn : function(event) {
 			var columnName = $(event.target).attr('data-column');
 			console.log('column [' + columnName + '] clicked for sorting');			
-			if ($(event.target).attr('data-active')) {
+			if ($(event.target).attr('data-active')==='true') {
 				console.log('same column clicked, just toggle');
 				this.toggleOrder($('[id="queryInput.queryOrder"]'));
 			} else {
@@ -317,36 +337,32 @@
 		onPagationClicked : function(event) {		
 			var pageAction = $(event.target).attr('data-page');
 			console.log('page to' + pageAction);
+			console.log("total " +$('input[id="pageCtrl.total"').val());
+			console.log("offset " + $('input[id="pageCtrl.offset"').val());
+			console.log("page size " + $('input[id="pageCtrl.pageSize"').val());
+			
+			var offset = parseInt($('input[id="pageCtrl.offset"]').val());
+			var size= parseInt($('input[id="pageCtrl.pageSize"]').val());
+			var total=parseInt($('input[id="pageCtrl.total"]').val());
+			console.log("total=" + total + ", offset=" + offset + ", size=" + size);
 			switch (pageAction) {
-			case "first":
-				console.log("current page is " + $('input[id="pageCtrl.current"]').val());
-				$('input[id="pageCtrl.current"]').val("0");				
-				console.log("current page set to " + $('input[id="pageCtrl.current"]').val());
+			case "first":				
+				offset = 0;
 				break;
 			case "prior":
-				console.log("current page is " + $('input[id="pageCtrl.current"]').val());
-				var cur = parseInt($('input[id="pageCtrl.current"]').val()) - 1;
-				$('input[id="pageCtrl.current"]').val(cur);
-				console.log("current page set to " + $('input[id="pageCtrl.current"]').val());
+				if(offset >= size) offset = offset - size;
+				else offset = 0;				
 				break;
 			case "next":
-				console.log("current page is " + $('input[id="pageCtrl.current"]').val());
-				var cur = parseInt($('input[id="pageCtrl.current"]').val()) + 1;
-				$('input[id="pageCtrl.current"]').val(cur);
-				console.log("current page set to " + $('input[id="pageCtrl.current"]').val());
+				if(total - offset > size) offset = offset + size;
 				break;
 			case "last":
-				console.log("current page is " + $('input[id="pageCtrl.current"]').val());
-				var cur = $('input[id="pageCtrl.pageCount"]').val();
-				$('input[id="pageCtrl.current"]').val(parseInt(cur)-1);
-				console.log("current page set to " + $('input[id="pageCtrl.current"]').val());
+				offset = total % size && total >= size ? (total/size - 1) * size : total/size;
 				break;
 			default:
-				console.log("current page is " + $('input[id="pageCtrl.current"]').val());
-				$('input[id="pageCtrl.current"]').val("0");
-				console.log("current page set to " + $('input[id="pageCtrl.current"]').val());
 				break;
 			}
+			$('input[id="pageCtrl.offset"]').val(offset);
 			this.onRefresh();
 			return false;
 		},
@@ -371,9 +387,9 @@
 			} else {
 				saveData = $("#detailInput").serialize();
 			}
+			$this=this;
 			console.log('saveData:' + saveData);
 			$.ajax({
-				async : false,
 				type : "POST",
 				url : this._o.detailUrl,
 				data : saveData,
@@ -398,15 +414,20 @@
 					text:'系统错误，请联系系统管理员！',
 					class_name:'gritter-error'
 				});
-			});
-			$("#detail-dialog").modal('hide');
-			
-			if (typeof this._o.afterSave === 'function') {
-				if(this._o.afterSave()){
-					this.onRefresh();
+			})
+			.complete(function(){
+				console.log('saved......')
+				if($this._o.closeAfterSave){		
+					console.log('close input dialog.....');
+					$("#detail-dialog").modal('hide');
+				}
+				if (typeof $this._o.afterSave === 'function') {
+				if($this._o.afterSave()){
+					$this.onRefresh();
 					console.log('table refreshed.');
 				};
 			}
+			});
 			return false;
 		},
 		onClickSelectColumn : function(event){
@@ -418,7 +439,7 @@
 				$.ajax({
 					type : 'GET',
 					url : this._o.selectColumnUrl,
-					data : 'mode=' + $(event.target).attr("data-column-select"),
+					data : 'module=' + $(event.target).attr("data-column-select"),
 					  dataType : 'html'
 				}).done(function(data){
 					$('#page-dialog').html(data);
@@ -437,6 +458,7 @@
 				event.preventDefault();
 				$("#btnSaveColumns").attr("disabled", true);
 				var dataStr="";
+				var $this=this;
 				$('#columns-form [data-column-name]').each(function(){
 					if($(this).prop('checked')){
 						dataStr +='1';
@@ -448,16 +470,16 @@
 				$.ajax({
 					type : 'POST',
 					url : this._o.selectColumnUrl,
-					data : dataStr + '&mode=' + $('#columns-form #mode').val(),
+					data : dataStr + '&module=' + $('#columns-form #module').val(),
 					dataType : 'text'
 				})
 				.done(function(data){					
+					$this.onRefresh();
 				})
 				.fail(function(xhr, error, exp){
 					//alert("系统错误，设置失败！")
-				});
+				});					
 				$('#column-dialog').modal('hide');
-				this.onRefresh();
 				return false;
 			}
 			console.error('column selection post url may not be set propertly.....');
@@ -477,8 +499,8 @@
 			console.error('export url may not be set propertly......');
 		}
 	};
-	$.fn.bindPage = function(options) {
-		this.each(function() {
+	$.fn.bindPage = function(options) {		
+		this.each(function(){
 			var el = $(this);
 			if (el.data('pageBinder')) {
 				el.data('pageBinder').remove();

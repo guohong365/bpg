@@ -303,7 +303,7 @@
                               <!-- functon button begin -->
                               <c:choose>
                                 <c:when test="${pageCtrl.total > 0 }">
-                                  <div class="col-xs-12 col-sm-6">共${pageCtrl.pageCount }页${pageCtrl.total }条记录, 当前第${pageCtrl.current + 1}页</div>
+                                  <div class="col-xs-12 col-sm-6">共${pageCtrl.pageCount }页${pageCtrl.total }条记录, 当前第${pageCtrl.page + 1}页</div>
                                 </c:when>
                                 <c:otherwise>
                                   <div class="col-xs-12 col-sm-6">无记录</div>
@@ -312,11 +312,11 @@
                               <div class="col-xs-12 col-sm-6">
                                 <div>
                                   <c:set var="disableFirst" value="btn-info"></c:set>
-                                  <c:if test="${pageCtrl.current==0}">
+                                  <c:if test="${pageCtrl.page==0}">
                                     <c:set var="disableFirst" value="disabled"></c:set>
                                   </c:if>
                                   <c:set var="disableLast" value="btn-info"></c:set>
-                                  <c:if test="${pageCtrl.current==0 or pageCtrl.current==pageCtrl.pageCount -1 }">
+                                  <c:if test="${pageCtrl.page==0 or pageCtrl.page==pageCtrl.pageCount -1 }">
                                     <c:set var="disableLast" value="disabled"></c:set>
                                   </c:if>
                                   <ul class="pagination">
@@ -403,9 +403,14 @@
   <script src='<c:url value="/resources/js/date-time/daterangepicker.min.js" />'></script>
   <script src='<c:url value="/resources/js/date-time/locales/bootstrap-datepicker.zh-CN.js" />'></script>
   <script src='<c:url value="/resources/js/chosen.jquery.min.js" />'></script>
+  <script src='<c:url value="/resources/js/uc/jquery.uc.loader.js" />' ></script>
+  <script src='<c:url value="/resources/js/uc/jquery.uc.utils.js" />' ></script>
   <script src='<c:url value="/resources/js/uc/jquery.uc.page-helper.js" />'></script>
   <script src='<c:url value="/resources/js/uc/jquery.uc.form-helper.js" />'></script>
   <script src='<c:url value="/resources/js/uc/jquery.uc.validate.methods.js" />'></script>
+  <script src='<c:url value="/resources/js/jquery.md5.js" />' ></script>
+  <script src='<c:url value="/resources/js/jquery.gritter.min.js" />' ></script>
+  
 
   <script type="text/javascript">
 			console.log('detail list loaded.....');
@@ -427,7 +432,6 @@
 								$('#content_container')
 										.bindPage(
 												{
-													bindPagation : false,
 													reset : function() {
 														$(
 																'#queryInput [name="queryOperateTimeFrom"]')

@@ -12,12 +12,12 @@ import com.uc.bpg.Constant;
 import com.uc.bpg.domain.Bill;
 import com.uc.bpg.domain.DeviceUsage;
 import com.uc.bpg.domain.Hotel;
+import com.uc.bpg.forms.DeviceUsageQueryForm;
+import com.uc.bpg.forms.HotelQueryForm;
 import com.uc.bpg.persistence.BillMapper;
 import com.uc.bpg.persistence.DeviceUsageMapper;
 import com.uc.bpg.persistence.HotelMapper;
 import com.uc.bpg.test.TestBase;
-import com.uc.web.persistence.Example;
-import com.uc.web.persistence.ExampleImpl;
 
 public class GenBill extends TestBase{
 	
@@ -32,14 +32,12 @@ public class GenBill extends TestBase{
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test(){
-		hotels=(List<Hotel>) hotelMapper.selectByExample(null, 0, 1000);
-		Example example=new ExampleImpl();
+		hotels=(List<Hotel>) hotelMapper.selectOptimized(new HotelQueryForm(), 0, 1000);		
 		for(Hotel hotel:hotels){
-			example.clear();
-			example.or()
-			.andFieldEqualTo("HOTEL", hotel.getId())
-			.andFieldEqualTo("IN_BILL", false);
-			Long count=usageMapper.selectCountByExample(example);
+			DeviceUsageQueryForm usageQueryForm=new DeviceUsageQueryForm();
+			usageQueryForm.setQueryHotel(hotel.getId());
+			usageQueryForm.setQueryInBill(false);
+			Long count=usageMapper.selectCountOptimized(usageQueryForm);
 			Bill bill=new Bill();
 			bill.setGeneratedTime(new Date());
 			bill.setHotel(hotel.getId());
@@ -48,7 +46,7 @@ public class GenBill extends TestBase{
 			BigDecimal charge=new BigDecimal("0");
 			BigDecimal rent=new BigDecimal("0");
 			BigDecimal basicCharge=new BigDecimal("0");
-			List<DeviceUsage> usages=(List<DeviceUsage>) usageMapper.selectByExample(example, 0, count);
+			List<DeviceUsage> usages=(List<DeviceUsage>) usageMapper.selectOptimized(usageQueryForm, 0, count);
 			for(DeviceUsage usage:usages){
 				charge=charge.add(usage.getCharge());
 				rent=rent.add(usage.getRent());

@@ -15,38 +15,12 @@
     <result column="DEVICE_STATUS" jdbcType="VARCHAR" property="deviceStatus"/>
     <result column="CAN_CANCEL" jdbcType="BIT" property="canCancel"/>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="columns">
-    ID, UUID, HOTEL, STOREY, ROOM_NO,VALID, DEVICE,DEVICE_NAME, DEVICE_SERIAL,DEVICE_STATUS, HOTEL_NAME, CAN_CANCEL
-  </sql>
+    <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
+    </if>
+  </sql>  
+
   <sql id="selectSql">
     select 
       a.ID as ID, 
@@ -67,46 +41,57 @@
     left join t_device_status  d on d.DEVICE = b.ID  and d.ID=(select max(ID) from t_device_status where DEVICE=b.ID)
     left join t_orgnization e on e.ID=a.HOTEL 
   </sql>
-  <select id="selectByExample" parameterType="map" resultMap="roomDetail">
-    select
-    <include refid="columns" />
-    from (
-      <include refid="selectSql" />
-    ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />    
-    <if test="example.orderByClause != null">
-      order by ${example.orderByClause}
-   </if>    
-   </if>
-   limit ${offset},${count}
+  <sql id="whereSql">
+      <where>
+      <trim prefixOverrides="and">
+        <choose>
+          <when test="queryForm.queryHotel != null">
+            and a.HOTEL = #{queryForm.queryHotel, jdbcType=INTEGER}
+          </when>
+          <when test="queryForm.queryHotelName !=null">
+            and e.NAME like '%${queryForm.queryHotelName}%'
+          </when>
+        </choose>
+        <if test="queryForm.queryRoomNo !=null">
+          and a.ROOM_NO like '%${queryForm.queryRoomNo}%'
+        </if>
+        <if test="queryForm.queryStorey !=null">
+          and a.STOREY = #{queryForm.queryStorey, jdbcType=INTEGER}
+        </if>
+        <if test="!queryForm.queryAll">
+          and a.VALID
+        </if>
+      </trim>
+    </where>
+  </sql>
+  <select id="selectCountOptimized" parameterType="map" resultType="java.lang.Long">
+    select COUNT(*)
+    from t_room a
+    left join t_device b on b.ROOM = a.ID
+    left join t_type c on c.ID=b.TYPE
+    left join t_device_status  d on d.DEVICE = b.ID  and d.ID=(select max(ID) from t_device_status where DEVICE=b.ID)
+    left join t_orgnization e on e.ID=a.HOTEL
+    <include refid="whereSql" />
   </select>
-  <select id="selectById" parameterType="java.lang.Long" resultMap="roomDetail">
-    select 
-    <include refid="columns" />
-    from (
-      <include refid="selectSql" />
-    ) t
-    where ID = #{id,jdbcType=INTEGER}
+  <select id="selectOptimized" parameterType="map" resultMap="roomDetail">
+    <include refid="selectSql" />
+    <include refid="whereSql" />
+    <include refid="orderBySql" />
+    limit ${offset},${count}
   </select>
-  <delete id="deleteDetail" parameterType="java.lang.Long">
-    delete from t_room
-    where ID = #{id,jdbcType=INTEGER}
-  </delete>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="roomDetail">     
+    <include refid="selectSql" />
+    where a.ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectUnallocatedRooms" parameterType="map" resultMap="roomDetail">
+    <include refid="selectSql" />
+    where a.HOTEL = #{hotel, jdbcType=INTEGER}
+  </select>
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.Room">
     insert into t_room (UUID, HOTEL,  STOREY, ROOM_NO, VALID)
     values (#{uuid,jdbcType=CHAR}, #{hotel,jdbcType=INTEGER}, 
       #{storey,jdbcType=INTEGER}, #{roomNo,jdbcType=VARCHAR}, true)
   </insert>
-  <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
-    select count(*) from
-    (
-      <include refid="selectSql" />
-    ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
   <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Room">
     update t_room
     <set>

@@ -72,14 +72,7 @@
             <table class="table table-striped table-bordered table-hover dataTable no-footer">
               <thead>
                 <tr>
-                  <c:choose>
-                    <c:when test="${queryInput.queryOrderBy =='角色名称' }">
-                      <th class="sorting_${queryInput.queryOrder}" data-active="true" data-column="角色名称">角色名称</th>
-                    </c:when>
-                    <c:otherwise>
-                      <th class="sorting" data-column="角色名称">角色名称</th>          
-                    </c:otherwise>
-                  </c:choose>
+                  <th class="sorting${queryInput.queryOrderBy eq '角色名称' ? '_'.concat(queryInput.queryOrder): ''}" ${queryInput.queryOrderBy eq '角色名称' ? 'data-active=\"true\"' : '' } data-column="角色名称">角色名称</th>
                   <th>角色描述</th>                  
                   <th></th>
                 </tr>

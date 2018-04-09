@@ -9,54 +9,42 @@
   <result column="VALID" jdbcType="BIT" property="valid"/>
   <result column="SHOW_ORDER" jdbcType="INTEGER" property="showOrder"/>  
 </resultMap>
-<sql id="columns">
-  ID, UUID,PRODUCT, NAME, VALID, SHOW_ORDER
+  <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
+    </if>
+  </sql>  
+<sql id="selectSql">
+  select ID, UUID,PRODUCT, NAME, VALID, SHOW_ORDER from t_type
 </sql>
-
-<select id="selectOptimized" parameterType="map" resultMap="deviceTypeDetail">
-  select
-  <include refid="columns" />
-  from t_type
+<sql id="whereSql">
   <where>
     <trim prefixOverrides="and">
       <if test="queryForm==null or !queryForm.queryAll">
         and VALID
       </if>
       <if test="queryForm!=null and queryForm.queryName!=null">
-        and NAME like '${queryForm.queryName}%'
+        and NAME like '%${queryForm.queryName}%'
       </if>
       <if test="queryForm!=null and queryForm.queryProduct">
-        and PRODUCT like '${queryForm.queryProduct}%'
+        and PRODUCT like '%${queryForm.queryProduct}%'
       </if>
     </trim>
   </where>
-  <if test="queryForm!=null">
-    <if test="queryForm.queryOrderByClause">
-      order by ${queryForm.queryOrderByClause}
-    </if>
-  </if>
+
+</sql>
+<select id="selectOptimized" parameterType="map" resultMap="deviceTypeDetail">
+  <include refid="selectSql" />
+  <include refid="whereSql" />
+  <include refid="orderBySql" />
   limit ${offset},${count}
 </select>
  <select id="selectCountOptimized" parameterType="map" resultType="java.lang.Long">
   select count(*) from t_type
-  <where>
-    <trim prefixOverrides="and">
-      <if test="queryForm==null or !queryForm.queryAll">
-        and VALID
-      </if>
-      <if test="queryForm!=null and queryForm.queryName!=null">
-        and NAME like '${queryForm.queryName}%'
-      </if>
-      <if test="queryForm!=null and queryForm.queryProduct">
-        and PRODUCT like '${queryForm.queryProduct}%'
-      </if>
-    </trim>
-  </where>
+  <include refid="whereSql" />
  </select>
  <select id="selectById" parameterType="java.lang.Long" resultMap="deviceTypeDetail">
-  select 
-  <include refid="columns" />
-  from t_type
+  <include refid="selectSql" />
   where ID=#{id,jdbcType=INTEGER}
 </select>
  <insert id="insertDetail" parameterType="com.uc.bpg.domain.DeviceType">
@@ -100,6 +88,6 @@
  </update>
 
  <select id="selectNextOrder" resultType="java.lang.Long">
-  select ifnull(max(SHOW_ORDER),0) + 1 from t_type
+  select IFNULL(max(SHOW_ORDER),0) + 1 from t_type
  </select>
 </mapper>

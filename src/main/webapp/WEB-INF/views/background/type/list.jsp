@@ -80,30 +80,9 @@
               <table class="table table-striped table-bordered table-hover dataTable no-footer">
                 <thead>
                   <tr>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='产品名称' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="产品名称">产品名称</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="产品名称">产品名称</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='型号' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="型号">型号</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="型号">型号</th>
-                      </c:otherwise>
-                    </c:choose>
-                    <c:choose>
-                      <c:when test="${queryInput.queryOrderBy =='显示顺序' }">
-                        <th class="center sorting_${queryInput.queryOrder }" data-active="true" data-column="显示顺序">显示顺序</th>
-                      </c:when>
-                      <c:otherwise>
-                        <th class="center sorting" data-column="显示顺序">显示顺序</th>
-                      </c:otherwise>
-                    </c:choose>
+                    <th class="center sorting${queryInput.queryOrderBy eq '产品名称' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '产品名称' ? 'data-active=\"true\"' :'' } data-column="产品名称">产品名称</th>
+                    <th class="center sorting${queryInput.queryOrderBy eq '型号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '型号'  ? 'data-active=\"true\"' :'' } data-column="型号">型号</th>
+                    <th class="center sorting${queryInput.queryOrderBy eq '显示顺序' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy eq '显示顺序'  ? 'data-active=\"true\"' :'' } data-column="显示顺序">显示顺序</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -189,7 +168,6 @@
 		$('.chosen').chosen({width:'100%'});
 		
 		$('#content_container').bindPage({
-			bindPagation : false,
 			reset : function() {
 				$('#queryInput [name="queryAll"]').attr("checked", false);
 			},

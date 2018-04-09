@@ -107,14 +107,7 @@
   <bean id="statisticBillService" class="com.uc.bpg.service.impl.StatisticBillListServiceImpl">
     <property name="mapper" ref="statisticBillMapper" />
   </bean>
-  
-  <bean id="demoService" class="com.uc.bpg.service.impl.DemoServiceImpl">
-    <property name="hotelMapper" ref="hotelMapper" />
-    <property name="billMapper" ref="billMapper" />
-    <property name="deviceMapper" ref="deviceMapper" />
-    <property name="usageMapper" ref="deviceUsageMapper" />
-    <property name="receiverMapper" ref="receiverMapper" />
-  </bean>
+
   <bean id="examineService" class="com.uc.bpg.service.impl.ExamineListServiceImpl">
   	<property name="mapper" ref="examineMapper" />
   </bean>

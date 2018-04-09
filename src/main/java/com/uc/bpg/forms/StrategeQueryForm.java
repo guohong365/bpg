@@ -7,10 +7,7 @@ public class StrategeQueryForm extends DetailListQueryFormImpl {
 	private Long queryTotalDeviceFrom;
 	private Long queryTotalDeviceTo;
 	private Long queryPublicUsageFrom;
-	private Long queryPublicUsageTo;
-	private Date querySigningDateFrom;
-	private Date querySigningDateTo;
-	private Boolean queryValid;
+	private Long queryPublicUsageTo;	
 	private String queryHotelName;
 	private Date queryBeginTimeFrom;
 	private Date queryBeginTimeTo;
@@ -51,24 +48,6 @@ public class StrategeQueryForm extends DetailListQueryFormImpl {
 	}
 	public void setQueryPublicUsageTo(Long queryPublicUsageTo) {
 		this.queryPublicUsageTo = queryPublicUsageTo;
-	}
-	public Date getQuerySigningDateFrom() {
-		return querySigningDateFrom;
-	}
-	public void setQuerySigningDateFrom(Date querySigningDateFrom) {
-		this.querySigningDateFrom = querySigningDateFrom;
-	}
-	public Date getQuerySigningDateTo() {
-		return querySigningDateTo;
-	}
-	public void setQuerySigningDateTo(Date querySigningDateTo) {
-		this.querySigningDateTo = querySigningDateTo;
-	}
-	public Boolean getQueryValid() {
-		return queryValid;
-	}
-	public void setQueryValid(Boolean queryValid) {
-		this.queryValid = queryValid;
 	}
 	public String getQueryHotelName() {
 		return queryHotelName;

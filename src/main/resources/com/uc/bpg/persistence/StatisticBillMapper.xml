@@ -11,6 +11,11 @@
     <result column="PUBLIC_USAGE_TIMES" jdbcType="INTEGER" property="publicUseTimes" />
     <result column="HOTEL_NAME" jdbcType="VARCHAR" property="hotelName" />    
   </resultMap>
+    <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
+    </if>
+  </sql>  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">

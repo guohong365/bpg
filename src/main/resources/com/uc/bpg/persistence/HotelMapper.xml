@@ -31,87 +31,89 @@
     <result column="OWNED_DEVICE" jdbcType="INTEGER" property="ownedDevice" />    
     <result column="CAN_CANCEL" jdbcType="BIT" property="canCancel"/>
   </resultMap>
-  
-  <sql id="baseSql">
+  <sql id="whereSql">
+      <where>
+      a.TYPE ='酒店'
+      <if test="queryForm.queryBillingCycleType">
+      and a.BILLING_CYCLE_TYPE = #{queryForm.queryBillingCycleTYpe}
+      </if>
+      <if test="queryForm.queryOwnedDeviceFrom != null">
+      and OWNED_DEVICE &gt;= #{queryForm.queryOwnedDeviceFrom}
+      </if>
+      <if test="queryForm.queryOwnedDeviceTo != null">
+      and OWNED_DEVICE &lt;= #{queryForm.queryOwnedDeviceTo}
+      </if>
+      <if test="queryForm.queryTotalDeviceFrom != null">
+      and a.TOTAL_DEVICE &gt;= #{queryForm.queryTotalDeviceFrom}
+      </if>
+      <if test="queryForm.queryTotalDeviceTo != null">
+      and a.TOTAL_DEVICE &lt;= #{queryForm.queryTotalDeviceTo}
+      </if>
+      <if test="queryForm.queryPublicUsageFrom !=null">
+      and a.PUBLIC_USAGE &gt;=#{queryForm.queryPublicUsage}
+      </if>
+      <if test="queryForm.queryPublicUsageTo !=null">
+      and a.PUBLIC_USAGE &lt;=#{queryForm.queryPublicUsage}
+      </if>
+      <if test="queryForm.queryName !=null">
+      and a.NAME like '%${queryForm.queryName}%'
+      </if>
+      <if test="!queryForm.queryAll">
+      and a.VALID 
+      </if>
+      
+    </where> 
   </sql>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  
+    <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
+    </if>
+  </sql>  
   <sql id="selectSql">
-    select 
-       a.ID, a.UUID, a.NAME, a.CREATER, a.CREATE_TIME, a.ADDRESS, a.LINKMAN, 
-       a.TELE, a.DESCRIPTION, a.VALID, a.CANCELATER, a.CANCEL_TIME, a.TYPE,
-       a.TOTAL_DEVICE, a.PUBLIC_USAGE, a.CHARGE_STANDARD, a.CHARGE, a.RATIO,
-       a.BILLING_CYCLE_TYPE, a.BILLING_DATE_PARAM1, a.BILLING_DATE_PARAM2,
-       (select count(*) from t_device where HOTEL=a.ID) as OWNED_DEVICE,
-       b.NAME as CREATER_NAME,
-       c.NAME as CANCELATER_NAME,
-       ((select count(*) from t_device where HOTEL=a.ID)=0 and (select count(*) from t_bill where HOTEL=a.ID and STATE!='确认收款')=0) as CAN_CANCEL        
+      select
+     a.ID, 
+     a.UUID, 
+     a.NAME, 
+     a.CREATER, 
+     a.CREATE_TIME, 
+     a.ADDRESS, 
+     a.LINKMAN, 
+     a.TELE, 
+     a.DESCRIPTION, 
+     a.VALID, 
+     a.CANCELATER, 
+     a.CANCEL_TIME, 
+     a.TYPE,
+     a.TOTAL_DEVICE, 
+     a.PUBLIC_USAGE, 
+     a.CHARGE_STANDARD, 
+     a.CHARGE, a.RATIO,
+     a.BILLING_CYCLE_TYPE, 
+     a.BILLING_DATE_PARAM1, 
+     a.BILLING_DATE_PARAM2,
+     (select count(*) from t_device where HOTEL=a.ID) as OWNED_DEVICE,
+     b.NAME as CREATER_NAME,
+     c.NAME as CANCELATER_NAME,
+     ((select count(*) from t_device where HOTEL=a.ID)=0 and (select count(*) from t_bill where HOTEL=a.ID and STATE!='确认收款')=0) as CAN_CANCEL        
     from t_orgnization a
     left join t_user b on b.ID=a.CREATER
     left join t_user c on c.ID=a.CANCELATER
-    where a.TYPE ='酒店' 
   </sql>
-  <sql id="columns">
-  `ID`, `UUID`, `NAME`, `ADDRESS`, `TELE`, `LINKMAN`, `DESCRIPTION`, `VALID`, `CREATER`,
-  `CREATE_TIME`, `TYPE`, `CANCELATER`, `CANCEL_TIME`, `TOTAL_DEVICE`, `PUBLIC_USAGE`, `CHARGE_STANDARD`,
-  `CHARGE`, `RATIO`, BILLING_CYCLE_TYPE, BILLING_DATE_PARAM1, BILLING_DATE_PARAM2, OWNED_DEVICE, 
-  `CREATER_NAME`, `CANCELATER_NAME`, `CAN_CANCEL`
-  </sql>
-  
-  <select id="selectByExample" parameterType="map" resultMap="hotelDetail">
-    select
-    <include refid="columns" />
-    from (
-      <include refid="selectSql" />
-    ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-      <if test="example.orderByClause != null">
-        order by ${example.orderByClause}
-      </if>
-    </if>
+  <select id="selectOptimized" parameterType="map" resultMap="hotelDetail">
+    <include refid="selectSql"/>
+    <include refid="whereSql" />
+    <include refid="orderBySql" />    
     limit ${offset}, ${count}  
   </select>
-  <select id="selectById" parameterType="java.lang.Long" resultMap="hotelDetail">
-    select 
-    <include refid="columns" />
-    from (
-     <include refid="selectSql" />
-    ) t
-    where ID = #{id,jdbcType=INTEGER}
+  <select id="selectCountOptimized" parameterType="map" resultType="java.lang.Long">
+    select COUNT(*) 
+    from t_orgnization a
+    <include refid="whereSql"/>
   </select>
-  <delete id="deleteDetail">
-    delete from t_orgnization
-    where ID = #{id,jdbcType=INTEGER}
-  </delete>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="hotelDetail">
+    <include refid="selectSql"/>
+    where a.ID = #{id,jdbcType=INTEGER}
+  </select>
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.Hotel">
     insert into t_orgnization 
     (UUID, NAME, CREATER,  CREATE_TIME, ADDRESS, LINKMAN, TELE, DESCRIPTION, VALID, TYPE,
@@ -127,14 +129,6 @@
      #{ratio, jdbcType=DECIMAL}, #{billingCycle, jdbcType=VARCHAR},
      #{billingDateParam1,jdbcType=INTEGER},#{billingDateParam2, jdbcType=INTEGER});     
   </insert>
-  <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
-    select count(*) from (
-      <include refid="selectSql" />
-    ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
   <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Hotel">
     update t_orgnization
     <set>

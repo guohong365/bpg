@@ -23,45 +23,30 @@
     <result column="STATUS" jdbcType="INTEGER" property="status"/>
     <association property="canAllotPublic" column="HOTEL" notNullColumn="true" jdbcType="BIT" select="selectCanAllotPublic" />
   </resultMap>
-  
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="baseSql">
+    <sql id="orderBySql">
+    <if test="queryForm!=null and queryForm.queryOrderByClause!=null and !queryForm.queryOrderByClause.empty">
+      order by ${queryForm.queryOrderByClause}
+    </if>
+  </sql>  
+  <sql id="selectSql">
      select
-     a.ID, a.UUID, a.SERIAL_NO, a.VALID, a.TYPE, a.HOTEL, a.ROOM, a.PUBLIC_USAGE, a.INPUTER, a.INPUT_TIME, 
-     a.MODIFIER, a.MODIFY_TIME,     
+     a.ID, 
+     a.UUID, 
+     a.SERIAL_NO, 
+     a.VALID, 
+     a.TYPE, 
+     a.HOTEL, 
+     a.ROOM, 
+     a.PUBLIC_USAGE, 
+     a.INPUTER, 
+     a.INPUT_TIME, 
+     a.MODIFIER, 
+     a.MODIFY_TIME,     
      b.NAME as TYPE_NAME, 
      b.PRODUCT as NAME,
      c.NAME as HOTEL_NAME, 
      d.ROOM_NO as ROOM_NO,
-     (select if(STATUS=0 and BATTERY = 1, 15, STATUS) as STATUS from t_device_status where ID=(select max(ID) from t_device_status where DEVICE= a.ID)) as STATUS,
+     IF(g.STATUS=0 and g.BATTERY = 1, 15, g.STATUS) as STATUS,   
      e.NAME as INPUTER_NAME,
      f.NAME as MODIFIER_NAME
      from t_device a
@@ -70,38 +55,78 @@
      left join t_room d on a.room = d.id  
      left join t_user e on a.INPUTER = e.ID
      left join t_user f on a.MODIFIER = f.ID
+     left join (select t.DEVICE, t.STATUS, t.BATTERY 
+                from t_device_status t 
+                left join (select DEVICE, MAX(ID) as ID from t_device_status group by DEVICE) s on s.ID = t.ID 
+                where s.ID is not null) g on g.DEVICE = a.ID
   </sql>
-  <sql id="columns">
-    ID, UUID, SERIAL_NO, NAME, VALID, TYPE, HOTEL, ROOM, PUBLIC_USAGE, TYPE_NAME, HOTEL_NAME, ROOM_NO, STATUS,
-    INPUTER, INPUT_TIME, INPUTER_NAME, MODIFIER,MODIFY_TIME,MODIFIER_NAME 
-    
+  <sql id="whereSql">
+    <where>
+      <trim prefixOverrides="and">
+        <choose>
+          <when test="queryForm.queryHotel !=null">
+            and a.HOTEL = #{queryForm.queryHotel, jdbcType=INTEGER}
+          </when>
+          <when test="queryForm.queryHotelName !=null">
+            and c.NAME like '%${queryForm.queryHotelName}%'
+          </when>
+        </choose>
+        <if test="queryForm.queryName !=null">
+          and b.PRODUCT like '%${queryForm.queryName}%'
+        </if>
+        <if test="queryForm.querySerialNo !=null">
+          and a.SERIAL_NO like '%${queryForm.querySerialNo}%'
+        </if>
+        <if test="queryForm.queryStatus !=null">
+          <choose>
+            <when test="queryForm.queryStatus == 1">
+              and g.STATUS = 0
+            </when>
+            <when test="queryForm.queryStatus == 2">
+              and g.STATUS = 15
+            </when>
+            <when test="queryForm.queryStatus == 3">
+              and (g.STATUS &gt;= 1 and g.STATUS &lt;= 8) 
+            </when>
+            <when test="queryForm.queryStatus == 4">
+              and (g.STATUS is null or not (g.STATUS &gt;= 0 and g.STATUS &lt;=8))
+            </when>
+          </choose>
+        </if>
+        <if test="queryForm.queryType !=null">
+          and a.TYPE = #{queryForm.queryType,jdbcType=INTEGER}
+        </if>
+        <if test="!queryForm.queryAll">
+          and a.VALID
+        </if>
+      </trim>
+    </where>  
   </sql>
-  <select id="selectByExample" parameterType="map" resultMap="deviceDetail">
-    select
-    <include refid="columns" />
-    from (
-      <include refid="baseSql" />
-    ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-      <if test="example.orderByClause != null">
-        order by ${example.orderByClause}
-      </if>  
-    </if>
+  <select id="selectCountOptimized" parameterType="map" resultType="java.lang.Long">
+    select COUNT(*)
+    from t_device a
+     left join t_type b on a.type = b.id
+     left join t_orgnization c on a.hotel = c.id
+     left join t_room d on a.room = d.id  
+     left join t_user e on a.INPUTER = e.ID
+     left join t_user f on a.MODIFIER = f.ID
+     left join (select t.DEVICE, t.STATUS, t.BATTERY 
+                from t_device_status t 
+                left join (select DEVICE, MAX(ID) as ID from t_device_status group by DEVICE) s on s.ID = t.ID 
+                where s.ID is not null) g on g.DEVICE = a.ID         
+     <include refid="whereSql" /> 
+  </select>
+  <select id="selectOptimized" parameterType="map" resultMap="deviceDetail">
+    <include refid="selectSql" />
+    <include refid="whereSql" />
+    <include refid="orderBySql" />
     limit ${offset}, ${count}
   </select>
   <select id="selectById" parameterType="java.lang.Long" resultMap="deviceDetail">
-    select 
-    <include refid="columns" />
-    from (
-     <include refid="baseSql" />
-    ) t
-    where ID = #{id,jdbcType=INTEGER}
+    <include refid="selectSql" />
+    where a.ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteDetail" parameterType="java.lang.Long">
-    delete from t_device
-    where ID = #{id,jdbcType=INTEGER}
-  </delete>
+
   <insert id="insertDetail" parameterType="com.uc.bpg.domain.Device">
     insert into t_device (UUID, SERIAL_NO, VALID, TYPE, PUBLIC_USAGE, INPUTER, INPUT_TIME)
     values (#{uuid,jdbcType=CHAR}, #{serialNo,jdbcType=VARCHAR}, true, 
@@ -112,14 +137,6 @@
       select uuid(), '新增', ID, null, null, #{inputTime,jdbcType=TIMESTAMP}, #{inputer,jdbcType=INTEGER} 
       from t_device where UUID=#{uuid,jdbcType=CHAR};             
   </insert>
-  <select id="selectCountByExample" parameterType="map" resultType="java.lang.Long">
-    select count(*) from (
-     <include refid="baseSql" />
-     ) t
-    <if test="example != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
   <update id="updateDetailSelective" parameterType="com.uc.bpg.domain.Device">
     update t_device
     <set>
@@ -265,26 +282,46 @@
   <select id="selectIdBySerial" parameterType="java.lang.String" resultType="java.lang.Long">
     select ID from t_device where SERIAL_NO=#{serial,jdbcType=VARCHAR}
   </select>
-  <select id="selectBySerial" parameterType="java.lang.String" resultMap="deviceDetail">
-    select 
-    <include refid="columns" />
-    from (
-      <include refid="baseSql" />
-    ) t 
-    where SERIAL_NO = #{serial,jdbcType=VARCHAR}
+  <select id="selectBySerial" parameterType="java.lang.String" resultMap="deviceDetail">    
+    <include refid="selectSql" />
+    where a.SERIAL_NO = #{serial,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllocatedDevices" parameterType="map" resultMap="deviceDetail">
+    <include refid="selectSql" />
+    <where>
+    <trim prefixOverrides="and">
+      <choose>
+      <when test="hotel !=null">
+        and a.HOTEL = #{hotel, jdbcType=INTEGER}      
+        and a.ROOM is not null
+      </when>
+      <otherwise>
+        and a.HOTEL is not null
+      </otherwise>
+      </choose>  
+    </trim>  
+    </where>
+  </select>
+  <select id="selectAllocableDevices" parameterType="map" resultMap="deviceDetail">
+    <include refid="selectSql" />
+    where 
+    a.HOTEL =#{hotel, jdbcType=INTEGER}
+    and a.ROOM is null and not a.PUBLIC_USAGE
   </select>
   <update id="updateWithdrawAll" parameterType="map" >
-      <foreach collection="devices" item="device">
-      update t_device 
+    set @modify_time=NOW();
+    update t_device 
       set 
       ROOM = null,
-      MODIFY_TIME=#{device.modifyTime, jdbcType=TIMESTAMP},
-      MODIFIER=#{device.modifier,jdbcType=INTEGER}
-      where ID=#{device.id,jdbcType=VARCHAR};
-      insert into t_allot_history
+      MODIFY_TIME=@modify_time,
+      MODIFIER=#{modifier,jdbcType=INTEGER}
+      where ID in (<foreach collection="devices" item="device">${device.id}</foreach>);
+    insert into t_allot_history
       (UUID, OPERATION, DEVICE, HOTEL, ROOM, OPERATE_TIME, OPERATOR)
-      values (uuid(), '收回', #{device.id, jdbcType=INTEGER}, #{device.hotel,jdbcType=INTEGER}, null, 
-      #{device.modifyTime, jdbcType=TIMESTAMP},#{device.modifier,jdbcType=INTEGER});
-    </foreach>
+    values
+    <foreach collection="devices" item="device" open="(" close=")" separator=",">
+    uuid(), '收回', #{device.id, jdbcType=INTEGER}, #{device.hotel,jdbcType=INTEGER}, null, 
+    @modify_time, #{modifier,jdbcType=INTEGER}
+    </foreach>;
   </update>
 </mapper>

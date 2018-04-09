@@ -284,7 +284,6 @@
 		
 		$('#content_container').bindPage(
 		{
-			bindPagation : false,
 			reset : function() {
 				$('#queryInput [name="querySerailNo"]').val("");
 				$('#queryInput [name="queryHotelName"]').val("");
