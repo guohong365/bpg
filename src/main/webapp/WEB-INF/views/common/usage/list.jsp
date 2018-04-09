@@ -210,11 +210,6 @@
                             <div class="row">
                               <!-- functon button begin -->
                               <div class="col-xs-12">
-                                <div class="btn-group pull-right">
-                                  <button class="btn btn-primary" type="button" data-export="export" id="btnExport">
-                                    <i class="ace-icon fa fa-file-excel-o"></i>导出Excel
-                                  </button>
-                                </div>
                               </div>
                             </div>
                             <!-- function button end -->
@@ -230,39 +225,27 @@
                             <table class="table table-striped table-bordered table-hover dataTable no-footer">
                               <thead>
                                 <tr>
-                                <th class="center sorting${queryInput.queryOrderBy =='使用时间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='使用时间' ? 'data-active=\"true\"' : ''}  data-column="使用时间">使用时间</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='酒店收款' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='酒店收款' ? 'data-active=\"true\"' : ''}  data-column="酒店收款">酒店收款</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='结算标准' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='结算标准' ? 'data-active=\"true\"' : ''}  data-column="结算标准">结算标准</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='分成比例' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='分成比例' ? 'data-active=\"true\"' : ''}  data-column="分成比例">分成比例</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='应付款' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='应付款' ? 'data-active=\"true\"' : ''}  data-column="应付款">应付款</th>
                                 <th class="center sorting${queryInput.queryOrderBy =='房间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='房间' ? 'data-active=\"true\"' : ''}  data-column="房间">房间</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='设备名称' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='设备名称' ? 'data-active=\"true\"' : ''}  data-column="设备名称">设备名称</th>
-                                <th class="center sorting${queryInput.queryOrderBy =='序列号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='序列号' ? 'data-active=\"true\"' : ''}  data-column="序列号">序列号</th>
+                                <th class="center sorting${queryInput.queryOrderBy =='序列号' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='序列号' ? 'data-active=\"true\"' : ''}  data-column="序列号">序列号</th>                                
+                                <th class="center sorting${queryInput.queryOrderBy =='使用时间' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='使用时间' ? 'data-active=\"true\"' : ''}  data-column="使用时间">使用时间</th>
                                 <th class="center sorting${queryInput.queryOrderBy =='已结账' ? '_'.concat(queryInput.queryOrder) : '' }" ${queryInput.queryOrderBy =='已结账' ? 'data-active=\"true\"' : ''}  data-column="已结账">已结账</th>
+                                <th class="center">酒店收款</th>
+                                <th class="center">结算标准</th>
+                                <th class="center">分成比例</th>
+                                <th class="center">应付款</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <c:forEach var="item" items="${records}">
                                   <tr>
-                                    <td>
-                                      <fmt:formatDate value="${item.useTime}" pattern="yyyy年MM月dd日 HH:mm:ss" />
-                                    </td>
-                                    <td>
-                                      <fmt:formatNumber type="CURRENCY" value="${item.charge}" currencySymbol="￥" maxFractionDigits="2" minFractionDigits="2" />
-                                    </td>
-                                    <td>
-                                      <fmt:formatNumber type="CURRENCY" value="${item.chargeStandard}" currencySymbol="￥" maxFractionDigits="2" minFractionDigits="2" />
-                                    </td>
-                                    <td>
-                                      <fmt:formatNumber type="PERCENT" value="${item.ratio}" maxFractionDigits="2" />
-                                    </td>
-                                    <td>
-                                      <fmt:formatNumber type="CURRENCY" value="${item.rent}" currencySymbol="￥" maxFractionDigits="2" />
-                                    </td>
-                                    <td>${item.publicUsage?'公用':item.roomNo}</td>
-                                    <td>${item.deviceName}</td>
+                                    <td>${item.publicUsage? '公用' : item.roomNo}</td>
                                     <td>${item.deviceSerial}</td>
-                                    <td>${item.payed}</td>
+                                    <td><fmt:formatDate value="${item.useTime}" pattern="yyyy年MM月dd日 HH:mm:ss" /></td>
+                                    <td>${item.payed ? '已付' : '未付'}</td>
+                                    <td><fmt:formatNumber type="CURRENCY" value="${item.charge}" currencySymbol="￥" maxFractionDigits="2" minFractionDigits="2" /></td>
+                                    <td><fmt:formatNumber type="CURRENCY" value="${item.chargeStandard}" currencySymbol="￥" maxFractionDigits="2" minFractionDigits="2" /></td>
+                                    <td><fmt:formatNumber type="PERCENT" value="${item.ratio}" maxFractionDigits="2" /></td>
+                                    <td><fmt:formatNumber type="CURRENCY" value="${item.rent}" currencySymbol="￥" maxFractionDigits="2" /></td>
                                   </tr>
                                 </c:forEach>
                               </tbody>
@@ -401,7 +384,7 @@
 						$('#queryInput [name="queryUseTimeTo"]').val("");
 						$('#queryInput [name="queryRoomNo"]').val("");
 					},
-					baseUrl : '<c:url value="${baseUrl}/detail" />',
+					baseUrl : 'detail',
 				});
 			});
 		</script>

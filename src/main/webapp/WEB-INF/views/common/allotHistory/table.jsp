@@ -5,17 +5,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <form id="FORM_TABLE_FUNCTION" role="form" action="#" method="post">
   <div class="dataTables_wrapper form-inline no-footer">
-    <div class="row">
-      <!-- functon button begin -->
-      <div class="col-xs-12">
-        <div class="btn-group pull-right">
-          <button class="btn btn-primary" type="button" data-export="export" id="btnExport">
-            <i class="ace-icon fa fa-file-excel-o"></i>导出Excel
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- function button end -->
+    <div class="row">  <!-- functon button begin -->
+    </div>  <!-- function button end -->
     <!-- table data begin-->
     <input type="hidden" id="action" name="action" value="${action}" />
     <input type="hidden" id="selectedId" name="selectedId" value="" />

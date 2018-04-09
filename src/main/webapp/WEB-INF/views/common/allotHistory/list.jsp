@@ -246,17 +246,8 @@
                   <div class="row" id="listResult">
                     <form id="FORM_TABLE_FUNCTION" role="form" action="#" method="post">
                       <div class="dataTables_wrapper form-inline no-footer">
-                        <div class="row">
-                          <!-- functon button begin -->
-                          <div class="col-xs-12">
-                            <div class="btn-group pull-right">
-                              <button class="btn btn-primary" type="button" data-export="export" id="btnExport">
-                                <i class="ace-icon fa fa-file-excel-o"></i>导出Excel
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- function button end -->
+                        <div class="row"> <!-- functon button begin -->                          
+                        </div> <!-- function button end -->
                         <!-- table data begin-->
                         <input type="hidden" id="action" name="action" value="${action}" />
                         <input type="hidden" id="selectedId" name="selectedId" value="" />
@@ -411,7 +402,6 @@
     });
     	
     $('#content_container').bindPage({
-	    bindPagation : false,
 	    reset : function() {
 		    $('#queryInput [name="queryOperateTimeFrom"]').val("");
 		    $('#queryInput [name="queryOperateTimeTo"]').val("");
@@ -421,7 +411,7 @@
 		    $('#queryInput [name="queryOperation"]').val("");
 		    $('#queryInput [name="queryOperation"]').trigger('chosen:update');
 		    },
-		  baseUrl: '<c:url value="${baseUrl}/detail" />',
+		  baseUrl: 'detail',
 		});	
   });
   </script>  

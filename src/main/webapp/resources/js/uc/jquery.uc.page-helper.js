@@ -227,7 +227,6 @@
 			console.log($('#queryInput'));
 			console.log('search param :' + $('#queryInput').serialize());
 			$.ajax({
-				async: false,
 				type : 'POST',
 				url : this._o.listUrl,
 				data : $('#queryInput').serialize(),

@@ -38,10 +38,10 @@
       and a.BILLING_CYCLE_TYPE = #{queryForm.queryBillingCycleTYpe}
       </if>
       <if test="queryForm.queryOwnedDeviceFrom != null">
-      and OWNED_DEVICE &gt;= #{queryForm.queryOwnedDeviceFrom}
+      and d.OWNED_DEVICE &gt;= #{queryForm.queryOwnedDeviceFrom}
       </if>
       <if test="queryForm.queryOwnedDeviceTo != null">
-      and OWNED_DEVICE &lt;= #{queryForm.queryOwnedDeviceTo}
+      and d.OWNED_DEVICE &lt;= #{queryForm.queryOwnedDeviceTo}
       </if>
       <if test="queryForm.queryTotalDeviceFrom != null">
       and a.TOTAL_DEVICE &gt;= #{queryForm.queryTotalDeviceFrom}
@@ -91,13 +91,14 @@
      a.BILLING_CYCLE_TYPE, 
      a.BILLING_DATE_PARAM1, 
      a.BILLING_DATE_PARAM2,
-     (select count(*) from t_device where HOTEL=a.ID) as OWNED_DEVICE,
+     d.OWNED_DEVICE as OWNED_DEVICE,
      b.NAME as CREATER_NAME,
      c.NAME as CANCELATER_NAME,
      ((select count(*) from t_device where HOTEL=a.ID)=0 and (select count(*) from t_bill where HOTEL=a.ID and STATE!='确认收款')=0) as CAN_CANCEL        
     from t_orgnization a
     left join t_user b on b.ID=a.CREATER
     left join t_user c on c.ID=a.CANCELATER
+    left join (select COUNT(*) as OWNED_DEVICE, s.HOTEL as HOTEL from t_device s group by s.HOTEL) d on d.HOTEL = a.ID
   </sql>
   <select id="selectOptimized" parameterType="map" resultMap="hotelDetail">
     <include refid="selectSql"/>
